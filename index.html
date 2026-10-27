@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v4.11.4 -->
+<!-- v4.11.7 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -544,6 +544,15 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
  .user-name-button{text-align:left}
 }
 
+
+.label-print-loading{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(25,25,25,.42)}
+.label-print-loading.active{display:flex}
+.label-print-loading-card{display:flex;align-items:center;gap:15px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 55px rgba(0,0,0,.2);padding:20px 25px;max-width:100%}
+.label-print-loading-spinner{width:30px;height:30px;flex:0 0 30px;border:3px solid #e6e6e6;border-top-color:var(--primary);border-radius:50%;animation:giocapo-spin .75s linear infinite}
+.label-print-loading-text strong{display:block;font-size:15px;color:var(--text)}
+.label-print-loading-text span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
+@media print{.label-print-loading{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -798,11 +807,11 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 
 <div id="kitEditModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3 id="kitEditTitle">Editar kit</h3><button class="close" onclick="closeModal('kitEditModal')">×</button></div><div class="modal-body"><div class="form-grid"><div class="field full"><label>Nome do kit</label><input id="editKitName"></div><div class="field full"><label>Adicionar equipamento disponível</label><select id="editKitAdd" onchange="addToEditingKit(this.value);this.value=''"><option value="">Selecione um equipamento...</option></select></div></div><div style="height:15px"></div><h3>Equipamentos do kit</h3><div id="editKitList" class="selected-list"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('kitEditModal')">CANCELAR</button><button class="btn btn-primary" onclick="saveKitEdit()">SALVAR ALTERAÇÕES</button></div></div></div>
 
-<div id="printLocalModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Imprimir local</h3><button class="close" onclick="closeModal('printLocalModal')">×</button></div><div class="modal-body"><form id="printLocalForm" onsubmit="printLocalLabel(event)"><div class="field"><label>Local</label><input id="printLocalValue" maxlength="16" autocomplete="off" required placeholder="Ex.: 1501, 1503..."><div class="hint">Insira o código do local imobilizado ou de terceiros acima.</div></div></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('printLocalModal')">CANCELAR</button><button class="btn btn-primary" onclick="document.getElementById('printLocalForm').requestSubmit()">IMPRIMIR</button></div></div></div>
+<div id="printLocalModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Imprimir local</h3><button class="close" onclick="closeModal('printLocalModal')">×</button></div><div class="modal-body"><form id="printLocalForm" onsubmit="printLocalLabel(event)"><div class="field"><label>Local</label><input id="printLocalValue" maxlength="16" autocomplete="off" required placeholder="Ex.: 1501, 1503..."><div class="hint">Insira o código do local imobilizado ou de terceiros acima.</div></div></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('printLocalModal')">CANCELAR</button><button class="btn btn-primary" onclick="submitPrintForm('printLocalForm',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button></div></div></div>
 
-<div id="printOsModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Imprimir O.S.</h3><button class="close" onclick="closeModal('printOsModal')">×</button></div><div class="modal-body"><form id="printOsForm" onsubmit="printOsLabel(event)"><div class="field"><label>Ordem de serviço</label><input id="printOsValue" maxlength="16" inputmode="numeric" autocomplete="off" required placeholder="EX.: 50670, 51067..."><div class="hint">Insira o número da ordem de serviço acima.</div></div></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('printOsModal')">CANCELAR</button><button class="btn btn-primary" onclick="document.getElementById('printOsForm').requestSubmit()">IMPRIMIR</button></div></div></div>
+<div id="printOsModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Imprimir O.S.</h3><button class="close" onclick="closeModal('printOsModal')">×</button></div><div class="modal-body"><form id="printOsForm" onsubmit="printOsLabel(event)"><div class="field"><label>Ordem de serviço</label><input id="printOsValue" maxlength="16" inputmode="numeric" autocomplete="off" required placeholder="EX.: 50670, 51067..."><div class="hint">Insira o número da ordem de serviço acima.</div></div></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('printOsModal')">CANCELAR</button><button class="btn btn-primary" onclick="submitPrintForm('printOsForm',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button></div></div></div>
 
-<div id="printLabelModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3 id="printLabelTitle">Imprimir identificação</h3><button class="close" onclick="closeModal('printLabelModal')">×</button></div><div class="modal-body"><p class="hint" style="margin-top:0">Selecione o equipamento que será destacado na etiqueta. A identificação completa do kit ficará na etiqueta esquerda.</p><div id="printLabelEquipmentList" class="selected-list"></div></div><div class="modal-footer"><button class="btn btn-primary" onclick="printCompleteKitFromModal()">IMPRIMIR KIT COMPLETO</button><button class="btn" onclick="closeModal('printLabelModal')">FECHAR</button></div></div></div>
+<div id="printLabelModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3 id="printLabelTitle">Imprimir identificação</h3><button class="close" onclick="closeModal('printLabelModal')">×</button></div><div class="modal-body"><p class="hint" style="margin-top:0">Selecione o equipamento que será destacado na etiqueta. A identificação completa do kit ficará na etiqueta esquerda.</p><div id="printLabelEquipmentList" class="selected-list"></div></div><div class="modal-footer"><button class="btn btn-primary" onclick="printCompleteKitFromModal(event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR KIT COMPLETO</button><button class="btn" onclick="closeModal('printLabelModal')">FECHAR</button></div></div></div>
 
 
 <div id="changePasswordModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Trocar senha</h3><button class="close" onclick="closeModal('changePasswordModal')">×</button></div><div class="modal-body"><form id="changePasswordForm" onsubmit="changeOwnPassword(event)"><div class="form-grid"><div class="field full"><label>Senha atual</label><div class="auth-input-wrap"><input id="currentPasswordValue" class="auth-password-input" type="password" autocomplete="current-password" required><button class="auth-eye" type="button" onclick="togglePasswordVisibility('currentPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div></div><div class="field full"><label>Nova senha</label><div class="auth-input-wrap"><input id="newPasswordValue" class="auth-password-input" type="password" autocomplete="new-password" minlength="8" required oninput="updatePasswordStrength('newPasswordValue','changePasswordStrength')"><button class="auth-eye" type="button" onclick="togglePasswordVisibility('newPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div><div id="changePasswordStrength" class="password-strength" data-level="0"><div class="password-strength-track"><div class="password-strength-fill"></div></div><div class="password-strength-label">Use 8+ caracteres, maiúscula, minúscula e número.</div></div></div><div class="field full"><label>Confirmar nova senha</label><div class="auth-input-wrap"><input id="confirmNewPasswordValue" class="auth-password-input" type="password" autocomplete="new-password" minlength="8" required><button class="auth-eye" type="button" onclick="togglePasswordVisibility('confirmNewPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div></div></div></form><div id="changePasswordMessage" class="auth-message"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('changePasswordModal')">CANCELAR</button><button id="changePasswordButton" class="btn btn-primary" onclick="document.getElementById('changePasswordForm').requestSubmit()">ALTERAR SENHA</button></div></div></div>
@@ -810,6 +819,12 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 <div id="pendingApprovalsModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3>Aprovações pendentes</h3><button class="close" onclick="closeModal('pendingApprovalsModal')">×</button></div><div class="modal-body"><div class="approval-tabs"><button class="btn active" data-approval-tab="all" onclick="setApprovalTab('all',this)">TODOS</button><button class="btn" data-approval-tab="activation" onclick="setApprovalTab('activation',this)">NOVOS USUÁRIOS</button><button class="btn" data-approval-tab="display_name" onclick="setApprovalTab('display_name',this)">ALTERAÇÃO DE NOME</button></div><div id="pendingApprovalsList" class="approval-list"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('pendingApprovalsModal')">FECHAR</button></div></div></div>
 <div id="confirmModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Confirmar ação</h3><button class="close" onclick="closeModal('confirmModal')">×</button></div><div class="modal-body"><p id="confirmText"></p></div><div class="modal-footer"><button class="btn" onclick="closeModal('confirmModal')">CANCELAR</button><button id="confirmAction" class="btn btn-danger">CONFIRMAR</button></div></div></div>
 <div id="modalHora" class="calc-time-modal"><div class="calc-time-dialog"><h3>Informe a hora</h3><div class="calc-time-body"><input type="text" id="horaManual" maxlength="4" inputmode="numeric" placeholder="HHMM" oninput="atualizarPreviewHora()" onkeydown="if(event.key==='Enter') confirmarHora()"><div class="calc-time-preview" id="previewHora">--:--</div><div class="calc-time-actions"><button type="button" class="btn" onclick="cancelarHora()">CANCELAR</button><button type="button" class="btn btn-primary" onclick="confirmarHora()">CONFIRMAR</button></div></div></div></div>
+<div id="labelPrintLoading" class="label-print-loading" role="status" aria-live="polite" aria-hidden="true">
+  <div class="label-print-loading-card">
+    <div class="label-print-loading-spinner" aria-hidden="true"></div>
+    <div class="label-print-loading-text"><strong>Gerando etiqueta...</strong><span>Preparando impressão</span></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 <script>
 /* QR Code Generator for JavaScript, Kazuhiko Arase.
@@ -3735,7 +3750,7 @@ function equipmentRowActions(e){
     const deleteBtn=hasPermission('equipment.delete')?`<button class="btn btn-small btn-danger" onclick="deleteEquipment('${e.id}')">EXCLUIR</button>`:'';
     const duplicateBtn=hasPermission('equipment.duplicate')?`<button class="btn btn-small" onclick="openDuplicateEquipment('${e.id}')">DUPLICAR</button>`:'';
     const balanceControls=accessoryBalanceActions(e);
-    const printBtn=hasPermission('equipment.print')?`<button class="btn btn-small btn-primary" onclick="printStandaloneEquipmentLabel('${e.id}')">IMPRIMIR</button>`:'';
+    const printBtn=hasPermission('equipment.print')?`<button class="btn btn-small btn-primary" onclick="printStandaloneEquipmentLabel('${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button>`:'';
     const actions=[editBtn,deleteBtn,duplicateBtn,balanceControls,printBtn].filter(Boolean).join('');
     if(!actions)return '';
     const wrapperId=`equipment-actions-${e.id}`;
@@ -4257,6 +4272,30 @@ function pdfDoc(stream){
 }
 
 
+function pdfDocPages(streams){
+ if(!Array.isArray(streams)||streams.length<2)throw new Error('São necessárias pelo menos duas páginas.');
+ const mm=72/25.4,W=103*mm,H=30*mm,o=[];
+ o[1]='<< /Type /Catalog /Pages 2 0 R >>';
+ o[2]=`<< /Type /Pages /Kids [${streams.map((_,i)=>`${5+(i*2)} 0 R`).join(' ')}] /Count ${streams.length} >>`;
+ o[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+ o[4]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+ streams.forEach((stream,i)=>{
+  const pageId=5+(i*2),contentId=pageId+1;
+  o[pageId]=`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W.toFixed(3)} ${H.toFixed(3)}] /CropBox [0 0 ${W.toFixed(3)} ${H.toFixed(3)}] /TrimBox [0 0 ${W.toFixed(3)} ${H.toFixed(3)}] /Rotate 0 /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentId} 0 R >>`;
+  o[contentId]=`<< /Length ${pdfLatin1Bytes(stream).length} >>\nstream\n${stream}endstream`;
+ });
+ let p='%PDF-1.4\n%âãÏÓ\n',off=[0];
+ for(let i=1;i<o.length;i++){
+  off[i]=pdfLatin1Bytes(p).length;
+  p+=`${i} 0 obj\n${o[i]}\nendobj\n`;
+ }
+ const xr=pdfLatin1Bytes(p).length;
+ p+=`xref\n0 ${o.length}\n0000000000 65535 f \n`;
+ for(let i=1;i<o.length;i++)p+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+ p+=`trailer\n<< /Size ${o.length} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`;
+ return pdfLatin1Bytes(p);
+}
+
 function buildKitLabelPdf(k,serialized,e){
  const mm=72/25.4,H=30*mm,L=50*mm,RX=53*mm,R=50*mm,M=3*mm,lx=M,lw=L-2*M,rx=RX+M,rw=R-2*M;
  const product=productLabelName(getProduct(e.productId))||'';
@@ -4301,7 +4340,7 @@ function isAccessoryEquipment(e){
 }
 
 
-function buildStandaloneEquipmentLabelPdf(e){
+function buildStandaloneEquipmentLabelPdf(e,asStream=false){
  const mm=72/25.4,H=30*mm,L=50*mm,RX=53*mm,R=50*mm,M=3*mm,lx=M,lw=L-2*M,rx=RX+M,rw=R-2*M;
  const title='CPE - SP';
  const info=`${e.code||''} S/N: ${e.series||''}`;
@@ -4337,7 +4376,7 @@ function buildStandaloneEquipmentLabelPdf(e){
   s+=pdfTextCommand(product,rx,productY,productFs,rw,true,'center');
  }
 
- return pdfDoc(s);
+ return asStream?s:pdfDoc(s);
 }
 
 
@@ -4411,7 +4450,7 @@ function localLabelFontSize(value){
  if(len<=14)return 15;
  return 13.5;
 }
-function buildLocalLabelPdf(value){
+function buildLocalLabelPdf(value,asStream=false){
  const mm=72/25.4,H=30*mm,L=50*mm,RX=53*mm,R=50*mm,M=3*mm,lx=M,lw=L-2*M,rx=RX+M,rw=R-2*M;
  const local=String(value??'').trim();
  let s='';
@@ -4434,7 +4473,7 @@ function buildLocalLabelPdf(value){
  renderLocalHalf(lx,lw);
  renderLocalHalf(rx,rw);
 
- return pdfDoc(s);
+ return asStream?s:pdfDoc(s);
 }
 function openPrintLocalModal(){
  if(!requirePermission('equipment.print'))return;
@@ -4443,15 +4482,22 @@ function openPrintLocalModal(){
  openModal('printLocalModal');
  setTimeout(()=>input.focus(),0);
 }
+function submitPrintForm(formId,ev){
+ const form=$(formId);
+ if(!form)return;
+ form.dataset.printPreview=ev?.ctrlKey||ev?.metaKey?'true':'false';
+ try{form.requestSubmit()}finally{delete form.dataset.printPreview}
+}
 function printLocalLabel(ev){
  ev.preventDefault();
  if(!requirePermission('equipment.print'))return;
  const value=String($('printLocalValue').value||'').trim();
  const length=Array.from(value).length;
+ const preview=ev.currentTarget.dataset.printPreview==='true';
  if(!value){toast('Informe o local que será impresso.');return}
  if(length>16){toast('O local deve ter no máximo 16 caracteres.');return}
  try{
-   openPdfBytes(buildLocalLabelPdf(value),`Local - ${value}`);
+   openPdfBytes(buildLocalLabelPdf(value),`Local - ${value}`,preview);
    closeModal('printLocalModal');
  }catch(err){
    console.error(err);
@@ -4500,10 +4546,11 @@ function printOsLabel(ev){
  if(!requirePermission('equipment.print'))return;
  const value=String($('printOsValue').value||'').trim();
  const length=Array.from(value).length;
+ const preview=ev.currentTarget.dataset.printPreview==='true';
  if(!value){toast('Informe o número da ordem de serviço.');return}
  if(length>16){toast('A ordem de serviço deve ter no máximo 16 caracteres.');return}
  try{
-   openPdfBytes(buildOsLabelPdf(value),`OS - ${value}`);
+   openPdfBytes(buildOsLabelPdf(value),`OS - ${value}`,preview);
    closeModal('printOsModal');
  }catch(err){
    console.error(err);
@@ -4511,16 +4558,21 @@ function printOsLabel(ev){
  }
 }
 
-function printStandaloneEquipmentLabel(id){if(!requirePermission('equipment.print'))return;
+function printStandaloneEquipmentLabel(id,ev){if(!requirePermission('equipment.print'))return;
  const e=getEquipment(id);
  if(!e){toast('Equipamento não encontrado.');return}
  const ean=generateEanFromCode(e.code);
  if(!ean||!validEan13(ean)){toast('Não foi possível gerar um EAN-13 válido para o código '+(e.code||'')+'.');return}
  try{
-   if(isAccessoryEquipment(e))openPdfBytes(buildAccessoryEanLabelPdf(e),`${e.code} - EAN EAN`);
+   if(isAccessoryEquipment(e))openPdfBytes(buildAccessoryEanLabelPdf(e),`${e.code} - EAN EAN`,!!(ev?.ctrlKey||ev?.metaKey));
    else{
      if(!e.series||e.series==='N/S'){toast('Este equipamento não possui número de série para gerar o QR Code.');return}
-     openPdfBytes(buildStandaloneEquipmentLabelPdf(e),`${e.code} - QRCode EAN`);
+
+     const local=String(e.location||'').trim();
+     if(!local){toast('Este equipamento não possui local cadastrado.');return}
+     if(Array.from(local).length>16){toast('O local deve ter no máximo 16 caracteres.');return}
+     const pages=[buildStandaloneEquipmentLabelPdf(e,true),buildLocalLabelPdf(local,true)];
+     openPdfBytes(pdfDocPages(pages),`${e.code} - QRCode EAN - Local`,!!(ev?.ctrlKey||ev?.metaKey));
    }
  }catch(err){console.error(err);toast('Não foi possível gerar a identificação do equipamento.')}
 }
@@ -4532,8 +4584,71 @@ function buildCompleteKitLabelPdf(k,rows){
  let fs=6.1;
  rows.forEach(e=>{let p=getProduct(e.productId),metric=e.type||hceText(e)||'',line=[e.code,productLabelName(p),metric,'S/N:',e.series].filter(Boolean).join(' ');let lineFs=fs;while(pdfApproxWidth(line,lineFs,true)>rw&&lineFs>4)lineFs-=.2;s+=pdfTextCommand(line,rx,y,lineFs,rw,true,'center');y-=step});return pdfDoc(s)
 }
-function openPdfBytes(bytes,title){const w=window.open('about:blank','_blank');if(!w){toast('O navegador bloqueou a visualização. Permita pop-ups para este arquivo.');return}const blob=new Blob([bytes],{type:'application/pdf'}),url=URL.createObjectURL(blob);w.location.href=url;w.document.title=title;setTimeout(()=>URL.revokeObjectURL(url),120000)}
-function printCompleteKitFromModal(){const k=state.kits.find(x=>x.id===currentPrintKitId);if(!k){toast('Kit não encontrado.');return}const rows=k.equipmentIds.map(getEquipment).filter(e=>e&&e.series&&e.series!=='N/S');if(!rows.length){toast('Este kit não possui equipamentos seriados.');return}openPdfBytes(buildCompleteKitLabelPdf(k,rows),`${k.name} - Kit completo`)}
+function setLabelPrintLoading(visible){
+ const loading=$('labelPrintLoading');
+ if(!loading)return;
+ loading.classList.toggle('active',!!visible);
+ loading.setAttribute('aria-hidden',visible?'false':'true');
+}
+function openPdfBytes(bytes,title,preview=false){
+ const blob=new Blob([bytes],{type:'application/pdf'});
+ const url=URL.createObjectURL(blob);
+ if(preview){
+  const w=window.open('about:blank','_blank');
+  if(!w){
+   URL.revokeObjectURL(url);
+   toast('O navegador bloqueou a nova aba. Permita pop-ups e tente novamente.');
+   return;
+  }
+  w.document.title=title;
+  w.location.href=url;
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+  return;
+ }
+ setLabelPrintLoading(true);
+ const frame=document.createElement('iframe');
+ frame.title=title;
+ frame.setAttribute('aria-hidden','true');
+ frame.setAttribute('tabindex','-1');
+ frame.style.cssText='position:fixed;left:-10000px;top:0;width:800px;height:600px;border:0;pointer-events:none;';
+ let started=false,disposed=false,watchdog=null,disposeTimer=null;
+ const cleanup=()=>{
+  if(disposed)return;
+  disposed=true;
+  clearTimeout(watchdog);
+  clearTimeout(disposeTimer);
+  setLabelPrintLoading(false);
+  frame.remove();
+  URL.revokeObjectURL(url);
+ };
+ const fail=err=>{
+  if(err)console.error('Falha na impressão automática da etiqueta:',err);
+  cleanup();
+  toast('Impressão automática indisponível. Use Ctrl+clique em IMPRIMIR para abrir o PDF.');
+ };
+ watchdog=setTimeout(()=>{if(!started)fail(new Error('O PDF não terminou de carregar.'))},15000);
+ disposeTimer=setTimeout(cleanup,120000);
+ frame.addEventListener('error',()=>{clearTimeout(watchdog);fail(new Error('Falha no carregamento do PDF.'))},{once:true});
+ frame.addEventListener('load',()=>{
+  if(disposed||started)return;
+  started=true;
+  clearTimeout(watchdog);
+  setTimeout(()=>{
+   if(disposed)return;
+   try{
+    const frameWindow=frame.contentWindow;
+    if(!frameWindow||typeof frameWindow.print!=='function')throw new Error('API de impressão indisponível.');
+    try{frameWindow.addEventListener('afterprint',()=>setTimeout(cleanup,2500),{once:true})}catch(_){}
+    setLabelPrintLoading(false);
+    frameWindow.focus();
+    frameWindow.print();
+   }catch(err){fail(err)}
+  },900);
+ },{once:true});
+ frame.src=url;
+ document.body.appendChild(frame);
+}
+function printCompleteKitFromModal(ev){const k=state.kits.find(x=>x.id===currentPrintKitId);if(!k){toast('Kit não encontrado.');return}const rows=k.equipmentIds.map(getEquipment).filter(e=>e&&e.series&&e.series!=='N/S');if(!rows.length){toast('Este kit não possui equipamentos seriados.');return}openPdfBytes(buildCompleteKitLabelPdf(k,rows),`${k.name} - Kit completo`,!!(ev?.ctrlKey||ev?.metaKey))}
 function printKitLabel(id){if(!requirePermission('kits.print'))return;
     const k=state.kits.find(x=>x.id===id);if(!k){toast('Kit não encontrado.');return}
     currentPrintKitId=id;
@@ -4544,11 +4659,11 @@ function printKitLabel(id){if(!requirePermission('kits.print'))return;
     $('printLabelEquipmentList').innerHTML=serialized.map(e=>{
         const p=getProduct(e.productId);
         const metric=e.type||hceText(e)||'';
-        return `<div class="selected-item"><div><strong>${esc(e.code)} · ${esc(e.location)} · ${esc(productSiteName(p))}${metric?' · '+esc(metric):''}</strong><div class="hint">S/N: ${esc(e.series)}</div></div><div class="table-actions"><button class="btn btn-small btn-primary" onclick="generateEquipmentLabel('${k.id}','${e.id}')">IMPRIMIR IDENTIFICAÇÃO</button><button class="btn btn-small btn-primary" onclick="generateKitEquipmentLocalLabel('${k.id}','${e.id}')">IMPRIMIR LOCAL</button></div></div>`;
+        return `<div class="selected-item"><div><strong>${esc(e.code)} · ${esc(e.location)} · ${esc(productSiteName(p))}${metric?' · '+esc(metric):''}</strong><div class="hint">S/N: ${esc(e.series)}</div></div><div class="table-actions"><button class="btn btn-small btn-primary" onclick="generateEquipmentLabel('${k.id}','${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR IDENTIFICAÇÃO</button><button class="btn btn-small btn-primary" onclick="generateKitEquipmentLocalLabel('${k.id}','${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR LOCAL</button></div></div>`;
     }).join('');
     openModal('printLabelModal');
 }
-function generateEquipmentLabel(kitId,equipmentId){
+function generateEquipmentLabel(kitId,equipmentId,ev){
     const k=state.kits.find(x=>x.id===kitId);
     const selected=getEquipment(equipmentId);
     if(!k||!selected){toast('Kit ou equipamento não encontrado.');return}
@@ -4557,11 +4672,11 @@ function generateEquipmentLabel(kitId,equipmentId){
     const codeRecord=getCode(selected.codeId);
     if(!codeRecord?.ean||!validEan13(codeRecord.ean)){toast('O código '+(selected.code||'')+' não possui um EAN-13 válido cadastrado.');return}
 
-    try{openPdfBytes(buildKitLabelPdf(k,serialized,selected),`${k.name} - ${selected.code} - Identificação`)}
+    try{openPdfBytes(buildKitLabelPdf(k,serialized,selected),`${k.name} - ${selected.code} - Identificação`,!!(ev?.ctrlKey||ev?.metaKey))}
     catch(err){console.error(err);toast('Não foi possível gerar o QR Code/PDF da identificação.')}
 }
 
-function generateKitEquipmentLocalLabel(kitId,equipmentId){
+function generateKitEquipmentLocalLabel(kitId,equipmentId,ev){
     if(!requirePermission('kits.print'))return;
     const k=state.kits.find(x=>x.id===kitId);
     const selected=getEquipment(equipmentId);
@@ -4573,7 +4688,7 @@ function generateKitEquipmentLocalLabel(kitId,equipmentId){
     if(Array.from(local).length>16){toast('O local deve ter no máximo 16 caracteres.');return}
 
     try{
-        openPdfBytes(buildLocalLabelPdf(local),`Local - ${local}`);
+        openPdfBytes(buildLocalLabelPdf(local),`Local - ${local}`,!!(ev?.ctrlKey||ev?.metaKey));
     }catch(err){
         console.error(err);
         toast('Não foi possível gerar a etiqueta de local.');
