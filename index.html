@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v4.11.7 -->
+<!-- v5.12.5 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -44,7 +44,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 .btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:9px 13px;border-radius:7px;font-weight:600}.btn:hover{border-color:#b9c5ce}.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}.btn-success{background:var(--success);border-color:var(--success);color:#fff}.btn-danger{background:var(--danger);border-color:var(--danger);color:#fff}.btn-small{padding:6px 9px;font-size:12px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
 .dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.metric{padding:17px}.metric .label{color:var(--muted);font-size:12px}.metric .value{font-size:27px;font-weight:700;margin-top:5px;color:var(--primary)}
-.toolbar{padding:13px;margin-bottom:14px;display:flex;gap:9px;align-items:end;flex-wrap:wrap}.equipment-print-actions{display:flex;flex-direction:column;gap:5px;align-self:flex-end}.equipment-print-actions .btn{width:100%;padding:7px 10px;font-size:11px}.field{display:flex;flex-direction:column;gap:6px;min-width:150px}.field.grow{flex:1}.field label{font-size:12px;font-weight:700;color:var(--muted)}input,select{width:100%;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);padding:9px 10px;outline:none}input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(242,195,0,.18)}
+.toolbar{padding:13px;margin-bottom:14px;display:flex;gap:9px;align-items:end;flex-wrap:wrap}.equipment-print-actions{position:relative;display:flex;flex-direction:column;align-self:flex-end;min-width:142px}.equipment-print-actions>.btn{width:100%;padding:9px 13px;font-size:inherit}.field{display:flex;flex-direction:column;gap:6px;min-width:150px}.field.grow{flex:1}.field label{font-size:12px;font-weight:700;color:var(--muted)}input,select{width:100%;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);padding:9px 10px;outline:none}input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(242,195,0,.18)}
 .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{text-align:left;padding:11px 12px;border-bottom:1px solid #edf0f2;vertical-align:middle}.table th{background:var(--surface-2);font-size:12px;color:var(--muted);font-weight:700}.table tr:last-child td{border-bottom:0}
 .equipment-table{table-layout:fixed;min-width:1280px}
 
@@ -62,6 +62,10 @@ button,input,select{font:inherit}button{cursor:pointer}
 .equipment-sort-menu button:hover,.equipment-sort-menu button.active{background:#eef1f3}
 
 .equipment-sort-menu .equipment-sort-reset{margin-top:3px;padding-top:8px;border-top:1px solid #e3e7ea;border-radius:0 0 5px 5px;color:#59636a}
+.equipment-print-menu{position:absolute;top:calc(100% + 5px);right:0;z-index:1200;display:none;min-width:190px;padding:5px;background:#fff;border:1px solid #d8dde1;border-radius:7px;box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.equipment-print-menu.open{display:grid;gap:3px}
+.equipment-print-menu button{width:100%;padding:9px 10px;border:0;border-radius:5px;background:transparent;color:#303030;font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
+.equipment-print-menu button:hover,.equipment-print-menu button:focus-visible{background:#eef1f3;outline:none}
 
 
 .equipment-table th:nth-child(1),.equipment-table td:nth-child(1){width:96px}
@@ -177,7 +181,7 @@ button,input,select{font:inherit}button{cursor:pointer}
  .metric{padding:12px;min-width:0}.metric .label{font-size:11px}.metric .value{font-size:23px}
  .toolbar{padding:10px;gap:9px;align-items:stretch}
  .toolbar .field,.toolbar .field.grow{min-width:100%;width:100%;flex:auto}
- .toolbar>.btn{width:100%;min-height:44px}.equipment-print-actions{width:100%;align-self:stretch}.equipment-print-actions .btn{width:100%;min-height:42px;padding:8px 10px;font-size:11px}
+ .toolbar>.btn{width:100%;min-height:44px}.equipment-print-actions{width:100%;min-width:0;align-self:stretch}.equipment-print-actions>.btn{width:100%;min-height:42px;padding:8px 10px;font-size:12px}.equipment-print-menu{left:0;right:0;min-width:0}
  .actions{width:100%;gap:7px}.actions .btn{flex:1 1 140px;min-width:0}
  .btn{min-height:42px;padding:9px 10px;touch-action:manipulation}
  .btn-small{min-height:38px;padding:7px 9px}
@@ -553,6 +557,59 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 .label-print-loading-text span{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
 @media print{.label-print-loading{display:none!important}}
 
+
+/* v5.12.5 | Navegação lateral responsiva e alinhada */
+:root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10}
+body{border-left:0;padding-left:var(--sidebar-closed);transition:padding-left .22s ease}
+body.sidebar-pinned,body.sidebar-expanded{padding-left:var(--sidebar-open)}
+#mainApp{min-width:0}
+#mainApp .header-inner,#mainApp .container,#mainApp .site-footer{max-width:1450px}
+#mainApp .nav{position:fixed;z-index:95;left:0;top:0;bottom:0;width:var(--sidebar-closed);height:100dvh;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;overflow:hidden;margin:0;padding:0;border:0;border-right:1px solid #eab21f;border-radius:0;background:var(--sidebar-color);box-shadow:2px 0 13px rgba(0,0,0,.09);transition:width .22s ease;white-space:nowrap}
+body.sidebar-expanded #mainApp .nav,body.sidebar-pinned #mainApp .nav{width:var(--sidebar-open)}
+#mainApp .nav .nav-top{height:90px;min-height:90px;display:flex;gap:11px;align-items:center;padding:0 10px;border-bottom:1px solid rgba(83,70,0,.17);background:var(--sidebar-color)}
+#mainApp .nav .nav-top-mark{height:38px;width:38px;min-width:38px;object-fit:contain;border-radius:9px;background:rgba(255,255,255,.83);padding:4px;box-sizing:border-box}
+#mainApp .nav .nav-user-details{position:relative;display:flex;flex-direction:column;justify-content:flex-start;align-self:stretch;gap:0;flex:1;min-width:0;opacity:0;visibility:hidden;transition:opacity .12s ease}
+body.sidebar-expanded #mainApp .nav .nav-user-details,body.sidebar-pinned #mainApp .nav .nav-user-details{opacity:1;visibility:visible}
+#mainApp .nav .user-name-button{position:absolute;top:50%;left:0;transform:translateY(-50%);display:block;width:100%;height:auto;min-height:0;margin:0;padding:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--sidebar-text)!important;font-size:14px;font-weight:800;line-height:1.3;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+#mainApp .nav .user-name-button:hover{text-decoration:underline}
+#mainApp .nav .user-name-button:focus-visible{outline:2px solid #674500!important;outline-offset:3px!important}
+#mainApp .nav .sync-status{position:absolute;top:calc(50% + 13px);left:0;align-self:flex-start;max-width:100%;font-size:10px;font-weight:700;padding:5px 9px;color:var(--sidebar-text);background:#fff1b1;border:1px solid #e7ae21;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mainApp .nav .sync-dot{flex:0 0 7px}
+#mainApp .nav .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#mainApp .nav .nav-links{display:flex;flex-direction:column;gap:5px;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:14px 6px;scrollbar-width:thin}
+#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{min-height:45px;flex:0 0 45px;width:100%;display:flex;align-items:center;justify-content:flex-start;gap:12px;border:0;border-radius:8px;margin:0;padding:0 10px;background:var(--sidebar-button);color:var(--sidebar-text);font-weight:700;font-size:13px;white-space:nowrap;text-align:left;cursor:pointer;transition:background .14s ease,color .14s ease}
+#mainApp .nav button[data-page]:hover,#mainApp .nav .sidebar-pin:hover{background:#ffdb69;color:#3d2f00}
+#mainApp .nav button[data-page].active{background:#fff0a6;color:#3d2e00;box-shadow:inset 3px 0 #7a5200}
+#mainApp .nav .nav-icon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;flex-shrink:0}
+#mainApp .nav .nav-icon svg{width:22px;height:22px;flex-shrink:0}
+#mainApp .nav .nav-label{min-width:0;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .12s}
+body.sidebar-expanded #mainApp .nav .nav-label,body.sidebar-pinned #mainApp .nav .nav-label{opacity:1}
+#mainApp .nav .nav-bottom{padding:8px 6px;display:flex;min-height:62px;align-items:center;border-top:1px solid rgba(83,70,0,.17)}
+#mainApp .nav .nav-bottom .sidebar-pin{flex:1 1 auto;min-width:0;width:100%}
+#mainApp .nav .sidebar-pin[aria-pressed="true"]{background:#fff0a6;color:#3d2e00;box-shadow:inset 3px 0 #7a5200}
+#mainApp .nav button[data-page]:focus-visible,#mainApp .nav .sidebar-pin:focus-visible{outline:2px solid #674500;outline-offset:-2px}
+body.guest-calculator-mode{padding-left:0!important}
+body.guest-calculator-mode #mainApp .nav{display:none!important}
+@media(max-width:700px){
+ :root{--sidebar-closed:49px;--sidebar-open:230px}
+ body.sidebar-pinned,body.sidebar-expanded{padding-left:var(--sidebar-closed)}
+ #mainApp .nav .nav-top{padding-left:5px}
+ #mainApp .nav .nav-top-mark{width:38px;min-width:38px}
+ #mainApp .nav .nav-links{padding-left:4px;padding-right:4px}
+ #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{padding-left:7px}
+ #mainApp .nav .nav-bottom{padding-left:4px;padding-right:4px}
+}
+@media(prefers-reduced-motion:reduce){body,#mainApp .nav,#mainApp .nav .nav-label,#mainApp .nav .nav-user-details{transition:none!important}}
+
+/* v5.12.5 | Consistência dos links administrativos e badge no cabeçalho */
+body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!important}
+#mainApp .nav .nav-user-details{justify-content:center}
+#mainApp .nav .user-name-button{position:static;top:auto;left:auto;transform:none}
+#mainApp .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+#mainApp .header-actions .sync-status{display:inline-flex;justify-content:center;max-width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(255,255,255,.08);font-size:10px;font-weight:700;color:#eee}
+@media(max-width:700px){
+ #mainApp .header-actions{width:auto;align-self:flex-end;display:flex;grid-template-columns:none}
+}
 </style>
 </head>
 <body>
@@ -687,14 +744,26 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 <div id="forgotPasswordModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Recuperar senha</h3><button class="close" onclick="closeModal('forgotPasswordModal')">×</button></div><div class="modal-body"><form id="forgotPasswordForm" onsubmit="sendPasswordRecovery(event)"><div class="field"><label>E-mail</label><input id="forgotPasswordEmail" type="email" autocomplete="email" required placeholder="voce@empresa.com"><div class="hint">Enviaremos um link para definir uma nova senha.</div></div></form><div id="forgotPasswordMessage" class="auth-message"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('forgotPasswordModal')">CANCELAR</button><button id="forgotPasswordButton" class="btn btn-primary" onclick="document.getElementById('forgotPasswordForm').requestSubmit()">ENVIAR LINK</button></div></div></div>
 
 <div id="mainApp" class="app auth-locked">
-<header class="header"><div class="header-inner"><div class="brand"><img class="brand-logo" src="assets/logo.png" alt="CPE Tecnologia"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions"><button class="btn" data-permission="data.export" onclick="exportData()">EXPORTAR</button><button class="btn" data-permission="data.import" onclick="document.getElementById('importFile').click()">IMPORTAR</button><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"><div class="user-area"><div class="user-chip"><button id="currentUserName" class="user-name-button" type="button" onclick="openAccountPage()">Usuário</button><span id="currentUserRole">-</span></div><div id="syncStatus" class="sync-status" data-state="local"><span class="sync-dot"></span><span id="syncStatusText">Local</span></div><button class="btn" onclick="logoutUser()">SAIR</button></div></div></div></header>
+<header class="header"><div class="header-inner"><div class="brand"><img class="brand-logo" src="assets/logo.png" alt="CPE Tecnologia"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions"><div id="syncStatus" class="sync-status" data-state="local" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncStatusText">Local</span></div><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"></div></div></header>
 <main class="container">
-<nav class="nav"><button class="active" data-page="equipamentos">Equipamentos</button><button data-page="produtos">Produtos</button><button data-page="montar">Montar Kit</button><button data-page="kits">Kits Ativos</button><button data-page="calculadora">Calculadora de Diárias</button><button id="usersNavButton" class="admin-only" data-page="usuarios">Usuários</button><button id="permissionsNavButton" class="admin-only" data-page="permissoes">Permissões</button><button data-page="dados">Dados</button></nav>
+<nav class="nav" id="appSidebar" aria-label="Navegação principal">
+<div class="nav-top">
+  <img class="nav-top-mark" src="assets/favicon.ico" alt="" aria-hidden="true">
+  <div class="nav-user-details">
+    <button id="currentUserName" class="user-name-button" type="button" onclick="openAccountPage()" title="Abrir meu perfil">Usuário</button>
+    <span id="currentUserRole" class="sr-only">-</span>
+  </div>
+</div>
+<div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8V4l5-2 5 2v4l-5 2-5-2Zm10 0V4l5-2 5 2v4l-5 2-5-2ZM2 18v-4l5-2 5 2v4l-5 2-5-2Z"/><path d="M2 18v3l5 2 5-2v-3M7 10v3M17 10v3"/></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
+<div class="nav-bottom">
+  <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar barra lateral" title="Fixar barra lateral"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar barra</span></button>
+</div>
+</nav>
 <div id="readonlyBanner" class="readonly-banner permission-note">Seu perfil é de <strong>Consulta</strong>. Você pode visualizar dados, imprimir etiquetas, exportar backups e usar a calculadora, mas alterações de estoque estão bloqueadas.</div>
 <section id="equipamentos" class="page active">
 <div class="page-title"><div><h2>Equipamentos</h2><p>Cadastre, pesquise e acompanhe os equipamentos do estoque.</p></div><button class="btn btn-primary" data-permission="equipment.create" onclick="openEquipmentModal()">+ CADASTRAR EQUIPAMENTO</button></div>
 <div class="dashboard"><div class="card metric"><div class="label">Equipamentos</div><div class="value" id="mTotal">0</div></div><div class="card metric"><div class="label">Disponíveis</div><div class="value" id="mAvailable">0</div></div><div class="card metric"><div class="label">Em kits</div><div class="value" id="mInKit">0</div></div><div class="card metric"><div class="label">Kits ativos</div><div class="value" id="mKits">0</div></div></div>
-<div class="card toolbar"><div class="field grow"><label>Pesquisar</label><input id="filterSearch" placeholder="Produto, código, local, série..." oninput="renderEquipmentTable()"></div><div class="field"><label>Disponibilidade</label><select id="filterStatus" onchange="renderEquipmentTable()"><option value="">Todos</option><option value="available">Disponível</option><option value="kit">Em kit</option></select></div><div class="field"><label>Categoria</label><select id="filterVariable" onchange="renderEquipmentTable()"><option value="">Todas</option><option value="Receptor">Receptor</option><option value="Coletora">Coletora</option><option value="Estação Total">Estação Total</option><option value="Laser">Laser</option><option value="Drone">Drone</option><option value="Ecobatímetro">Ecobatímetro</option><option value="Nível">Nível</option><option value="Rádio">Rádio</option><option value="Bateria">Bateria</option><option value="Lidar">Lidar</option><option value="Acessório">Acessório</option></select></div><button class="btn" onclick="clearEquipmentFilters()">LIMPAR</button><div class="equipment-print-actions"><button class="btn btn-primary" data-permission="equipment.print" onclick="openPrintLocalModal()">IMPRIMIR LOCAL</button><button class="btn btn-primary" data-permission="equipment.print" onclick="openPrintOsModal()">IMPRIMIR O.S.</button></div></div>
+<div class="card toolbar"><div class="field grow"><label>Pesquisar</label><input id="filterSearch" placeholder="Produto, código, local, série..." oninput="renderEquipmentTable()"></div><div class="field"><label>Disponibilidade</label><select id="filterStatus" onchange="renderEquipmentTable()"><option value="">Todos</option><option value="available">Disponível</option><option value="kit">Em kit</option></select></div><div class="field"><label>Categoria</label><select id="filterVariable" onchange="renderEquipmentTable()"><option value="">Todas</option><option value="Receptor">Receptor</option><option value="Coletora">Coletora</option><option value="Estação Total">Estação Total</option><option value="Laser">Laser</option><option value="Drone">Drone</option><option value="Ecobatímetro">Ecobatímetro</option><option value="Nível">Nível</option><option value="Rádio">Rádio</option><option value="Bateria">Bateria</option><option value="Lidar">Lidar</option><option value="Acessório">Acessório</option></select></div><button class="btn" onclick="clearEquipmentFilters()">LIMPAR</button><div class="equipment-print-actions" data-permission="equipment.print"><button type="button" id="equipmentPrintToggle" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" aria-controls="equipmentPrintMenu" onclick="toggleEquipmentPrintMenu(event)">Impressão ▼</button><div id="equipmentPrintMenu" class="equipment-print-menu" aria-label="Etiquetas avulsas"><button type="button" onclick="closeEquipmentPrintMenu();openPrintOsModal()">Imprimir O.S.</button><button type="button" onclick="closeEquipmentPrintMenu();openPrintLocalModal()">Imprimir local</button><button type="button" title="Clique: imprimir · Ctrl+clique: abrir PDF" onclick="printConsumptionLabel(event)">Imprimir consumo</button></div></div></div>
 <div class="card table-wrap"><table class="table equipment-table"><thead><tr><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Código</span><button type="button" class="equipment-sort-btn" data-sort-field="code" aria-label="Classificar Código" onclick="toggleEquipmentSortMenu(event,'code')">▼</button></span></div><div id="equipment-sort-code" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('code','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('code','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Local</span><button type="button" class="equipment-sort-btn" data-sort-field="location" aria-label="Classificar Local" onclick="toggleEquipmentSortMenu(event,'location')">▼</button></span></div><div id="equipment-sort-location" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('location','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('location','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Produto</span><button type="button" class="equipment-sort-btn" data-sort-field="product" aria-label="Classificar Produto" onclick="toggleEquipmentSortMenu(event,'product')">▼</button></span></div><div id="equipment-sort-product" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('product','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('product','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Software</span><button type="button" class="equipment-sort-btn" data-sort-field="software" aria-label="Classificar Software" onclick="toggleEquipmentSortMenu(event,'software')">▼</button></span></div><div id="equipment-sort-software" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('software','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('software','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Série</span><button type="button" class="equipment-sort-btn" data-sort-field="series" aria-label="Classificar Série" onclick="toggleEquipmentSortMenu(event,'series')">▼</button></span></div><div id="equipment-sort-series" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('series','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('series','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Tipo</span><button type="button" class="equipment-sort-btn" data-sort-field="type" aria-label="Classificar Tipo" onclick="toggleEquipmentSortMenu(event,'type')">▼</button></span></div><div id="equipment-sort-type" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('type','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('type','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Status</span><button type="button" class="equipment-sort-btn" data-sort-field="status" aria-label="Classificar Status" onclick="toggleEquipmentSortMenu(event,'status')">▼</button></span></div><div id="equipment-sort-status" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('status','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('status','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span>Ações</span></div></th></tr></thead><tbody id="equipmentTable"></tbody></table></div>
 </section>
 <section id="produtos" class="page">
@@ -772,6 +841,7 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
       <dt>Cargo</dt><dd id="accountRole">-</dd>
       <dt>Conta criada em</dt><dd id="accountCreatedAt">-</dd>
     </dl>
+    <div class="actions" style="margin-top:20px"><button class="btn btn-danger" type="button" onclick="logoutUser()">SAIR</button></div>
   </div>
   <div class="card account-card">
     <h3>Alterar nome de exibição</h3>
@@ -3944,6 +4014,27 @@ const EQUIPMENT_TYPE_SORT_ORDER=['Receptor','Coletora','Estação Total','Laser'
 function closeEquipmentSortMenus(){
     document.querySelectorAll('.equipment-sort-menu.open').forEach(menu=>menu.classList.remove('open'));
 }
+function closeEquipmentPrintMenu(){
+    const menu=$('equipmentPrintMenu');
+    const button=$('equipmentPrintToggle');
+    if(!menu||!button)return;
+    menu.classList.remove('open');
+    button.setAttribute('aria-expanded','false');
+}
+function toggleEquipmentPrintMenu(event){
+    event.stopPropagation();
+    if(!hasPermission('equipment.print'))return;
+    const menu=$('equipmentPrintMenu');
+    const button=$('equipmentPrintToggle');
+    if(!menu||!button)return;
+    const willOpen=!menu.classList.contains('open');
+    closeEquipmentSortMenus();
+    closeEquipmentPrintMenu();
+    if(willOpen){
+        menu.classList.add('open');
+        button.setAttribute('aria-expanded','true');
+    }
+}
 
 function updateEquipmentSortIndicators(){
     document.querySelectorAll('.equipment-sort-btn').forEach(btn=>{
@@ -3962,6 +4053,7 @@ function toggleEquipmentSortMenu(event,field){
     if(!target)return;
     const willOpen=!target.classList.contains('open');
     closeEquipmentSortMenus();
+    closeEquipmentPrintMenu();
     if(willOpen)target.classList.add('open');
     updateEquipmentSortIndicators();
 }
@@ -4037,6 +4129,15 @@ function compareEquipmentSortValues(a,b,field=''){
 document.addEventListener('click',event=>{
     if(!event.target.closest('.equipment-sort-menu')&&!event.target.closest('.equipment-sort-btn')){
         closeEquipmentSortMenus();
+    }
+    if(!event.target.closest('.equipment-print-actions'))closeEquipmentPrintMenu();
+});
+document.addEventListener('keydown',event=>{
+    if(event.key!=='Escape')return;
+    const menu=$('equipmentPrintMenu');
+    if(menu?.classList.contains('open')){
+        if(menu.contains(document.activeElement))$('equipmentPrintToggle')?.focus();
+        closeEquipmentPrintMenu();
     }
 });
 
@@ -4450,7 +4551,7 @@ function localLabelFontSize(value){
  if(len<=14)return 15;
  return 13.5;
 }
-function buildLocalLabelPdf(value,asStream=false){
+function buildLocalLabelPdf(value,asStream=false,labelTitle='Local'){
  const mm=72/25.4,H=30*mm,L=50*mm,RX=53*mm,R=50*mm,M=3*mm,lx=M,lw=L-2*M,rx=RX+M,rw=R-2*M;
  const local=String(value??'').trim();
  let s='';
@@ -4459,7 +4560,7 @@ function buildLocalLabelPdf(value,asStream=false){
   const cx=x+(w/2);
 
   // Etiqueta simplificada: apenas o título "Local" e o valor informado.
-  s+=pdfCenteredLabelTextCommand('Local',cx,H-M-11.5,13,w,true);
+  s+=pdfCenteredLabelTextCommand(labelTitle,cx,H-M-11.5,13,w,true);
 
   // 4 caracteres ou menos usam o mesmo tamanho-base do LOCAL das EAN/EAN.
   // A fonte diminui progressivamente conforme o texto cresce e ainda possui
@@ -4474,6 +4575,16 @@ function buildLocalLabelPdf(value,asStream=false){
  renderLocalHalf(rx,rw);
 
  return asStream?s:pdfDoc(s);
+}
+function printConsumptionLabel(ev){
+ closeEquipmentPrintMenu();
+ if(!requirePermission('equipment.print'))return;
+ try{
+  openPdfBytes(buildLocalLabelPdf('Consumo',false,'CPE - SP'),'Consumo - Etiqueta',!!(ev?.ctrlKey||ev?.metaKey));
+ }catch(err){
+  console.error(err);
+  toast('Não foi possível gerar a etiqueta de consumo.');
+ }
 }
 function openPrintLocalModal(){
  if(!requirePermission('equipment.print'))return;
@@ -5063,7 +5174,87 @@ function applyResponsiveTableLabels(){
 }
 function renderAll(){updateDashboard();renderEquipmentTable();renderProductPage();renderBuilderProductFilter();renderBuilder();renderKits();updateCharts();renderProductManager();renderCodeManager();applyPermissionVisibility();if(canAdmin()){renderUsersPage();renderPermissionsPage()}}
 
-document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>{lastMainPage=btn.dataset.page||lastMainPage;if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));btn.classList.add('active');$(btn.dataset.page).classList.add('active');if(btn.dataset.page==='dados')updateCharts();if(btn.dataset.page==='produtos')renderProductPage();if(btn.dataset.page==='usuarios')renderUsersPage();if(btn.dataset.page==='permissoes')renderPermissionsPage()}));
+
+/* v5.12.5 | Recolhimento antecipado somente apos concluir a expansao */
+const appSidebar=document.getElementById('appSidebar');
+let sidebarExpansionComplete=false;
+function setSidebarHoverExpanded(expanded){
+ if(document.body.classList.contains('sidebar-pinned'))return;
+ if(document.body.classList.contains('sidebar-expanded')===expanded)return;
+ sidebarExpansionComplete=false;
+ document.body.classList.toggle('sidebar-expanded',expanded);
+ if(expanded){
+  const duration=getComputedStyle(appSidebar).transitionDuration.split(',').some(part=>parseFloat(part)>0);
+  if(!duration)sidebarExpansionComplete=true;
+ }
+}
+appSidebar.addEventListener('pointerenter',ev=>{
+ if(ev.pointerType==='mouse'||ev.pointerType==='pen')setSidebarHoverExpanded(true);
+});
+appSidebar.addEventListener('pointerleave',ev=>{
+ if(ev.pointerType==='mouse'||ev.pointerType==='pen')setSidebarHoverExpanded(false);
+});
+appSidebar.addEventListener('transitionend',ev=>{
+ if(ev.target===appSidebar&&ev.propertyName==='width'&&document.body.classList.contains('sidebar-expanded')&&!document.body.classList.contains('sidebar-pinned'))sidebarExpansionComplete=true;
+});
+appSidebar.addEventListener('pointermove',ev=>{
+ if(!sidebarExpansionComplete||document.body.classList.contains('sidebar-pinned')||(ev.pointerType!=='mouse'&&ev.pointerType!=='pen'))return;
+ const rect=appSidebar.getBoundingClientRect();
+ if(ev.clientX>=rect.right-14&&ev.clientX<rect.right)setSidebarHoverExpanded(false);
+});
+appSidebar.addEventListener('focusin',ev=>{
+ if(ev.target.matches(':focus-visible'))setSidebarHoverExpanded(true);
+});
+appSidebar.addEventListener('focusout',ev=>{
+ if(!appSidebar.contains(ev.relatedTarget)&&!appSidebar.matches(':hover'))setSidebarHoverExpanded(false);
+});
+
+/* v5.12.3 | Fixação sem interferir na navegação */
+function updateSidebarPin(){
+ const pinned=document.body.classList.contains('sidebar-pinned');
+ const control=document.getElementById('sidebarPin');
+ const label=document.getElementById('sidebarPinLabel');
+ const iconElement=document.getElementById('sidebarPinIcon');
+ if(!control)return;
+ control.setAttribute('aria-pressed',String(pinned));
+ control.setAttribute('aria-label',pinned?'Desafixar barra lateral':'Fixar barra lateral');
+ control.title=pinned?'Desafixar barra lateral':'Fixar barra lateral';
+ if(label)label.textContent=pinned?'Desafixar barra':'Fixar barra';
+ if(iconElement)iconElement.innerHTML=pinned?'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-3 3M12 13l-1 4-2 2-1-5-4-1 2-2 4-1 2-2"/><path d="M4 20l6-6M2 2l20 20"/></svg>':'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg>';
+}
+function toggleSidebarPin(){
+ const pinned=document.body.classList.toggle('sidebar-pinned');
+ if(pinned){
+  document.body.classList.remove('sidebar-expanded');
+  sidebarExpansionComplete=false;
+ }else if(appSidebar.matches(':hover')){
+  document.body.classList.add('sidebar-expanded');
+  sidebarExpansionComplete=true;
+ }else{
+  document.body.classList.remove('sidebar-expanded');
+  sidebarExpansionComplete=false;
+ }
+ try{localStorage.setItem('giocapo_sidebar_pinned',pinned?'1':'0')}catch(_){}
+ updateSidebarPin();
+}
+try{if(localStorage.getItem('giocapo_sidebar_pinned')==='1')document.body.classList.add('sidebar-pinned')}catch(_){}
+updateSidebarPin();
+
+document.querySelectorAll('.nav button[data-page]').forEach(btn=>btn.addEventListener('click',()=>{
+ const page=btn.dataset.page;
+ const target=$(page);
+ if(!target)return;
+ lastMainPage=page;
+ if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
+ document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ btn.classList.add('active');
+ target.classList.add('active');
+ if(page==='dados')updateCharts();
+ if(page==='produtos')renderProductPage();
+ if(page==='usuarios')renderUsersPage();
+ if(page==='permissoes')renderPermissionsPage();
+}));
 bootApp();
 
 const responsiveTableObserver=new MutationObserver(()=>applyResponsiveTableLabels());
