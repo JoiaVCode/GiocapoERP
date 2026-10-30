@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v5.12.5 -->
+<!-- v5.14.4 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -33,7 +33,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 .app{min-height:100vh;display:flex;flex-direction:column}
 .header{background:#3a3a3a;color:#fff;padding:18px 24px}
 .header-inner{max-width:1450px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand-logo{display:block;width:120px;height:auto;max-height:64px;object-fit:contain;flex:0 0 auto}.brand-text{min-width:0}.brand h1{margin:0;font-size:21px;font-weight:700}.brand p{margin:5px 0 0;color:#c9d7df;font-size:12px}
+.brand{display:flex;position:relative;align-items:center;gap:0;min-width:0;padding-left:132px;transition:padding-left .24s ease,transform .24s ease}.brand-logo{position:absolute;left:0;top:50%;display:block;width:120px;height:auto;max-height:64px;object-fit:contain;transform-origin:left center;opacity:1;transform:translateY(-50%) scale(1);transition:opacity .12s ease,transform .14s ease;pointer-events:none}.brand-text{min-width:0}.brand h1{margin:0;font-size:21px;font-weight:700}.brand p{margin:5px 0 0;color:#c9d7df;font-size:12px}
 .header-actions{display:flex;gap:8px;flex-wrap:wrap}.header-actions button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff}
 .container{width:100%;max-width:1450px;box-sizing:border-box;margin:0 auto;padding:20px 24px 32px;flex:1 0 auto}
 .nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:8px}
@@ -166,7 +166,7 @@ button,input,select{font:inherit}button{cursor:pointer}
  .app{min-width:0}
  .header{padding:13px 14px}
  .header-inner{align-items:flex-start;flex-direction:column;gap:12px}
- .brand{min-width:0;width:100%;gap:10px}.brand-logo{width:96px;max-height:52px}.brand-text{min-width:0}.brand h1{font-size:19px;line-height:1.2}.brand p{font-size:11px;line-height:1.4}
+ .brand{min-width:0;width:100%;padding-left:106px}.brand-logo{width:96px;max-height:52px}.brand-text{min-width:0}.brand h1{font-size:19px;line-height:1.2}.brand p{font-size:11px;line-height:1.4}
  .header-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
  .header-actions button{width:100%;min-width:0;min-height:42px;padding:8px 7px;font-size:11px}
  .container{padding:0 11px 24px}
@@ -558,58 +558,85 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 @media print{.label-print-loading{display:none!important}}
 
 
-/* v5.12.5 | Navegação lateral responsiva e alinhada */
-:root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10}
+/* v5.14.4 | Logo unica com mascara em degrade e zoom progressivo */
+:root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-fixed:227.4122304px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10}
 body{border-left:0;padding-left:var(--sidebar-closed);transition:padding-left .22s ease}
-body.sidebar-pinned,body.sidebar-expanded{padding-left:var(--sidebar-open)}
+body.sidebar-pinned{padding-left:var(--sidebar-fixed)}
+body.sidebar-pinned .brand{padding-left:0;transform:translateX(calc(-1 * max(0px,(100vw - var(--sidebar-fixed) - 1498px)/2)))}
+body.sidebar-pinned .brand-logo{opacity:0;transform:translateY(-50%) scale(.72)}
 #mainApp{min-width:0}
 #mainApp .header-inner,#mainApp .container,#mainApp .site-footer{max-width:1450px}
-#mainApp .nav{position:fixed;z-index:95;left:0;top:0;bottom:0;width:var(--sidebar-closed);height:100dvh;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;overflow:hidden;margin:0;padding:0;border:0;border-right:1px solid #eab21f;border-radius:0;background:var(--sidebar-color);box-shadow:2px 0 13px rgba(0,0,0,.09);transition:width .22s ease;white-space:nowrap}
-body.sidebar-expanded #mainApp .nav,body.sidebar-pinned #mainApp .nav{width:var(--sidebar-open)}
-#mainApp .nav .nav-top{height:90px;min-height:90px;display:flex;gap:11px;align-items:center;padding:0 10px;border-bottom:1px solid rgba(83,70,0,.17);background:var(--sidebar-color)}
-#mainApp .nav .nav-top-mark{height:38px;width:38px;min-width:38px;object-fit:contain;border-radius:9px;background:rgba(255,255,255,.83);padding:4px;box-sizing:border-box}
-#mainApp .nav .nav-user-details{position:relative;display:flex;flex-direction:column;justify-content:flex-start;align-self:stretch;gap:0;flex:1;min-width:0;opacity:0;visibility:hidden;transition:opacity .12s ease}
-body.sidebar-expanded #mainApp .nav .nav-user-details,body.sidebar-pinned #mainApp .nav .nav-user-details{opacity:1;visibility:visible}
-#mainApp .nav .user-name-button{position:absolute;top:50%;left:0;transform:translateY(-50%);display:block;width:100%;height:auto;min-height:0;margin:0;padding:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--sidebar-text)!important;font-size:14px;font-weight:800;line-height:1.3;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
-#mainApp .nav .user-name-button:hover{text-decoration:underline}
-#mainApp .nav .user-name-button:focus-visible{outline:2px solid #674500!important;outline-offset:3px!important}
-#mainApp .nav .sync-status{position:absolute;top:calc(50% + 13px);left:0;align-self:flex-start;max-width:100%;font-size:10px;font-weight:700;padding:5px 9px;color:var(--sidebar-text);background:#fff1b1;border:1px solid #e7ae21;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#mainApp .nav .sync-dot{flex:0 0 7px}
-#mainApp .nav .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-#mainApp .nav .nav-links{display:flex;flex-direction:column;gap:5px;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:14px 6px;scrollbar-width:thin}
-#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{min-height:45px;flex:0 0 45px;width:100%;display:flex;align-items:center;justify-content:flex-start;gap:12px;border:0;border-radius:8px;margin:0;padding:0 10px;background:var(--sidebar-button);color:var(--sidebar-text);font-weight:700;font-size:13px;white-space:nowrap;text-align:left;cursor:pointer;transition:background .14s ease,color .14s ease}
+#mainApp .nav{position:fixed;z-index:95;left:0;top:0;bottom:0;width:var(--sidebar-closed);height:100dvh;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;overflow:visible;margin:0;padding:0;border:0;border-right:1px solid #eab21f;border-radius:0;background:var(--sidebar-color);box-shadow:2px 0 13px rgba(0,0,0,.09);transition:width .22s ease;white-space:nowrap}
+body.sidebar-pinned #mainApp .nav{width:var(--sidebar-fixed)}
+#mainApp .nav .nav-top{position:relative;z-index:3;width:100%;height:90px;min-height:90px;display:flex;gap:11px;align-items:center;padding:0 10px;border-bottom:1px solid rgba(83,70,0,.17);background:var(--sidebar-color);transition:width .22s ease}
+#mainApp .nav .nav-brand-lockup{position:relative;display:block;align-self:stretch;flex:1;min-width:0;height:100%;overflow:hidden;pointer-events:none}
+#mainApp .nav .nav-brand-image{position:absolute;left:0;top:50%;width:113px;max-width:none;height:auto;display:block;object-fit:contain;pointer-events:none;transform-origin:left center;transform:translateY(-50%) scale(1);-webkit-mask-image:linear-gradient(to right,#000 0%,#000 90%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 90%,transparent 100%);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:left center;mask-position:left center;-webkit-mask-size:36% 100%;mask-size:36% 100%;transition:transform .28s cubic-bezier(.4,0,.2,1),-webkit-mask-size .28s cubic-bezier(.4,0,.2,1),mask-size .28s cubic-bezier(.4,0,.2,1);will-change:transform,-webkit-mask-size,mask-size}
+body.sidebar-pinned #mainApp .nav .nav-brand-image{transform:translateY(-50%) scale(1.5);-webkit-mask-size:106% 100%;mask-size:106% 100%}
+#mainApp .nav .nav-links{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px;flex:1;min-height:0;overflow:visible;padding:14px 6px;scrollbar-width:thin}
+#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{position:relative;z-index:1;min-height:45px;min-width:0;flex:0 0 45px;width:100%;display:flex;align-items:center;justify-content:flex-start;gap:12px;border:0;border-radius:8px;margin:0;padding:0 10px;background:var(--sidebar-button);color:var(--sidebar-text);font-weight:700;font-size:13px;white-space:nowrap;text-align:left;overflow:hidden;cursor:pointer;transform-origin:left center;transition:width .22s ease,transform .18s ease,background .14s ease,color .14s ease,box-shadow .14s ease}
 #mainApp .nav button[data-page]:hover,#mainApp .nav .sidebar-pin:hover{background:#ffdb69;color:#3d2f00}
 #mainApp .nav button[data-page].active{background:#fff0a6;color:#3d2e00;box-shadow:inset 3px 0 #7a5200}
 #mainApp .nav .nav-icon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;flex-shrink:0}
 #mainApp .nav .nav-icon svg{width:22px;height:22px;flex-shrink:0}
-#mainApp .nav .nav-label{min-width:0;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .12s}
-body.sidebar-expanded #mainApp .nav .nav-label,body.sidebar-pinned #mainApp .nav .nav-label{opacity:1}
-#mainApp .nav .nav-bottom{padding:8px 6px;display:flex;min-height:62px;align-items:center;border-top:1px solid rgba(83,70,0,.17)}
-#mainApp .nav .nav-bottom .sidebar-pin{flex:1 1 auto;min-width:0;width:100%}
+#mainApp .nav .nav-label{min-width:0;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .12s ease}
+#mainApp .nav .nav-bottom{position:relative;z-index:3;padding:8px 6px;display:flex;min-height:62px;align-items:center;border-top:1px solid rgba(83,70,0,.17)}
+#mainApp .nav .nav-bottom .sidebar-pin{flex:0 0 auto;min-width:0;width:100%}
 #mainApp .nav .sidebar-pin[aria-pressed="true"]{background:#fff0a6;color:#3d2e00;box-shadow:inset 3px 0 #7a5200}
 #mainApp .nav button[data-page]:focus-visible,#mainApp .nav .sidebar-pin:focus-visible{outline:2px solid #674500;outline-offset:-2px}
+body.sidebar-pinned #mainApp .nav .nav-label{opacity:1}
+body.sidebar-pinned #mainApp .nav button[data-page]{transform:none}
+@media(hover:hover) and (pointer:fine){
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page]:not(.active){overflow:visible}
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page]:not(.active)::after{content:"";position:absolute;inset:0;transform:scale(1.080092588623772);transform-origin:center;pointer-events:auto;background:transparent}
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page]:hover:not(.sidebar-early-collapse){width:calc(var(--sidebar-open) - 12px);transform:scale(1.1666);z-index:10;box-shadow:4px 5px 13px rgba(0,0,0,.15)}
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page]:hover:not(.sidebar-early-collapse) .nav-label{opacity:1;transition-delay:.07s}
+}
+body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible{width:calc(var(--sidebar-open) - 12px);z-index:10;box-shadow:4px 5px 13px rgba(0,0,0,.15)}
+body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible .nav-label{opacity:1}
 body.guest-calculator-mode{padding-left:0!important}
 body.guest-calculator-mode #mainApp .nav{display:none!important}
 @media(max-width:700px){
- :root{--sidebar-closed:49px;--sidebar-open:230px}
- body.sidebar-pinned,body.sidebar-expanded{padding-left:var(--sidebar-closed)}
+ :root{--sidebar-closed:49px;--sidebar-open:230px;--sidebar-fixed:210.906504px}
+ body.sidebar-pinned{padding-left:var(--sidebar-closed)}
+ body.sidebar-pinned .brand{width:calc(100% - var(--sidebar-fixed) + var(--sidebar-closed));transform:translateX(calc(var(--sidebar-fixed) - var(--sidebar-closed)))}
  #mainApp .nav .nav-top{padding-left:5px}
- #mainApp .nav .nav-top-mark{width:38px;min-width:38px}
  #mainApp .nav .nav-links{padding-left:4px;padding-right:4px}
  #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{padding-left:7px}
  #mainApp .nav .nav-bottom{padding-left:4px;padding-right:4px}
+ @media(hover:hover) and (pointer:fine){body:not(.sidebar-pinned) #mainApp .nav button[data-page]:hover:not(.sidebar-early-collapse){width:calc(var(--sidebar-open) - 8px)}}
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible{width:calc(var(--sidebar-open) - 8px)}
 }
-@media(prefers-reduced-motion:reduce){body,#mainApp .nav,#mainApp .nav .nav-label,#mainApp .nav .nav-user-details{transition:none!important}}
-
-/* v5.12.5 | Consistência dos links administrativos e badge no cabeçalho */
+@media(max-height:590px){
+ #mainApp .nav .nav-top{height:64px;min-height:64px}
+ #mainApp .nav .nav-links{gap:2px;padding-top:5px;padding-bottom:5px}
+ #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{min-height:39px;flex-basis:39px}
+ #mainApp .nav .nav-bottom{min-height:52px;padding-top:5px;padding-bottom:5px}
+}
+@media(prefers-reduced-motion:reduce){body,.brand,.brand-logo,#mainApp .nav,#mainApp .nav .nav-top,#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,#mainApp .nav .nav-label,#mainApp .nav .nav-brand-image{transition:none!important}}
+/* Perfis e indicador de sincronização preservados */
 body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!important}
-#mainApp .nav .nav-user-details{justify-content:center}
-#mainApp .nav .user-name-button{position:static;top:auto;left:auto;transform:none}
 #mainApp .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
 #mainApp .header-actions .sync-status{display:inline-flex;justify-content:center;max-width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(255,255,255,.08);font-size:10px;font-weight:700;color:#eee}
-@media(max-width:700px){
- #mainApp .header-actions{width:auto;align-self:flex-end;display:flex;grid-template-columns:none}
-}
+@media(max-width:700px){#mainApp .header-actions{width:auto;align-self:flex-end;display:flex;grid-template-columns:none}}
+
+/* v5.13.2 | Avatar e menu de conta no cabeçalho */
+#mainApp .header-actions{overflow:visible}
+#mainApp .header-profile-wrap{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+#mainApp .header-actions .header-profile-trigger{display:flex;align-items:center;justify-content:center;width:42px;min-width:42px;height:42px;min-height:42px;padding:0;border:2px solid rgba(255,255,255,.28);border-radius:50%;background:#fec123;color:#fff;font-size:14px;font-weight:800;letter-spacing:.3px;line-height:1;text-shadow:0 1px 1px rgba(95,67,0,.28);box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+#mainApp .header-actions .header-profile-trigger:hover,#mainApp .header-actions .header-profile-trigger[aria-expanded="true"]{background:#fec123;border-color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+#mainApp .header-actions .header-profile-trigger:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#mainApp .header-profile-initials{display:flex;align-items:center;justify-content:center;width:100%;height:100%;user-select:none}
+#mainApp .header-profile-menu{position:absolute;z-index:250;top:calc(100% + 4px);right:0;width:min(258px,calc(100vw - 70px));padding:6px;background:#fff;border:1px solid #dedede;border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.21);color:#303030;white-space:normal}
+#mainApp .header-profile-menu[hidden]{display:none!important}
+#mainApp .header-profile-identity{display:flex;flex-direction:column;gap:4px;min-width:0;padding:12px 11px;border-bottom:1px solid #e9e9e9;margin-bottom:5px}
+#mainApp .header-profile-identity strong{font-size:13px;color:#303030;overflow-wrap:anywhere}
+#mainApp .header-profile-identity span{color:#707070;font-size:11px}
+#mainApp .header-actions .header-profile-action{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:#333;font-size:12px;font-weight:700;text-align:left;cursor:pointer}
+#mainApp .header-actions .header-profile-action:hover,#mainApp .header-actions .header-profile-action:focus-visible{background:#fff3c6;color:#272727}
+#mainApp .header-profile-action span{display:inline-flex;align-items:center;justify-content:center;width:18px;font-size:16px;color:#795800}
+#mainApp .header-actions .header-profile-logout{color:#a33d39}
+#mainApp .header-actions .header-profile-logout span{color:#a33d39}
+@media(max-width:700px){#mainApp .header-profile-menu{width:min(258px,calc(100vw - 70px))}#mainApp .header-actions .header-profile-action{width:100%;min-height:38px;padding:9px 10px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -744,19 +771,28 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 <div id="forgotPasswordModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Recuperar senha</h3><button class="close" onclick="closeModal('forgotPasswordModal')">×</button></div><div class="modal-body"><form id="forgotPasswordForm" onsubmit="sendPasswordRecovery(event)"><div class="field"><label>E-mail</label><input id="forgotPasswordEmail" type="email" autocomplete="email" required placeholder="voce@empresa.com"><div class="hint">Enviaremos um link para definir uma nova senha.</div></div></form><div id="forgotPasswordMessage" class="auth-message"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('forgotPasswordModal')">CANCELAR</button><button id="forgotPasswordButton" class="btn btn-primary" onclick="document.getElementById('forgotPasswordForm').requestSubmit()">ENVIAR LINK</button></div></div></div>
 
 <div id="mainApp" class="app auth-locked">
-<header class="header"><div class="header-inner"><div class="brand"><img class="brand-logo" src="assets/logo.png" alt="CPE Tecnologia"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions"><div id="syncStatus" class="sync-status" data-state="local" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncStatusText">Local</span></div><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"></div></div></header>
+<header class="header"><div class="header-inner"><div class="brand"><img class="brand-logo" src="assets/logo.png" alt="CPE Tecnologia"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions">
+<div id="syncStatus" class="sync-status" data-state="local" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncStatusText">Local</span></div>
+<div id="headerProfileWrap" class="header-profile-wrap">
+  <button id="headerProfileTrigger" class="header-profile-trigger" type="button" aria-label="Abrir menu do perfil" aria-haspopup="true" aria-expanded="false" aria-controls="headerProfileMenu" title="Meu perfil" onclick="toggleHeaderProfileMenu(event)"><span id="headerAvatarInitials" class="header-profile-initials" aria-hidden="true">U</span></button>
+  <div id="headerProfileMenu" class="header-profile-menu" aria-label="Opções do perfil" hidden>
+    <div class="header-profile-identity"><strong id="currentUserName">Usuário</strong><span id="currentUserRole">-</span></div>
+    <button type="button" class="header-profile-action" onclick="openHeaderProfileAccount()"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg></span> Minha conta</button>
+    <button type="button" class="header-profile-action header-profile-logout" onclick="logoutFromHeaderProfile()"><span aria-hidden="true">↪</span> Sair</button>
+  </div>
+</div>
+<input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)">
+</div></div></header>
 <main class="container">
 <nav class="nav" id="appSidebar" aria-label="Navegação principal">
 <div class="nav-top">
-  <img class="nav-top-mark" src="assets/favicon.ico" alt="" aria-hidden="true">
-  <div class="nav-user-details">
-    <button id="currentUserName" class="user-name-button" type="button" onclick="openAccountPage()" title="Abrir meu perfil">Usuário</button>
-    <span id="currentUserRole" class="sr-only">-</span>
+  <div class="nav-brand-lockup">
+    <img class="nav-brand-image" src="assets/logo.png" alt="CPE Tecnologia">
   </div>
 </div>
 <div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8V4l5-2 5 2v4l-5 2-5-2Zm10 0V4l5-2 5 2v4l-5 2-5-2ZM2 18v-4l5-2 5 2v4l-5 2-5-2Z"/><path d="M2 18v3l5 2 5-2v-3M7 10v3M17 10v3"/></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
 <div class="nav-bottom">
-  <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar barra lateral" title="Fixar barra lateral"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar barra</span></button>
+  <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar menu" title="Fixar menu"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar menu</span></button>
 </div>
 </nav>
 <div id="readonlyBanner" class="readonly-banner permission-note">Seu perfil é de <strong>Consulta</strong>. Você pode visualizar dados, imprimir etiquetas, exportar backups e usar a calculadora, mas alterações de estoque estão bloqueadas.</div>
@@ -2978,6 +3014,7 @@ async function saveUserAccess(userId){
     currentAccess={...currentAccess,display_name:displayName,role,active,approval_status:update.approval_status||currentAccess.approval_status};
     $('currentUserName').textContent=displayName;
     $('currentUserRole').textContent=roleLabel(role);
+    updateHeaderAvatar();
     applyRoleToInterface();
   }
   toast('Usuário atualizado.');
@@ -3062,6 +3099,7 @@ async function loadCloudState(){
   await loadCurrentRolePermissions();
   $('currentUserName').textContent=access.display_name||currentSession.user.email||'Usuário';
   $('currentUserRole').textContent=roleLabel(access.role);
+  updateHeaderAvatar();
   applyRoleToInterface();
 
   const localSnapshot=cloneStateForCloud();
@@ -3313,6 +3351,7 @@ async function refreshOwnProfileHeader(){
   currentAccess={...currentAccess,...data};
   $('currentUserName').textContent=data.display_name||currentSession.user.email||'Usuário';
   $('currentUserRole').textContent=roleLabel(data.role);
+  updateHeaderAvatar();
 }
 function handleAppRoute(){
   if(location.hash==='#/user/me'&&currentSession&&currentAccess?.active)showAccountPage();
@@ -3479,6 +3518,7 @@ async function signupWithEmail(ev){
   }
 }
 async function logoutUser(){
+  closeHeaderProfileMenu();
   if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
   await flushCloudSave();
   await touchOwnLastSeen(true);
@@ -5175,41 +5215,54 @@ function applyResponsiveTableLabels(){
 function renderAll(){updateDashboard();renderEquipmentTable();renderProductPage();renderBuilderProductFilter();renderBuilder();renderKits();updateCharts();renderProductManager();renderCodeManager();applyPermissionVisibility();if(canAdmin()){renderUsersPage();renderPermissionsPage()}}
 
 
-/* v5.12.5 | Recolhimento antecipado somente apos concluir a expansao */
-const appSidebar=document.getElementById('appSidebar');
-let sidebarExpansionComplete=false;
-function setSidebarHoverExpanded(expanded){
- if(document.body.classList.contains('sidebar-pinned'))return;
- if(document.body.classList.contains('sidebar-expanded')===expanded)return;
- sidebarExpansionComplete=false;
- document.body.classList.toggle('sidebar-expanded',expanded);
- if(expanded){
-  const duration=getComputedStyle(appSidebar).transitionDuration.split(',').some(part=>parseFloat(part)>0);
-  if(!duration)sidebarExpansionComplete=true;
- }
+
+function profileInitials(name){
+ const words=String(name||'').trim().split(/\s+/).filter(Boolean);
+ return words.length?words.slice(0,2).map(word=>Array.from(word)[0].toLocaleUpperCase('pt-BR')).join(''):'U';
 }
-appSidebar.addEventListener('pointerenter',ev=>{
- if(ev.pointerType==='mouse'||ev.pointerType==='pen')setSidebarHoverExpanded(true);
+function updateHeaderAvatar(){
+ const avatar=$('headerAvatarInitials'),name=$('currentUserName');
+ if(!avatar||!name)return;
+ const displayName=currentAccess?.display_name||name.textContent||'Usuário';
+ avatar.textContent=profileInitials(displayName);
+ const button=$('headerProfileTrigger');
+ if(button)button.title='Perfil de '+displayName;
+}
+function closeHeaderProfileMenu(){
+ const menu=$('headerProfileMenu'),trigger=$('headerProfileTrigger');
+ if(!menu||!trigger)return;
+ menu.hidden=true;
+ trigger.setAttribute('aria-expanded','false');
+}
+function toggleHeaderProfileMenu(event){
+ event?.stopPropagation();
+ const menu=$('headerProfileMenu'),trigger=$('headerProfileTrigger');
+ if(!menu||!trigger)return;
+ const next=menu.hidden;
+ menu.hidden=!next;
+ trigger.setAttribute('aria-expanded',String(next));
+ if(next)menu.querySelector('.header-profile-action')?.focus({preventScroll:true});
+}
+function openHeaderProfileAccount(){
+ closeHeaderProfileMenu();
+ openAccountPage();
+}
+function logoutFromHeaderProfile(){
+ closeHeaderProfileMenu();
+ logoutUser();
+}
+document.addEventListener('click',event=>{
+ if(!event.target.closest('#headerProfileWrap'))closeHeaderProfileMenu();
 });
-appSidebar.addEventListener('pointerleave',ev=>{
- if(ev.pointerType==='mouse'||ev.pointerType==='pen')setSidebarHoverExpanded(false);
-});
-appSidebar.addEventListener('transitionend',ev=>{
- if(ev.target===appSidebar&&ev.propertyName==='width'&&document.body.classList.contains('sidebar-expanded')&&!document.body.classList.contains('sidebar-pinned'))sidebarExpansionComplete=true;
-});
-appSidebar.addEventListener('pointermove',ev=>{
- if(!sidebarExpansionComplete||document.body.classList.contains('sidebar-pinned')||(ev.pointerType!=='mouse'&&ev.pointerType!=='pen'))return;
- const rect=appSidebar.getBoundingClientRect();
- if(ev.clientX>=rect.right-14&&ev.clientX<rect.right)setSidebarHoverExpanded(false);
-});
-appSidebar.addEventListener('focusin',ev=>{
- if(ev.target.matches(':focus-visible'))setSidebarHoverExpanded(true);
-});
-appSidebar.addEventListener('focusout',ev=>{
- if(!appSidebar.contains(ev.relatedTarget)&&!appSidebar.matches(':hover'))setSidebarHoverExpanded(false);
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&!$('headerProfileMenu')?.hidden){
+  closeHeaderProfileMenu();
+  $('headerProfileTrigger')?.focus({preventScroll:true});
+ }
 });
 
-/* v5.12.3 | Fixação sem interferir na navegação */
+/* v5.13.2 | Expansão individual, ampliação no hover e fixação compacta. */
+const appSidebar=document.getElementById('appSidebar');
 function updateSidebarPin(){
  const pinned=document.body.classList.contains('sidebar-pinned');
  const control=document.getElementById('sidebarPin');
@@ -5217,28 +5270,60 @@ function updateSidebarPin(){
  const iconElement=document.getElementById('sidebarPinIcon');
  if(!control)return;
  control.setAttribute('aria-pressed',String(pinned));
- control.setAttribute('aria-label',pinned?'Desafixar barra lateral':'Fixar barra lateral');
- control.title=pinned?'Desafixar barra lateral':'Fixar barra lateral';
- if(label)label.textContent=pinned?'Desafixar barra':'Fixar barra';
+ control.setAttribute('aria-label',pinned?'Desfixar menu':'Fixar menu');
+ control.title=pinned?'Desfixar menu':'Fixar menu';
+ if(label)label.textContent=pinned?'Desfixar menu':'Fixar menu';
  if(iconElement)iconElement.innerHTML=pinned?'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-3 3M12 13l-1 4-2 2-1-5-4-1 2-2 4-1 2-2"/><path d="M4 20l6-6M2 2l20 20"/></svg>':'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg>';
 }
 function toggleSidebarPin(){
  const pinned=document.body.classList.toggle('sidebar-pinned');
- if(pinned){
-  document.body.classList.remove('sidebar-expanded');
-  sidebarExpansionComplete=false;
- }else if(appSidebar.matches(':hover')){
-  document.body.classList.add('sidebar-expanded');
-  sidebarExpansionComplete=true;
- }else{
-  document.body.classList.remove('sidebar-expanded');
-  sidebarExpansionComplete=false;
- }
  try{localStorage.setItem('giocapo_sidebar_pinned',pinned?'1':'0')}catch(_){}
  updateSidebarPin();
 }
 try{if(localStorage.getItem('giocapo_sidebar_pinned')==='1')document.body.classList.add('sidebar-pinned')}catch(_){}
+document.body.classList.remove('sidebar-expanded');
 updateSidebarPin();
+
+const sidebarHoverMedia=window.matchMedia('(hover: hover) and (pointer: fine)');
+const sidebarHoverEdge=44;
+document.querySelectorAll('#appSidebar button[data-page]').forEach(button=>{
+ let expanded=false;
+ let hovering=false;
+ let pointerX=null;
+ const checkEdge=()=>{
+  if(!expanded||pointerX===null||document.body.classList.contains('sidebar-pinned'))return;
+  const rect=button.getBoundingClientRect();
+  if(pointerX>=rect.right-sidebarHoverEdge){
+   expanded=false;
+   button.classList.add('sidebar-early-collapse');
+  }
+ };
+ button.addEventListener('pointerenter',event=>{
+  if(event.pointerType!=='mouse'||!sidebarHoverMedia.matches||document.body.classList.contains('sidebar-pinned'))return;
+  expanded=false;
+  hovering=true;
+  pointerX=event.clientX;
+  button.classList.remove('sidebar-early-collapse');
+ });
+ button.addEventListener('pointermove',event=>{
+  if(event.pointerType!=='mouse'||!sidebarHoverMedia.matches)return;
+  pointerX=event.clientX;
+  checkEdge();
+ });
+ button.addEventListener('transitionend',event=>{
+  if(event.target!==button||event.propertyName!=='width'||!sidebarHoverMedia.matches)return;
+  if(document.body.classList.contains('sidebar-pinned')||button.classList.contains('sidebar-early-collapse'))return;
+  if(!hovering)return;
+  expanded=true;
+  checkEdge();
+ });
+ button.addEventListener('pointerleave',()=>{
+  hovering=false;
+  expanded=false;
+  pointerX=null;
+  button.classList.remove('sidebar-early-collapse');
+ });
+});
 
 document.querySelectorAll('.nav button[data-page]').forEach(btn=>btn.addEventListener('click',()=>{
  const page=btn.dataset.page;
