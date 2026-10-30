@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v5.14.4 -->
+<!-- v6.14.7 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -558,7 +558,7 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 @media print{.label-print-loading{display:none!important}}
 
 
-/* v5.14.4 | Logo unica com mascara em degrade e zoom progressivo */
+/* v6.14.7 | Logo unica com mascara em degrade e zoom progressivo */
 :root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-fixed:227.4122304px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10}
 body{border-left:0;padding-left:var(--sidebar-closed);transition:padding-left .22s ease}
 body.sidebar-pinned{padding-left:var(--sidebar-fixed)}
@@ -637,6 +637,54 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 #mainApp .header-actions .header-profile-logout{color:#a33d39}
 #mainApp .header-actions .header-profile-logout span{color:#a33d39}
 @media(max-width:700px){#mainApp .header-profile-menu{width:min(258px,calc(100vw - 70px))}#mainApp .header-actions .header-profile-action{width:100%;min-height:38px;padding:9px 10px;font-size:12px}}
+
+/* Histórico administrativo */
+
+.audit-type-icon svg{width:22px;height:22px}
+.audit-preview{font-size:12px;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.audit-preview-original{color:#aa3030;font-weight:600}
+.audit-preview-current{color:#227d37;font-weight:600}
+.audit-preview-separator{font-size:12px;color:#7e8a94}
+.audit-preview-single{color:#415465;font-weight:600}
+.audit-archive-notice{padding:13px 16px;border:1px solid #e3bf55;background:#fff6d9;border-radius:9px;color:#564213;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.audit-archive-notice[hidden]{display:none}
+.audit-archive-notice .btn{background:#fff}
+.audit-entry summary{align-items:flex-start}
+
+.audit-filters{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:15px 17px;margin-bottom:15px}
+.audit-filters .field{min-width:135px;flex:0 1 165px}
+.audit-filters .field.grow{flex:1 1 230px}
+.audit-filters .field input,.audit-filters .field select{width:100%;min-height:38px}
+.audit-filters>.btn{min-height:38px}
+.audit-history-list{display:flex;flex-direction:column;gap:10px;overflow-anchor:none}
+.audit-entry{background:var(--surface);border:1px solid var(--border);border-radius:11px;overflow:hidden;box-shadow:var(--shadow)}
+.audit-entry summary{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;list-style:none;user-select:none}
+.audit-entry summary::-webkit-details-marker{display:none}
+.audit-entry summary:after{content:'⌄';font-size:20px;line-height:1;color:#667783;margin-left:auto;transition:transform .18s ease}
+.audit-entry[open] summary:after{transform:rotate(180deg)}
+.audit-entry summary:hover{background:#fffdf2}
+.audit-type-icon{display:flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:10px;background:#fff3c8;color:#725300}
+.audit-entry-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:5px}
+.audit-entry-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.audit-entry-title strong{overflow-wrap:anywhere}
+.audit-entry-meta{font-size:11px;color:var(--muted);line-height:1.4}
+.audit-tag{display:inline-flex;padding:4px 7px;border-radius:6px;font-size:10px;font-weight:800;background:#edf1f3;color:#384f5c;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.audit-tag.created{background:#e4f6e6;color:#277641}.audit-tag.deleted{background:#ffebeb;color:#a53535}.audit-tag.updated{background:#e7f2ff;color:#315e95}.audit-tag.duplicated{background:#fff2d8;color:#8c5e0b}
+.audit-details{padding:14px 16px 17px;border-top:1px solid var(--border);background:#fafbfc;display:grid;gap:15px}
+.audit-details h3{font-size:13px;margin:0 0 8px;color:#273643}
+.audit-data{border:1px solid var(--border);border-radius:8px;background:#fff;overflow:hidden}
+.audit-data-row{display:grid;grid-template-columns:minmax(130px,25%) minmax(0,1fr);gap:10px;padding:8px 11px;border-bottom:1px solid #edf0f2;font-size:12px;line-height:1.4}
+.audit-data-row:last-child{border-bottom:0}
+.audit-data-label{font-weight:700;color:#526273}
+.audit-data-value{white-space:pre-wrap;overflow-wrap:anywhere}
+.audit-diff-table{width:100%;border-collapse:collapse;background:#fff;font-size:12px;table-layout:fixed}
+.audit-diff-table th,.audit-diff-table td{padding:9px 11px;border:1px solid #e4e9ed;text-align:left;vertical-align:top;white-space:pre-wrap;overflow-wrap:anywhere}
+.audit-diff-table th{background:#eef2f5;color:#4e5d6a;font-size:11px}
+.audit-diff-table td:first-child{font-weight:700;width:26%}.audit-diff-table td:nth-child(2){background:#fff7f5}.audit-diff-table td:nth-child(3){background:#f4fcf4}
+.audit-diff-scroll{overflow-x:auto;border-radius:8px}
+.audit-list-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
+.audit-info{margin-top:13px;line-height:1.6}
+@media(max-width:700px){.audit-filters .field{flex:1 1 120px}.audit-filters .field.grow{flex:1 1 100%}.audit-entry summary{padding:12px;gap:8px}.audit-entry-title{font-size:12px}.audit-data-row{grid-template-columns:minmax(90px,34%) minmax(0,1fr);font-size:11px}.audit-details{padding:12px}.audit-diff-table{min-width:520px}}
 </style>
 </head>
 <body>
@@ -790,7 +838,7 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
     <img class="nav-brand-image" src="assets/logo.png" alt="CPE Tecnologia">
   </div>
 </div>
-<div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8V4l5-2 5 2v4l-5 2-5-2Zm10 0V4l5-2 5 2v4l-5 2-5-2ZM2 18v-4l5-2 5 2v4l-5 2-5-2Z"/><path d="M2 18v3l5 2 5-2v-3M7 10v3M17 10v3"/></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
+<div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><g id="Layer_1" data-name="Layer 1"><g><path d="M10.697 16.127 C9.597 16.127 6.014 15.274 5.831 14.174 L5.309 11 C3.842 10.817 3.208 10.175 2.475 8.983 C3.483 5.775 6.508 4.308 11 4.308 M10.778 16.127 C11.878 16.127 15.461 15.274 15.644 14.174 L16.166 11 C17.633 10.817 18.267 10.175 19 8.983 C17.992 5.775 14.967 4.308 10.475 4.308" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.618 13.475 C10.35 13.475 8.368 13.369 8.179 13.18 C7.99 12.991 7.883 12.734 7.883 12.467 L7.883 10.45 C7.883 10.183 7.99 9.926 8.179 9.737 C8.368 9.548 10.35 9.544 10.618 9.544 M10.857 13.475 C11.125 13.475 13.107 13.369 13.296 13.18 C13.485 12.991 13.592 12.734 13.592 12.467 L13.592 10.45 C13.592 10.183 13.485 9.926 13.296 9.737 C13.107 9.548 11.125 9.544 10.857 9.544" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.129 11.183 C10.129 11.411 9.944 11.596 9.717 11.596 C9.489 11.596 9.304 11.411 9.304 11.183 C9.304 10.956 9.489 10.771 9.717 10.771 C9.944 10.771 10.129 10.956 10.129 11.183 Z M11.346 11.183 C11.346 11.411 11.531 11.596 11.758 11.596 C11.986 11.596 12.171 11.411 12.171 11.183 C12.171 10.956 11.986 10.771 11.758 10.771 C11.531 10.771 11.346 10.956 11.346 11.183 Z" fill="#000000"/></g><path d="M3.211 8.214 C3.211 8.214 6.811 6.752 8.73 6.446 C9.355 6.346 10.703 6.309 10.703 6.309 C10.703 6.309 11.852 6.344 12.507 6.446 C14.459 6.749 18.214 8.214 18.214 8.214" fill="none" stroke="#000000" stroke-miterlimit="10"/><path d="M15.104 6.309" fill="none" stroke="#000000" stroke-miterlimit="10"/><path d="M9.968 7.79 C9.968 7.414 10.259 7.108 10.618 7.108 C10.976 7.108 11.267 7.414 11.267 7.79 C11.267 8.167 10.976 8.473 10.618 8.473 C10.259 8.473 9.968 8.167 9.968 7.79 Z" fill="#000000"/><path d="M10.712 7.528 C10.712 7.446 10.776 7.38 10.855 7.38 C10.934 7.38 10.998 7.446 10.998 7.528 C10.998 7.609 10.934 7.676 10.855 7.676 C10.776 7.676 10.712 7.609 10.712 7.528 Z" fill="#ffffff"/><path d="M10.29 8.078 C10.29 8.033 10.326 7.996 10.372 7.996 C10.417 7.996 10.453 8.033 10.453 8.078 C10.453 8.123 10.417 8.16 10.372 8.16 C10.326 8.16 10.29 8.123 10.29 8.078 Z" fill="#ffffff"/><path d="M10.969 7.676 C10.969 7.649 10.991 7.627 11.018 7.627 C11.044 7.627 11.066 7.649 11.066 7.676 C11.066 7.702 11.044 7.724 11.018 7.724 C10.991 7.724 10.969 7.702 10.969 7.676 Z" fill="#ffffff"/><path d="M9.304 17.142 L12.22 17.142" fill="none" stroke="#000000" stroke-miterlimit="10"/></g></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button id="historyNavButton" class="admin-only" data-page="historico" type="button" title="Histórico" aria-label="Histórico"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="7" y="7" width="13" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1M10 11h7M10 15h7"/></svg></span><span class="nav-label">Histórico</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
 <div class="nav-bottom">
   <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar menu" title="Fixar menu"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar menu</span></button>
 </div>
@@ -861,6 +909,21 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 <div class="permissions-actions">
   <button class="btn btn-primary" onclick="saveRolePermissions()">SALVAR PERMISSÕES</button>
 </div>
+</section>
+
+<section id="historico" class="page">
+<div class="page-title"><div><h2>Histórico</h2><p>Registro de alterações de equipamentos e produtos realizadas por usuários não administradores.</p></div><div class="actions"><button id="auditExport" class="btn" type="button" onclick="exportAuditHistory()">EXPORTAR</button><button class="btn" type="button" onclick="document.getElementById('auditLogUpload').click()">VER REGISTRO</button><input type="file" id="auditLogUpload" accept=".log" hidden onchange="importAuditLog(event)"></div></div><div id="auditArchiveNotice" class="audit-archive-notice" hidden></div>
+<div class="card audit-filters">
+  <div class="field grow"><label for="auditSearch">Pesquisar item ou usuário</label><input id="auditSearch" placeholder="Produto, equipamento, série, usuário..." oninput="scheduleAuditSearch()"></div>
+  <div class="field"><label for="auditEntity">Categoria</label><select id="auditEntity" onchange="loadAuditHistory(true)"><option value="">Todas</option><option value="equipment">Equipamentos</option><option value="product">Produtos</option></select></div>
+  <div class="field"><label for="auditOperation">Operação</label><select id="auditOperation" onchange="loadAuditHistory(true)"><option value="">Todas</option><option value="created">Adicionado</option><option value="updated">Editado</option><option value="duplicated">Duplicado</option><option value="deleted">Excluído</option></select></div>
+  <div class="field"><label for="auditFrom">A partir de</label><input id="auditFrom" type="date" onchange="loadAuditHistory(true)"></div>
+  <div class="field"><label for="auditTo">Até</label><input id="auditTo" type="date" onchange="loadAuditHistory(true)"></div>
+  <button class="btn" type="button" onclick="clearAuditFilters()">LIMPAR</button>
+</div>
+<div id="auditHistoryList" class="audit-history-list"><div class="empty">Abra a aba para consultar os registros.</div></div>
+<div class="audit-list-footer"><span id="auditHistoryCount" class="hint"></span><button id="auditHistoryMore" class="btn btn-primary" type="button" hidden onclick="loadAuditHistory(false)">CARREGAR MAIS</button></div>
+<div class="hint audit-info" id="auditHistoryHint">O registro é feito no Supabase após o salvamento bem-sucedido. Alterações de administradores não são incluídas. A consulta mostra somente os registros dos últimos 30 dias.</div>
 </section>
 
 <section id="conta" class="page">
@@ -2437,6 +2500,7 @@ function stopRealtimeSync(){
   remoteSyncDeferred=false;
   remoteSyncInFlight=false;
   remoteSyncToastShown=false;
+  stopAuditRealtime();
 }
 function startRealtimeSync(){
   stopRealtimeSync();
@@ -2457,6 +2521,7 @@ function startRealtimeSync(){
         if(remoteRevision<=cloudRevision)return;
         remoteSyncDeferred=true;
         applyLatestCloudState('realtime',false);
+        if(canAdmin())queueAuditRefresh(160);
       }
     )
     .subscribe(status=>{
@@ -2467,6 +2532,7 @@ function startRealtimeSync(){
 
   // Rede de segurança caso o WebSocket seja interrompido sem aviso.
   realtimeFallbackTimer=setInterval(checkCloudRevisionAndSync,60000);
+  if(canAdmin())startAuditRealtime();
 }
 
 async function reloadStateFromCloudAfterDenied(){
@@ -2740,7 +2806,7 @@ function applyPermissionVisibility(){
   document.querySelectorAll('.nav button[data-page]').forEach(btn=>{
     const page=btn.dataset.page;
     let allowed=true;
-    if(page==='usuarios'||page==='permissoes')allowed=canAdmin();
+    if(page==='usuarios'||page==='permissoes'||page==='historico')allowed=canAdmin();
     else if(map[page])allowed=hasPermission(map[page]);
     btn.classList.toggle('permission-hidden',!allowed);
   });
@@ -3525,7 +3591,7 @@ async function logoutUser(){
   stopUserPresence();
   stopRealtimeSync();
   await supabaseClient.auth.signOut();
-  currentSession=null;currentAccess=null;cloudReady=false;applyRoleToInterface();
+  currentSession=null;currentAccess=null;cloudReady=false;resetAuditHistory();applyRoleToInterface();
   $('authPassword').value='';
   setSyncStatus('local','Local');
   showLoginGate();
@@ -3536,6 +3602,7 @@ async function bootApp(){
     const {data:{session},error}=await supabaseClient.auth.getSession();
     if(error)throw error;
     await activateAuthenticatedSession(session);
+    if(session&&canAdmin())restoreAuditArchiveRoute();
   }catch(err){
     console.error('Falha ao verificar sessão:',err);
     showLoginGate('Não foi possível verificar a sessão. Tente entrar novamente.');
@@ -3737,7 +3804,7 @@ function saveEquipment(ev){
     }else{
         state.equipments.push({
             id:uid('eq'),codeId:c.id,code:c.code,location:$('eqLocation').value.trim(),productId:p.id,
-            series,type,hce:hceData,...(accessory?{balance:1}:{})
+            series,type,hce:hceData,...(accessory?{balance:1}:{}),...(mode==='duplicate'?{duplicatedFromId:duplicateSourceEquipmentId}:{})
         });
     }
 
@@ -5216,6 +5283,243 @@ function renderAll(){updateDashboard();renderEquipmentTable();renderProductPage(
 
 
 
+
+const AUDIT_HISTORY_PAGE_SIZE=50;
+const AUDIT_COLUMNS='id,event_at,actor_user_id,actor_name,actor_role,entity_type,operation,entity_id,entity_label,before_data,after_data,before_context,after_context,source_data,changes';
+const AUDIT_RETENTION_DAYS=30;
+const AUDIT_LOG_PATTERN=/^LOG(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})$/;
+const AUDIT_HIDDEN_FIELDS=new Set(['id','codeId','productId','ean','duplicatedFromId']);
+const AUDIT_FIELD_NAMES={name:'Nome',displayName:'Nome de exibição',variables:'Categoria',code:'Código',location:'Local',series:'Série',type:'Tipo',hce:'Plataformas HCE',balance:'Saldo',productName:'Produto',productCategory:'Categoria do produto'};
+const AUDIT_OP_NAMES={created:'Adicionado',updated:'Editado',deleted:'Excluído',duplicated:'Duplicado'};
+const AUDIT_TYPE_ICONS={equipment:`<svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><g id="Layer_1" data-name="Layer 1"><g><path d="M10.697 16.127 C9.597 16.127 6.014 15.274 5.831 14.174 L5.309 11 C3.842 10.817 3.208 10.175 2.475 8.983 C3.483 5.775 6.508 4.308 11 4.308 M10.778 16.127 C11.878 16.127 15.461 15.274 15.644 14.174 L16.166 11 C17.633 10.817 18.267 10.175 19 8.983 C17.992 5.775 14.967 4.308 10.475 4.308" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.618 13.475 C10.35 13.475 8.368 13.369 8.179 13.18 C7.99 12.991 7.883 12.734 7.883 12.467 L7.883 10.45 C7.883 10.183 7.99 9.926 8.179 9.737 C8.368 9.548 10.35 9.544 10.618 9.544 M10.857 13.475 C11.125 13.475 13.107 13.369 13.296 13.18 C13.485 12.991 13.592 12.734 13.592 12.467 L13.592 10.45 C13.592 10.183 13.485 9.926 13.296 9.737 C13.107 9.548 11.125 9.544 10.857 9.544" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.129 11.183 C10.129 11.411 9.944 11.596 9.717 11.596 C9.489 11.596 9.304 11.411 9.304 11.183 C9.304 10.956 9.489 10.771 9.717 10.771 C9.944 10.771 10.129 10.956 10.129 11.183 Z M11.346 11.183 C11.346 11.411 11.531 11.596 11.758 11.596 C11.986 11.596 12.171 11.411 12.171 11.183 C12.171 10.956 11.986 10.771 11.758 10.771 C11.531 10.771 11.346 10.956 11.346 11.183 Z" fill="#000000"/></g><path d="M3.211 8.214 C3.211 8.214 6.811 6.752 8.73 6.446 C9.355 6.346 10.703 6.309 10.703 6.309 C10.703 6.309 11.852 6.344 12.507 6.446 C14.459 6.749 18.214 8.214 18.214 8.214" fill="none" stroke="#000000" stroke-miterlimit="10"/><path d="M15.104 6.309" fill="none" stroke="#000000" stroke-miterlimit="10"/><path d="M9.968 7.79 C9.968 7.414 10.259 7.108 10.618 7.108 C10.976 7.108 11.267 7.414 11.267 7.79 C11.267 8.167 10.976 8.473 10.618 8.473 C10.259 8.473 9.968 8.167 9.968 7.79 Z" fill="#000000"/><path d="M10.712 7.528 C10.712 7.446 10.776 7.38 10.855 7.38 C10.934 7.38 10.998 7.446 10.998 7.528 C10.998 7.609 10.934 7.676 10.855 7.676 C10.776 7.676 10.712 7.609 10.712 7.528 Z" fill="#ffffff"/><path d="M10.29 8.078 C10.29 8.033 10.326 7.996 10.372 7.996 C10.417 7.996 10.453 8.033 10.453 8.078 C10.453 8.123 10.417 8.16 10.372 8.16 C10.326 8.16 10.29 8.123 10.29 8.078 Z" fill="#ffffff"/><path d="M10.969 7.676 C10.969 7.649 10.991 7.627 11.018 7.627 C11.044 7.627 11.066 7.649 11.066 7.676 C11.066 7.702 11.044 7.724 11.018 7.724 C10.991 7.724 10.969 7.702 10.969 7.676 Z" fill="#ffffff"/><path d="M9.304 17.142 L12.22 17.142" fill="none" stroke="#000000" stroke-miterlimit="10"/></g></svg>`,product:`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg>`};
+let auditHistoryRows=[];
+let auditHistoryHasMore=false;
+let auditHistoryLoading=false;
+let auditHistoryRequest=0;
+let auditSearchTimer=null;
+let auditArchive=null;
+let auditRealtimeChannel=null;
+let auditRealtimeTimer=null;
+let auditRefreshTimer=null;
+function auditCutoff(){return new Date(Date.now()-AUDIT_RETENTION_DAYS*86400000).toISOString()}
+function auditCleanValue(v){return v!==null&&v!==undefined&&String(v).trim()!==''&&String(v).trim()!=='-'}
+function auditSimple(v){return String(v??'').trim()}
+function auditLabelForEquipment(record,context){
+ if(!record)return '';
+ const raw=[record.code,record.location,context?.productName,record.type||auditSoftware(record),record.series,(Array.isArray(context?.productCategory)?context.productCategory.join(', '):context?.productCategory)];
+ return raw.filter(auditCleanValue).map(v=>String(v).trim()).join(' ⦁ ');
+}
+function auditSoftware(record){const h=record?.hce||{};return [h.landstar?'Landstar':null,h.smartgo?'SmartGO':null].filter(Boolean).join(' / ')}
+function auditLabelForProduct(record){return [record?.name,record?.displayName,Array.isArray(record?.variables)?record.variables.join(', '):''].filter(auditCleanValue).join(' ⦁ ')}
+function auditCompact(entry,record,context){return entry.entity_type==='equipment'?auditLabelForEquipment(record,context):auditLabelForProduct(record)}
+function auditSourceContext(entry){return entry.before_context||entry.after_context}
+function auditPreview(entry){
+ const isCompare=['updated','duplicated'].includes(entry.operation);
+ const prev=isCompare?(entry.operation==='duplicated'?entry.source_data:entry.before_data):null;
+ const prevContext=isCompare?auditSourceContext(entry):null;
+ const current=entry.operation==='deleted'?entry.before_data:entry.after_data;
+ const curContext=entry.operation==='deleted'?entry.before_context:entry.after_context;
+ const oldText=prev?auditCompact(entry,prev,prevContext):'';
+ const newText=current?auditCompact(entry,current,curContext):'';
+ if(isCompare&&prev){return `<div class="audit-preview"><span class="audit-preview-original">${esc(oldText||'Sem informações')}</span><span class="audit-preview-separator">→</span><span class="audit-preview-current">${esc(newText||'Sem informações')}</span></div>`}
+ return `<div class="audit-preview"><span class="audit-preview-single">${esc(newText||entry.entity_label||'Sem informações')}</span></div>`;
+}
+function resetAuditHistory(){auditHistoryRows=[];auditHistoryHasMore=false;auditHistoryLoading=false;auditHistoryRequest++;auditArchive=null;stopAuditRealtime();if($('auditHistoryList'))$('auditHistoryList').innerHTML='<div class="empty">Abra a aba para consultar os registros.</div>';if($('auditHistoryCount'))$('auditHistoryCount').textContent='';if($('auditHistoryMore'))$('auditHistoryMore').hidden=true}
+function scheduleAuditSearch(){clearTimeout(auditSearchTimer);auditSearchTimer=setTimeout(()=>loadAuditHistory(true),320)}
+function clearAuditFilters(){['auditSearch','auditEntity','auditOperation','auditFrom','auditTo'].forEach(id=>{if($(id))$(id).value=''});loadAuditHistory(true)}
+function auditValue(value,field=''){
+ if(value===null||value===undefined||value==='')return '—';
+ if(field==='hce'&&typeof value==='object'){const enabled=[value.landstar?'Landstar':null,value.smartgo?'SmartGO':null].filter(Boolean);return enabled.length?enabled.join(' / '):'Nenhuma'}
+ if(Array.isArray(value))return value.length?value.map(v=>typeof v==='object'?JSON.stringify(v):String(v)).join(', '):'Nenhuma';
+ if(typeof value==='object')return JSON.stringify(value);
+ if(typeof value==='boolean')return value?'Sim':'Não';
+ return String(value);
+}
+function auditVisibleEntries(record,context){
+ if(!record)return [];
+ const entries=Object.entries(record).filter(([key])=>!AUDIT_HIDDEN_FIELDS.has(key));
+ if(context){for(const [key,value] of Object.entries(context)){if(!AUDIT_HIDDEN_FIELDS.has(key)&&key!=='ean')entries.push([key,value])}}
+ return entries;
+}
+function auditFullSnapshot(record,context){
+ if(!record)return '<div class="hint">Nenhum dado.</div>';
+ const entries=auditVisibleEntries(record,context);
+ return `<div class="audit-data">${entries.map(([key,value])=>`<div class="audit-data-row"><div class="audit-data-label">${esc(AUDIT_FIELD_NAMES[key]||key)}</div><div class="audit-data-value">${esc(auditValue(value,key))}</div></div>`).join('')}</div>`;
+}
+function auditEffectiveChanges(entry){
+ const before=entry.operation==='duplicated'?entry.source_data:entry.before_data;
+ const after=entry.after_data;
+ if(before&&after){const keys=new Set([...Object.keys(before),...Object.keys(after)]);return [...keys].filter(k=>!AUDIT_HIDDEN_FIELDS.has(k)&&JSON.stringify(before[k]??null)!==JSON.stringify(after[k]??null)).map(field=>({field,before:before[field],after:after[field]}))}
+ return (Array.isArray(entry.changes)?entry.changes:[]).filter(c=>c&&!AUDIT_HIDDEN_FIELDS.has(c.field));
+}
+function auditChangesTable(changes){
+ if(!changes.length)return '<p class="hint">Nenhuma diferença nos campos comparáveis.</p>';
+ return `<div class="audit-diff-scroll"><table class="audit-diff-table"><thead><tr><th>Campo</th><th>Valor original</th><th>Valor atualizado</th></tr></thead><tbody>${changes.map(change=>`<tr><td>${esc(AUDIT_FIELD_NAMES[change.field]||change.field)}</td><td>${esc(auditValue(change.before,change.field))}</td><td>${esc(auditValue(change.after,change.field))}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function auditDetails(entry){
+ if(entry.operation==='created')return `<div><h3>Dados adicionados</h3>${auditFullSnapshot(entry.after_data,entry.after_context)}</div>`;
+ if(entry.operation==='deleted')return `<div><h3>Dados completos do item excluído</h3>${auditFullSnapshot(entry.before_data,entry.before_context)}</div>`;
+ if(entry.operation==='duplicated')return `<div><h3>Duplicado de</h3><div class="audit-preview audit-preview-single">${esc(auditCompact(entry,entry.source_data,auditSourceContext(entry))||'Equipamento original')}</div></div><div><h3>Comparativo dos campos alterados</h3>${auditChangesTable(auditEffectiveChanges(entry))}</div><div><h3>Dados completos do item duplicado</h3>${auditFullSnapshot(entry.after_data,entry.after_context)}</div>`;
+ return `<div><h3>Comparativo dos campos alterados</h3>${auditChangesTable(auditEffectiveChanges(entry))}</div><div><h3>Dados anteriores</h3>${auditFullSnapshot(entry.before_data,entry.before_context)}</div><div><h3>Dados atualizados</h3>${auditFullSnapshot(entry.after_data,entry.after_context)}</div>`;
+}
+function auditFilteredArchiveRows(){
+ if(!auditArchive)return [];
+ const term=String($('auditSearch')?.value||'').trim().toLocaleLowerCase('pt-BR');
+ const ent=$('auditEntity')?.value,op=$('auditOperation')?.value,start=$('auditFrom')?.value,end=$('auditTo')?.value;
+ return auditArchive.records.filter(x=>(!ent||x.entity_type===ent)&&(!op||x.operation===op)&&(!term||[x.actor_name,x.entity_label,auditCompact(x,x.before_data,x.before_context),auditCompact(x,x.after_data,x.after_context)].join(' ').toLocaleLowerCase('pt-BR').includes(term))&&(!start||x.event_at>=new Date(start+'T00:00:00').toISOString())&&(!end||x.event_at<=new Date(end+'T23:59:59.999').toISOString()));
+}
+function renderAuditHistory(){
+ const list=$('auditHistoryList'),more=$('auditHistoryMore'),count=$('auditHistoryCount');if(!list)return;
+ const rows=auditArchive?auditFilteredArchiveRows():auditHistoryRows;
+ const openIds=new Set([...list.querySelectorAll('.audit-entry[open][data-audit-id]')].map(node=>node.dataset.auditId));
+ const visible=[...list.querySelectorAll('.audit-entry[data-audit-id]')].find(node=>{const r=node.getBoundingClientRect();return r.bottom>0&&r.top<window.innerHeight});
+ const anchorId=visible?.dataset.auditId;
+ const anchorTop=visible?.getBoundingClientRect().top;
+ const focusedId=document.activeElement?.closest?.('.audit-entry[data-audit-id]')?.dataset.auditId;
+ const focusedSummary=focusedId&&document.activeElement?.tagName==='SUMMARY';
+ list.innerHTML=rows.length?rows.map(entry=>`<details class="audit-entry" data-audit-id="${esc(String(entry.id))}"><summary><span class="audit-type-icon" aria-hidden="true">${AUDIT_TYPE_ICONS[entry.entity_type]||''}</span><div class="audit-entry-info"><div class="audit-entry-title"><span class="audit-tag ${esc(entry.operation)}">${esc(AUDIT_OP_NAMES[entry.operation]||entry.operation)}</span></div>${auditPreview(entry)}<div class="audit-entry-meta">${entry.entity_type==='equipment'?'Equipamento':'Produto'} · ${esc(entry.actor_name||'Usuário')} · ${esc(fmtDate(entry.event_at))}</div></div></summary><div class="audit-details">${auditDetails(entry)}</div></details>`).join(''):'<div class="card empty">Nenhuma alteração encontrada para os filtros selecionados.</div>';
+ const current=[...list.querySelectorAll('.audit-entry[data-audit-id]')];
+ for(const entry of current){if(openIds.has(entry.dataset.auditId))entry.open=true}
+ if(focusedSummary){const match=current.find(entry=>entry.dataset.auditId===focusedId);match?.querySelector('summary')?.focus({preventScroll:true})}
+ if(anchorId&&Number.isFinite(anchorTop)){
+  const match=current.find(entry=>entry.dataset.auditId===anchorId);
+  if(match){
+   const difference=match.getBoundingClientRect().top-anchorTop;
+   if(Math.abs(difference)>.5)window.scrollBy({top:difference,behavior:'instant'});
+  }
+ }
+ count.textContent=`${rows.length} ${rows.length===1?'registro carregado':'registros carregados'}${auditArchive?' do arquivo':''}`;
+ more.hidden=!!auditArchive||!auditHistoryHasMore;
+ more.disabled=auditHistoryLoading;
+}
+async function loadAuditHistory(reset=true,background=false){
+ if(!canAdmin())return;
+ if(auditArchive){if(!background)renderAuditHistory();return}
+ if(background&&auditHistoryLoading)return;
+ if(auditHistoryLoading&&!reset)return;
+ const request=++auditHistoryRequest;
+ auditHistoryLoading=true;
+ if(reset&&!background){auditHistoryRows=[];auditHistoryHasMore=false;$('auditHistoryList').innerHTML='<div class="card empty">Carregando histórico...</div>'}
+ const more=$('auditHistoryMore');if(more)more.disabled=true;
+ try{
+  const fromIndex=reset?0:auditHistoryRows.length;
+  const pageSize=background?Math.max(AUDIT_HISTORY_PAGE_SIZE,auditHistoryRows.length):AUDIT_HISTORY_PAGE_SIZE;
+  let query=supabaseClient.from('erp_audit_history').select(AUDIT_COLUMNS).gte('event_at',auditCutoff()).order('id',{ascending:false}).range(fromIndex,fromIndex+pageSize-1);
+  const entity=$('auditEntity')?.value,operation=$('auditOperation')?.value;
+  if(entity)query=query.eq('entity_type',entity);
+  if(operation)query=query.eq('operation',operation);
+  const search=String($('auditSearch')?.value||'').trim().replace(/[,().%*]/g,' ').slice(0,100);
+  if(search)query=query.or(`entity_label.ilike.%${search}%,actor_name.ilike.%${search}%`);
+  const start=$('auditFrom')?.value,end=$('auditTo')?.value;
+  if(start)query=query.gte('event_at',new Date(start+'T00:00:00').toISOString());
+  if(end)query=query.lte('event_at',new Date(end+'T23:59:59.999').toISOString());
+  const {data,error}=await query;
+  if(request!==auditHistoryRequest)return;
+  if(error)throw error;
+  const fresh=data||[];
+  let updated=reset?fresh:auditHistoryRows.concat(fresh);
+  if(background){
+   const existingIds=new Set(fresh.map(row=>String(row.id)));
+   const cutoff=auditCutoff();
+   updated=fresh.concat(auditHistoryRows.filter(row=>row.event_at>=cutoff&&!existingIds.has(String(row.id))));
+   updated.sort((a,b)=>Number(b.id)-Number(a.id));
+  }
+  const unchanged=background&&JSON.stringify(updated)===JSON.stringify(auditHistoryRows);
+  auditHistoryRows=updated;
+  if(!background)auditHistoryHasMore=fresh.length===pageSize;
+  if(!unchanged)renderAuditHistory();
+ }catch(error){
+  if(request!==auditHistoryRequest)return;
+  console.error('Falha ao consultar histórico:',error);
+  if(!background){$('auditHistoryList').innerHTML=`<div class="card empty">Não foi possível carregar o histórico. ${esc(error.message||'Confira a conexão e as permissões.')}</div>`;if(more)more.hidden=true}
+ }finally{if(request===auditHistoryRequest){auditHistoryLoading=false;if(more)more.disabled=false}}
+}
+function queueAuditRefresh(delay=180){
+ if(auditArchive||!canAdmin()||!$('historico')?.classList.contains('active'))return;
+ clearTimeout(auditRefreshTimer);
+ auditRefreshTimer=setTimeout(()=>{auditRefreshTimer=null;loadAuditHistory(true,true)},delay);
+}
+function startAuditRealtime(){
+ stopAuditRealtime();if(!canAdmin()||!currentSession)return;
+ auditRealtimeChannel=supabaseClient.channel('giocapo-audit-'+currentSession.user.id).on('postgres_changes',{event:'*',schema:'public',table:'erp_audit_history'},()=>queueAuditRefresh()).subscribe();
+ auditRealtimeTimer=setInterval(()=>queueAuditRefresh(),15000);
+}
+function stopAuditRealtime(){
+ if(auditRefreshTimer){clearTimeout(auditRefreshTimer);auditRefreshTimer=null}
+ if(auditRealtimeTimer){clearInterval(auditRealtimeTimer);auditRealtimeTimer=null}
+ if(auditRealtimeChannel){supabaseClient.removeChannel(auditRealtimeChannel);auditRealtimeChannel=null}
+}
+function auditLogId(date){const n=x=>String(x).padStart(2,'0');return `LOG${n(date.getDate())}${n(date.getMonth()+1)}${date.getFullYear()}${n(date.getHours())}${n(date.getMinutes())}`}
+async function exportAuditHistory(){
+ if(!canAdmin()||auditArchive)return;
+ const btn=$('auditExport');btn.disabled=true;
+ try{
+  const rows=[];const cutoff=auditCutoff();let offset=0;
+  while(true){const {data,error}=await supabaseClient.from('erp_audit_history').select(AUDIT_COLUMNS).gte('event_at',cutoff).order('id',{ascending:true}).range(offset,offset+499);if(error)throw error;rows.push(...data);if(data.length<500)break;offset+=data.length;if(offset>100000)throw new Error('O histórico ultrapassou o limite de exportação.');}
+  const at=new Date();const id=auditLogId(at);
+  const content=JSON.stringify({format:'GiocapoAuditLog',version:1,id,exportedAt:at.toISOString(),retentionDays:30,total:rows.length,records:rows},null,2);
+  const href=URL.createObjectURL(new Blob([content],{type:'application/json;charset=utf-8'}));const a=document.createElement('a');a.href=href;a.download=id+'.log';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),2000);toast(`${rows.length} registros exportados.`);
+ }catch(err){console.error(err);toast('Falha ao exportar: '+(err.message||'erro desconhecido'))}finally{btn.disabled=false}
+}
+function auditValidLog(data,basename){
+ if(!data||data.format!=='GiocapoAuditLog'||data.version!==1||data.id!==basename||!Array.isArray(data.records)||data.records.length>100000)return false;
+ const match=AUDIT_LOG_PATTERN.exec(basename);if(!match)return false;
+ const [,dd,mm,yyyy,hh,minute]=match;const dt=new Date(Number(yyyy),Number(mm)-1,Number(dd),Number(hh),Number(minute));
+ if(dt.getFullYear()!==Number(yyyy)||dt.getMonth()+1!==Number(mm)||dt.getDate()!==Number(dd)||dt.getHours()!==Number(hh)||dt.getMinutes()!==Number(minute))return false;
+ if(!data.records.every(r=>r&&typeof r==='object'&&['equipment','product'].includes(r.entity_type)&&['created','updated','deleted','duplicated'].includes(r.operation)&&typeof r.event_at==='string'))return false;
+ return true;
+}
+async function importAuditLog(event){
+ const file=event.target.files?.[0];event.target.value='';if(!file)return;
+ const basename=file.name.replace(/\.log$/i,'');
+ if(!/^LOG\d{12}\.log$/.test(file.name)||file.size>30*1024*1024){toast('Selecione um arquivo LOGDDMMAAAAHHMM.log válido (até 30 MB).');return}
+ try{
+  const data=JSON.parse(await file.text());if(!auditValidLog(data,basename))throw new Error('Arquivo inválido ou incompatível.');
+  auditArchive=data;auditHistoryRequest++;auditHistoryLoading=false;
+  try{sessionStorage.setItem('giocapo_log_'+basename,JSON.stringify(data))}catch(_){}
+  history.pushState({auditLog:basename},'',`/${basename}`);
+  showAuditArchive();
+ }catch(err){toast('Não foi possível abrir o registro: '+(err.message||'arquivo inválido'))}
+}
+function restoreAuditArchiveRoute(){
+ if(!canAdmin())return;
+ const requested=new URLSearchParams(location.search).get('auditRoute')||location.pathname.slice(1);
+ if(!AUDIT_LOG_PATTERN.test(requested))return;
+ const saved=sessionStorage.getItem('giocapo_log_'+requested);
+ if(!saved){
+   history.replaceState(null,'','/');
+   document.querySelector('.nav button[data-page="historico"]')?.click();
+   toast('Este registro não está carregado nesta sessão. Use VER REGISTRO para selecionar o arquivo novamente.');
+   return;
+ }
+ try{
+  const data=JSON.parse(saved);if(!auditValidLog(data,requested))throw new Error('inválido');
+  auditArchive=data;
+  history.replaceState({auditLog:requested},'',`/${requested}`);
+  showAuditArchive();
+ }catch(_){sessionStorage.removeItem('giocapo_log_'+requested)}
+}
+function showAuditArchive(){
+ if(!auditArchive)return;
+ const note=$('auditArchiveNotice');note.hidden=false;
+ const when=new Date(auditArchive.exportedAt);const date=Number.isNaN(+when)?auditArchive.id:fmtDate(when);
+ note.innerHTML=`<div><strong>Registro arquivado ${esc(auditArchive.id)}</strong><div>Histórico exportado em ${esc(date)} · ${auditArchive.records.length} registros · Somente leitura.</div></div><button class="btn" type="button" onclick="leaveAuditArchive(true)">VOLTAR AO HISTÓRICO ATUAL</button>`;
+ $('auditExport').hidden=true;
+ $('auditHistoryHint').textContent='Visualizando arquivo importado. Estes registros não fazem parte do histórico atual do Supabase.';
+ document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page==='historico'));
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='historico'));
+ renderAuditHistory();
+}
+function leaveAuditArchive(openHistory=false,updatePath=true){
+ if(!auditArchive)return;
+ auditArchive=null;
+ if(updatePath)history.pushState(null,'','/');
+ $('auditArchiveNotice').hidden=true;$('auditExport').hidden=false;
+ $('auditHistoryHint').textContent='O registro é feito no Supabase após o salvamento bem-sucedido. Alterações de administradores não são incluídas. A consulta mostra somente os registros dos últimos 30 dias.';
+ if(openHistory){document.querySelector('.nav button[data-page="historico"]')?.click()}
+}
+window.addEventListener('popstate',()=>{if(auditArchive&&location.pathname!=='/'+auditArchive.id){leaveAuditArchive(false,false);const active=document.querySelector('.nav button.active');if(active?.dataset.page==='historico')loadAuditHistory(true)}});
+
 function profileInitials(name){
  const words=String(name||'').trim().split(/\s+/).filter(Boolean);
  return words.length?words.slice(0,2).map(word=>Array.from(word)[0].toLocaleUpperCase('pt-BR')).join(''):'U';
@@ -5329,6 +5633,7 @@ document.querySelectorAll('.nav button[data-page]').forEach(btn=>btn.addEventLis
  const page=btn.dataset.page;
  const target=$(page);
  if(!target)return;
+ if(auditArchive)leaveAuditArchive(false);
  lastMainPage=page;
  if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
  document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.remove('active'));
@@ -5339,6 +5644,7 @@ document.querySelectorAll('.nav button[data-page]').forEach(btn=>btn.addEventLis
  if(page==='produtos')renderProductPage();
  if(page==='usuarios')renderUsersPage();
  if(page==='permissoes')renderPermissionsPage();
+ if(page==='historico'){loadAuditHistory(true);if(!auditRealtimeChannel)startAuditRealtime();}
 }));
 bootApp();
 
