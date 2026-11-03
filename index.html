@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.15.1 -->
+<!-- v6.17.6 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -33,7 +33,7 @@ button,input,select{font:inherit}button{cursor:pointer}
 .app{min-height:100vh;display:flex;flex-direction:column}
 .header{background:#3a3a3a;color:#fff;padding:18px 24px}
 .header-inner{max-width:1450px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;position:relative;align-items:center;gap:0;min-width:0;padding-left:96px;transition:padding-left .24s ease,transform .24s ease}.brand-logo{position:absolute;top:50%;display:block;width:84px;height:auto;max-height:64px;object-fit:contain;transform:translateY(-50%);pointer-events:none}.brand-text{min-width:0}.brand h1{margin:0;font-size:21px;font-weight:700}.brand p{margin:5px 0 0;color:#c9d7df;font-size:12px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand-logo{display:block;width:120px;height:auto;max-height:64px;object-fit:contain;flex:0 0 auto}.brand-text{min-width:0}.brand h1{margin:0;font-size:21px;font-weight:700}.brand p{margin:5px 0 0;color:#c9d7df;font-size:12px}
 .header-actions{display:flex;gap:8px;flex-wrap:wrap}.header-actions button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff}
 .container{width:100%;max-width:1450px;box-sizing:border-box;margin:0 auto;padding:20px 24px 32px;flex:1 0 auto}
 .nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:8px}
@@ -53,15 +53,11 @@ button,input,select{font:inherit}button{cursor:pointer}
 
 .equipment-table th:nth-child(8) .equipment-th-inner{justify-content:flex-start}
 
-.equipment-th-title-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
-.equipment-sort-btn{position:absolute;left:100%;margin-left:5px;top:50%;transform:translateY(-50%);width:20px;min-width:20px;height:20px;padding:0;border:0;border-radius:4px;background:transparent;color:#7b858c;font-size:10px;line-height:20px;text-align:center}
-.equipment-sort-btn:hover{background:#e8ecef;color:#30383d}
-.equipment-sort-menu{position:absolute;top:calc(100% - 2px);left:10px;z-index:1200;display:none;width:168px;padding:5px;background:#fff;border:1px solid #d8dde1;border-radius:7px;box-shadow:0 8px 22px rgba(0,0,0,.14)}
-.equipment-sort-menu.open{display:grid;gap:3px}
-.equipment-sort-menu button{width:100%;padding:7px 8px;border:0;border-radius:5px;background:transparent;color:#303030;font-size:11px;font-weight:700;text-align:left;white-space:nowrap}
-.equipment-sort-menu button:hover,.equipment-sort-menu button.active{background:#eef1f3}
-
-.equipment-sort-menu .equipment-sort-reset{margin-top:3px;padding-top:8px;border-top:1px solid #e3e7ea;border-radius:0 0 5px 5px;color:#59636a}
+.equipment-column-sort{display:inline-flex;align-items:center;justify-content:center;gap:5px;max-width:100%;min-width:0;padding:5px 4px;border:0;border-radius:5px;background:transparent;color:inherit;font-size:inherit;font-weight:700;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.equipment-column-sort:hover{background:#e8ecef;color:#30383d}
+.equipment-column-sort:focus-visible{outline:2px solid #957300;outline-offset:1px}
+.equipment-column-sort .equipment-column-arrow{flex:0 0 auto;color:#73828e;font-size:11px;line-height:1}
+.equipment-column-sort.active .equipment-column-arrow{color:#504200}
 .equipment-print-menu{position:absolute;top:calc(100% + 5px);right:0;z-index:1200;display:none;min-width:190px;padding:5px;background:#fff;border:1px solid #d8dde1;border-radius:7px;box-shadow:0 8px 22px rgba(0,0,0,.14)}
 .equipment-print-menu.open{display:grid;gap:3px}
 .equipment-print-menu button{width:100%;padding:9px 10px;border:0;border-radius:5px;background:transparent;color:#303030;font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
@@ -166,7 +162,7 @@ button,input,select{font:inherit}button{cursor:pointer}
  .app{min-width:0}
  .header{padding:13px 14px}
  .header-inner{align-items:flex-start;flex-direction:column;gap:12px}
- .brand{min-width:0;width:100%;padding-left:77.2px}.brand-logo{width:67.2px;max-height:52px}.brand-text{min-width:0}.brand h1{font-size:19px;line-height:1.2}.brand p{font-size:11px;line-height:1.4}
+ .brand{min-width:0;width:100%;gap:10px}.brand-logo{width:96px;max-height:52px}.brand-text{min-width:0}.brand h1{font-size:19px;line-height:1.2}.brand p{font-size:11px;line-height:1.4}
  .header-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
  .header-actions button{width:100%;min-width:0;min-height:42px;padding:8px 7px;font-size:11px}
  .container{padding:0 11px 24px}
@@ -558,27 +554,16 @@ body.guest-calculator-mode #mainApp .container{padding-top:24px}
 @media print{.label-print-loading{display:none!important}}
 
 
-/* v6.15.1 | Logo unica com mascara em degrade e zoom progressivo */
-:root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-fixed:227.4122304px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10}
-body{border-left:0;padding-left:var(--sidebar-closed);transition:padding-left .22s ease}
-body.sidebar-pinned{padding-left:var(--sidebar-fixed)}
-body.sidebar-pinned .brand{padding-left:0;transform:translateX(calc(-1 * max(0px,(100vw - var(--sidebar-fixed) - 1498px)/2)))}
-#mainApp .header{position:relative}
-#mainApp .header .brand-logo{left:calc(24px + max(0px,(100vw - var(--sidebar-closed) - 1498px)/2));transition:left .48s cubic-bezier(.22,.61,.36,1);will-change:left}
-body.sidebar-pinned #mainApp .header .brand-logo{left:calc(min(102px,calc(var(--sidebar-closed) + max(0px,(100vw - var(--sidebar-closed) - 1498px)/2))) - var(--sidebar-fixed));transition-duration:.26s}
-@media(max-width:700px){
- #mainApp .header .brand-logo{top:35px;left:14px}
- body.sidebar-pinned #mainApp .header .brand-logo{left:calc(42px - var(--sidebar-closed))}
-}
-@media(max-width:420px){#mainApp .header .brand-logo{top:34px;left:11px}}
+/* v6.15.2 | Cabeçalho unificado e barra lateral abaixo do cabeçalho */
+:root{--sidebar-closed:58px;--sidebar-open:248px;--sidebar-fixed:227.4122304px;--sidebar-color:#fec123;--sidebar-text:#453400;--sidebar-button:#ffaf10;--app-content-inset:var(--sidebar-closed);--erp-header-height:84px}
+body{border-left:0;padding-left:var(--app-content-inset);transition:padding-left .22s ease}
+body.sidebar-pinned{--app-content-inset:var(--sidebar-fixed)}
 #mainApp{min-width:0}
-#mainApp .header-inner,#mainApp .container,#mainApp .site-footer{max-width:1450px}
-#mainApp .nav{position:fixed;z-index:95;left:0;top:0;bottom:0;width:var(--sidebar-closed);height:100dvh;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;overflow:visible;margin:0;padding:0;border:0;border-right:1px solid #eab21f;border-radius:0;background:var(--sidebar-color);box-shadow:2px 0 13px rgba(0,0,0,.09);transition:width .22s ease;white-space:nowrap}
+#mainApp .header{position:sticky;top:0;z-index:96;margin-left:calc(-1 * var(--app-content-inset));width:calc(100% + var(--app-content-inset));transition:margin-left .22s ease,width .22s ease}
+#mainApp .header-inner{max-width:none;margin:0}
+#mainApp .container,#mainApp .site-footer{max-width:1450px}
+#mainApp .nav{position:fixed;z-index:95;left:0;top:var(--erp-header-height);bottom:0;width:var(--sidebar-closed);height:calc(100dvh - var(--erp-header-height));display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;overflow:visible;margin:0;padding:0;border:0;border-right:1px solid #eab21f;border-radius:0;background:var(--sidebar-color);box-shadow:2px 0 13px rgba(0,0,0,.09);transition:width .22s ease;white-space:nowrap}
 body.sidebar-pinned #mainApp .nav{width:var(--sidebar-fixed)}
-#mainApp .nav .nav-top{position:relative;z-index:3;width:100%;height:90px;min-height:90px;display:flex;gap:11px;align-items:center;padding:0 10px;border-bottom:1px solid rgba(83,70,0,.17);background:var(--sidebar-color);transition:width .22s ease}
-#mainApp .nav .nav-brand-lockup{position:relative;display:block;align-self:stretch;flex:1;min-width:0;height:100%;overflow:hidden;pointer-events:none}
-#mainApp .nav .nav-brand-image{position:absolute;left:0;top:50%;width:113px;max-width:none;height:auto;display:block;object-fit:contain;pointer-events:none;transform-origin:left center;transform:translateY(-50%) scale(1);-webkit-mask-image:linear-gradient(to right,#000 0%,#000 90%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 90%,transparent 100%);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:left center;mask-position:left center;-webkit-mask-size:36% 100%;mask-size:36% 100%;transition:transform .28s cubic-bezier(.4,0,.2,1),-webkit-mask-size .28s cubic-bezier(.4,0,.2,1),mask-size .28s cubic-bezier(.4,0,.2,1);will-change:transform,-webkit-mask-size,mask-size}
-body.sidebar-pinned #mainApp .nav .nav-brand-image{transform:translateY(-50%) scale(1.5);-webkit-mask-size:114% 100%;mask-size:114% 100%}
 #mainApp .nav .nav-links{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px;flex:1;min-height:0;overflow:visible;padding:14px 6px;scrollbar-width:thin}
 #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{position:relative;z-index:1;min-height:45px;min-width:0;flex:0 0 45px;width:100%;display:flex;align-items:center;justify-content:flex-start;gap:12px;border:0;border-radius:8px;margin:0;padding:0 10px;background:var(--sidebar-button);color:var(--sidebar-text);font-weight:700;font-size:13px;white-space:nowrap;text-align:left;overflow:hidden;cursor:pointer;transform-origin:left center;transition:width .22s ease,transform .18s ease,background .14s ease,color .14s ease,box-shadow .14s ease}
 #mainApp .nav button[data-page]:hover,#mainApp .nav .sidebar-pin:hover{background:#ffdb69;color:#3d2f00}
@@ -600,13 +585,11 @@ body.sidebar-pinned #mainApp .nav button[data-page]{transform:none}
 }
 body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible{width:calc(var(--sidebar-open) - 12px);z-index:10;box-shadow:4px 5px 13px rgba(0,0,0,.15)}
 body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible .nav-label{opacity:1}
-body.guest-calculator-mode{padding-left:0!important}
+body.guest-calculator-mode{--app-content-inset:0px;padding-left:0!important}
 body.guest-calculator-mode #mainApp .nav{display:none!important}
 @media(max-width:700px){
  :root{--sidebar-closed:49px;--sidebar-open:230px;--sidebar-fixed:210.906504px}
- body.sidebar-pinned{padding-left:var(--sidebar-closed)}
- body.sidebar-pinned .brand{width:calc(100% - var(--sidebar-fixed) + var(--sidebar-closed));transform:translateX(calc(var(--sidebar-fixed) - var(--sidebar-closed)))}
- #mainApp .nav .nav-top{padding-left:5px}
+ body.sidebar-pinned{--app-content-inset:var(--sidebar-closed)}
  #mainApp .nav .nav-links{padding-left:4px;padding-right:4px}
  #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{padding-left:7px}
  #mainApp .nav .nav-bottom{padding-left:4px;padding-right:4px}
@@ -614,12 +597,13 @@ body.guest-calculator-mode #mainApp .nav{display:none!important}
  body:not(.sidebar-pinned) #mainApp .nav button[data-page]:focus-visible{width:calc(var(--sidebar-open) - 8px)}
 }
 @media(max-height:590px){
- #mainApp .nav .nav-top{height:64px;min-height:64px}
  #mainApp .nav .nav-links{gap:2px;padding-top:5px;padding-bottom:5px}
  #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{min-height:39px;flex-basis:39px}
  #mainApp .nav .nav-bottom{min-height:52px;padding-top:5px;padding-bottom:5px}
 }
-@media(prefers-reduced-motion:reduce){body,.brand,.brand-logo,#mainApp .nav,#mainApp .nav .nav-top,#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,#mainApp .nav .nav-label,#mainApp .nav .nav-brand-image{transition:none!important}}
+@media(prefers-reduced-motion:reduce){body,#mainApp .header,#mainApp .nav,#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,#mainApp .nav .nav-label{transition:none!important}}
+@media(max-width:700px){body{border-top:0}#mainApp .header{border-top:4px solid var(--primary)}}
+@media(max-width:420px){#mainApp .header{border-top-width:3px}}
 /* Perfis e indicador de sincronização preservados */
 body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!important}
 #mainApp .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
@@ -692,6 +676,396 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 .audit-list-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
 .audit-info{margin-top:13px;line-height:1.6}
 @media(max-width:700px){.audit-filters .field{flex:1 1 120px}.audit-filters .field.grow{flex:1 1 100%}.audit-entry summary{padding:12px;gap:8px}.audit-entry-title{font-size:12px}.audit-data-row{grid-template-columns:minmax(90px,34%) minmax(0,1fr);font-size:11px}.audit-details{padding:12px}.audit-diff-table{min-width:520px}}
+
+body{-webkit-user-select:none;user-select:none}
+input,textarea,select,[contenteditable=""],[contenteditable="true"],
+#equipamentos .equipment-table tbody td:not(:last-child),
+#produtos .product-row>div:first-child,
+#productManagerModal .product-row>div:first-child,
+.equip-info,.kit-eq,
+.audit-preview,.audit-details{
+ -webkit-user-select:text;user-select:text
+}
+button,button *,a,.nav,.nav *,summary,.audit-entry summary,.audit-entry summary *{
+ -webkit-user-select:none;user-select:none
+}
+.audit-entry summary .audit-preview,.audit-entry summary .audit-preview *{
+ -webkit-user-select:text;user-select:text
+}
+img,svg{-webkit-user-drag:none}
+
+@media (hover:none) and (pointer:coarse){
+ *{-webkit-tap-highlight-color:transparent}
+ button,a,summary,[role="button"],.product-option{-webkit-touch-callout:none}
+ button:not(:disabled):active,
+ input[type="button"]:not(:disabled):active,
+ input[type="submit"]:not(:disabled):active,
+ input[type="reset"]:not(:disabled):active,
+ a:active,summary:active,[role="button"]:active,.product-option:active{
+  filter:brightness(.91)
+ }
+}
+
+@media(max-width:700px){
+ :root{--mobile-sidebar-peek:18px;--mobile-sidebar-open:240px}
+ html{scroll-padding-top:72px}
+ body{--app-content-inset:var(--mobile-sidebar-peek);padding-left:var(--app-content-inset);font-size:14px;border-top:3px solid var(--primary);overflow-x:hidden}
+ body.sidebar-pinned{--app-content-inset:var(--mobile-sidebar-peek)}
+ #mainApp .header{margin-left:0;width:100%;position:sticky;top:0;z-index:110;padding:10px 12px 9px;border-top:0}
+ #mainApp .header-inner{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"logo title avatar" "logo sync avatar";align-items:center;gap:3px 10px}
+ #mainApp .brand{display:contents}
+ #mainApp .brand-logo{grid-area:logo;width:76px;max-height:none;align-self:center}
+ #mainApp .brand-text{grid-area:title;min-width:0;align-self:end}
+ #mainApp .brand h1{font-size:17px;line-height:1.05;margin:0 0 2px}
+ #mainApp .brand p{display:none}
+ #mainApp .header-actions{display:contents}
+ #mainApp .header-actions .sync-status{grid-area:sync;justify-self:start;align-self:start;max-width:none;padding:6px 10px;border-radius:8px;font-size:10px;line-height:1.1}
+ #mainApp .header-profile-wrap{grid-area:avatar;align-self:center;justify-self:end}
+ #mainApp .header-actions .header-profile-trigger{width:42px;min-width:42px;height:42px;min-height:42px}
+ #mainApp .header-profile-menu{top:calc(100% + 6px);right:0;width:min(258px,calc(100vw - 24px))}
+ #mainApp .container{padding:12px 12px 24px 14px}
+ #mainApp .nav{top:var(--erp-header-height);bottom:0;height:calc(100dvh - var(--erp-header-height));width:var(--mobile-sidebar-peek);min-width:0;overflow:hidden;transition:width .24s ease;box-shadow:2px 0 13px rgba(0,0,0,.12);z-index:109}
+ #mainApp .nav .nav-links{padding:8px 0 74px 4px;gap:6px}
+ #mainApp .nav .nav-bottom{padding:0;min-height:0}
+ #mainApp .nav button[data-page]{width:calc(var(--mobile-sidebar-open) - 10px);min-height:44px;flex:0 0 44px;border-radius:0 10px 10px 0;padding:0 14px;gap:12px;box-shadow:none;transform:none!important;transition:background .14s ease,color .14s ease,box-shadow .14s ease}
+ #mainApp .nav button[data-page].active{box-shadow:inset 3px 0 #7a5200;background:#fff0a6}
+ #mainApp .nav .nav-icon{opacity:0;transform:translateX(-8px);transition:opacity .14s ease,transform .18s ease}
+ #mainApp .nav .nav-label{opacity:0;transition:opacity .14s ease;color:#3d2e00}
+ #mainApp .nav .sidebar-pin{position:fixed;left:calc(var(--mobile-sidebar-peek) - 1px);bottom:14px;width:28px;height:54px;min-height:54px;flex:0 0 auto;padding:0;border-radius:0 10px 10px 0;display:flex;align-items:center;justify-content:center;background:var(--sidebar-button);box-shadow:0 3px 10px rgba(0,0,0,.14);z-index:111;transition:left .24s ease,background .14s ease,color .14s ease,box-shadow .14s ease}
+ #mainApp .nav .sidebar-pin .nav-label{display:none!important}
+ #mainApp .nav .sidebar-pin .nav-icon{opacity:1;transform:none}
+ #mainApp .nav .sidebar-pin .nav-icon svg{width:18px;height:18px}
+ body.mobile-sidebar-open #mainApp .nav{width:var(--mobile-sidebar-open)}
+ body.mobile-sidebar-open #mainApp .nav .nav-icon{opacity:1;transform:none}
+ body.mobile-sidebar-open #mainApp .nav .nav-label{opacity:1}
+ body.mobile-sidebar-open #mainApp .nav .sidebar-pin{left:calc(var(--mobile-sidebar-open) - 1px);background:#f0e59b}
+ body.mobile-sidebar-open #mainApp .nav button[data-page],body.mobile-sidebar-open #mainApp .nav .sidebar-pin{pointer-events:auto}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:hover,body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:focus-visible{width:calc(var(--mobile-sidebar-open) - 10px);box-shadow:none}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:not(.active){background:var(--sidebar-button)}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:not(.active)::after{display:none}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active .nav-icon{opacity:0;transform:translateX(-8px)}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active .nav-label{opacity:0}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]{pointer-events:none}
+ body:not(.mobile-sidebar-open) #mainApp .nav .sidebar-pin{pointer-events:auto}
+ #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin{-webkit-tap-highlight-color:transparent}
+}
+@media(max-width:420px){
+ #mainApp .header{padding:9px 10px 8px}
+ #mainApp .brand-logo{width:72px}
+ #mainApp .brand h1{font-size:16px}
+ #mainApp .header-actions .sync-status{padding:5px 9px;font-size:9.5px}
+ #mainApp .header-actions .header-profile-trigger{width:40px;min-width:40px;height:40px;min-height:40px}
+ #mainApp .container{padding:10px 10px 22px 12px}
+}
+
+
+@media(max-width:700px){
+ body{--app-content-inset:var(--mobile-sidebar-peek)}
+ #mainApp .header{margin-left:calc(-1 * var(--mobile-sidebar-peek));width:calc(100% + var(--mobile-sidebar-peek))}
+ #mainApp .nav{width:var(--mobile-sidebar-peek)}
+ #mainApp .nav .nav-links{padding:8px 0 62px 0}
+ #mainApp .nav button[data-page]{margin-left:calc(var(--mobile-sidebar-peek) - (var(--mobile-sidebar-open) - 10px));border-radius:0 10px 10px 0}
+ body.mobile-sidebar-open #mainApp .nav button[data-page]{margin-left:0}
+ #mainApp .nav .sidebar-pin{left:calc(var(--mobile-sidebar-peek) - 1px);bottom:0;width:34px;height:50px;min-height:50px;border-radius:0 10px 0 0;box-shadow:0 0 0 1px rgba(122,82,0,.18),0 3px 10px rgba(0,0,0,.14)}
+ body.mobile-sidebar-open #mainApp .nav .sidebar-pin{left:calc(var(--mobile-sidebar-open) - 1px)}
+}
+@media(max-width:420px){
+ #mainApp .nav .sidebar-pin{width:33px;height:48px;min-height:48px}
+}
+
+
+@media(max-width:700px){
+ body{position:relative}
+ body::before{content:"";position:absolute;top:var(--erp-header-height);bottom:0;left:0;width:var(--mobile-sidebar-peek);background:var(--sidebar-color);border-right:1px solid #eab21f;pointer-events:none;z-index:0}
+ #mainApp .nav{top:var(--erp-header-height);bottom:0;height:auto;min-height:0;max-height:none}
+ #mainApp .nav .nav-bottom{min-height:0;height:0;flex:0 0 0;padding:0;border:0;overflow:visible}
+ #mainApp .nav .nav-bottom .sidebar-pin{position:fixed;top:auto;bottom:0;left:0;width:28px;min-width:28px;max-width:28px;height:50px;min-height:50px;flex:none;margin:0;padding:0;border:1px solid rgba(122,82,0,.25);border-left:0;border-bottom:0;border-radius:0 9px 0 0;justify-content:center;align-items:center;box-shadow:1px -2px 6px rgba(0,0,0,.10);z-index:111;transition:left .24s ease,background .14s ease,color .14s ease}
+ body.mobile-sidebar-open #mainApp .nav .nav-bottom .sidebar-pin{left:calc(var(--mobile-sidebar-open) - var(--mobile-sidebar-peek))}
+ #mainApp .nav .nav-bottom .sidebar-pin .nav-icon{display:inline-flex;justify-content:center;align-items:center;width:26px;min-width:0;flex:0 0 auto}
+}
+@media(max-width:420px){
+ #mainApp .nav .nav-bottom .sidebar-pin{width:27px;min-width:27px;max-width:27px;height:48px;min-height:48px}
+}
+
+
+@media(max-width:700px){
+ body > #sidebarPin{
+  position:fixed;top:auto;right:auto;bottom:env(safe-area-inset-bottom,0px);left:0;
+  width:28px;min-width:28px;max-width:28px;height:50px;min-height:50px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  margin:0;padding:0;border:1px solid rgba(122,82,0,.25);border-left:0;border-bottom:0;
+  border-radius:0 9px 0 0;background:var(--sidebar-button);color:var(--sidebar-text);
+  box-shadow:1px -2px 6px rgba(0,0,0,.10);z-index:250;
+  transition:left .24s ease,background .14s ease,color .14s ease;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+ }
+ body.mobile-sidebar-open > #sidebarPin{left:calc(var(--mobile-sidebar-open) - var(--mobile-sidebar-peek));background:#f0e59b}
+ body > #sidebarPin .nav-label{display:none!important}
+ body > #sidebarPin .nav-icon{display:inline-flex;align-items:center;justify-content:center;width:26px;min-width:0;opacity:1;transform:none}
+ body > #sidebarPin .nav-icon svg{width:16px;height:16px}
+ body > #sidebarPin:active{filter:brightness(.91)}
+ body.guest-calculator-mode > #sidebarPin,
+ body > #mainApp.auth-locked ~ #sidebarPin{display:none!important}
+}
+@media(max-width:420px){
+ body > #sidebarPin{width:27px;min-width:27px;max-width:27px;height:48px;min-height:48px}
+}
+
+
+/* v6.17.6 | Navegacao e cabecalho fixos; rolagem somente do conteudo */
+html{scroll-padding-top:calc(var(--erp-header-height) + 12px)}
+#mainApp{padding-top:var(--erp-header-height);min-height:100dvh}
+#mainApp .header{
+ position:fixed;top:0;left:0;right:0;width:auto;margin:0;
+ z-index:96;transition:none;
+}
+#mainApp .nav{
+ position:fixed;top:var(--erp-header-height);bottom:0;
+ height:calc(100dvh - var(--erp-header-height));
+}
+body.guest-calculator-mode #mainApp{padding-top:0}
+@media(max-width:700px){
+ body{overflow-x:clip}
+ .modal-backdrop{z-index:320}
+ #mainApp .header{
+  position:fixed;top:0;left:0;right:0;width:auto;margin:0;z-index:110;
+ }
+ #mainApp .nav{
+  position:fixed;top:var(--erp-header-height);bottom:0;
+  height:calc(100dvh - var(--erp-header-height));
+ }
+}
+
+
+#equipamentos .equipment-mobile-list{display:none}
+@media(max-width:700px){
+ #equipamentos{min-width:0;max-width:100%;overflow:visible}
+ #equipamentos .dashboard{display:grid;grid-template-columns:minmax(0,1fr)}
+ #equipamentos .dashboard>.metric:not(:first-child){display:none}
+ #equipamentos .toolbar>.field:not(.grow),
+ #equipamentos .toolbar>.btn,
+ #equipamentos .toolbar>.equipment-print-actions{display:none!important}
+ #equipamentos .toolbar{min-width:0;max-width:100%;padding:10px}
+ #equipamentos .toolbar>.field.grow{width:100%;min-width:0;margin:0}
+ #equipamentos .table-wrap{display:none!important}
+ #equipamentos .equipment-mobile-list{display:block;min-width:0;width:100%;max-width:100%;margin-top:10px;overflow:visible}
+ #equipamentos .mobile-equipment-header,#equipamentos .mobile-equipment-row{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,.84fr) minmax(0,1.5fr) minmax(0,1.12fr) 25px;gap:4px;align-items:center;min-width:0;padding:7px 5px}
+ #equipamentos .mobile-equipment-header{padding-top:10px;padding-bottom:9px;background:#eef1f3;border:1px solid #dce2e6;border-radius:9px 9px 0 0;color:#51616e;font-size:10px;font-weight:700;text-align:center}
+ #equipamentos .mobile-equipment-header>.equipment-column-sort{width:100%;min-width:0;max-width:100%;gap:2px;padding:6px 0;justify-content:center;overflow:hidden;text-overflow:ellipsis;font-size:10px;line-height:1.15}
+ #equipamentos .mobile-equipment-header>.equipment-column-sort>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ #equipamentos .mobile-equipment-header>.equipment-column-sort .equipment-column-arrow{font-size:9px}
+ #equipamentos .mobile-equipment-body{border:1px solid #dce2e6;border-top:0;border-radius:0 0 9px 9px;background:#fff;min-width:0;overflow:hidden}
+ #equipamentos .mobile-equipment-item{min-width:0;max-width:100%;border-top:1px solid #edf0f2}
+ #equipamentos .mobile-equipment-item:first-child{border-top:0}
+ #equipamentos .mobile-equipment-item:nth-child(even){background:#fafbfc}
+ #equipamentos .mobile-equipment-row{min-height:47px;padding-top:7px;padding-bottom:7px}
+ #equipamentos .mobile-equipment-cell{min-width:0;width:100%;overflow:hidden}
+ #equipamentos .mobile-equipment-cell>.equipment-cell-chip{width:100%;min-width:0;max-width:100%;min-height:29px;padding:4px 3px;border-radius:6px;font-size:10px}
+ #equipamentos .mobile-equipment-cell .equipment-cell-chip-text,
+ #equipamentos .mobile-equipment-cell .equipment-cell-chip *{font-size:10px;max-width:100%}
+ #equipamentos .mobile-equipment-toggle{display:flex;align-items:center;justify-content:center;width:25px;height:33px;min-height:33px;min-width:0;padding:0;border:0;border-radius:6px;background:transparent;color:#465766;font-size:13px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ #equipamentos .mobile-equipment-toggle:active{background:#e6e9eb}
+ #equipamentos .mobile-equipment-toggle>span{display:inline-block;transition:transform .18s ease}
+ #equipamentos .mobile-equipment-item.open .mobile-equipment-toggle>span{transform:rotate(180deg)}
+ #equipamentos .mobile-equipment-details{display:none;min-width:0;max-width:100%;padding:10px;background:#f8fafb;border-top:1px solid #dde3e7;gap:8px}
+ #equipamentos .mobile-equipment-item.open .mobile-equipment-details{display:grid}
+ #equipamentos .mobile-equipment-detail-line{display:grid;grid-template-columns:minmax(0,67px) minmax(0,1fr);align-items:center;gap:9px;min-width:0}
+ #equipamentos .mobile-equipment-detail-label{font-size:11px;font-weight:700;color:#51616e;overflow-wrap:anywhere}
+ #equipamentos .mobile-equipment-detail-value{min-width:0;max-width:100%}
+ #equipamentos .mobile-equipment-detail-value .equipment-cell-chip{width:100%;max-width:100%;min-width:0;min-height:33px;border-radius:7px;padding:6px 9px}
+ #equipamentos .mobile-equipment-detail-value .equipment-cell-chip-text{min-width:0;max-width:100%}
+ #equipamentos .mobile-equipment-actions{display:flex;flex-wrap:wrap;gap:6px;min-width:0;max-width:100%}
+ #equipamentos .mobile-equipment-actions>.btn{min-width:0;flex:1 1 73px;padding:8px 7px;font-size:10px;min-height:37px}
+ #equipamentos .mobile-equipment-actions .stock-adjust{display:flex;flex:1 1 100%;flex-wrap:wrap;gap:5px;max-width:100%}
+ #equipamentos .mobile-equipment-actions .stock-adjust-input{width:53px;max-width:100%}
+ #equipamentos .equipment-mobile-list .equipment-cell-chip{-webkit-touch-callout:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+ #equipamentos .mobile-equipment-empty{padding:22px 12px;text-align:center;color:#697783;font-size:12px}
+}
+
+
+@media(max-width:700px){
+ #equipamentos .mobile-equipment-actions.mobile-accessory-actions{display:flex;flex-direction:column;gap:6px;width:100%;min-width:0;max-width:100%}
+ #equipamentos .mobile-accessory-actions-primary,#equipamentos .mobile-accessory-actions-bottom{display:flex;align-items:center;gap:5px;min-width:0;width:100%;max-width:100%}
+ #equipamentos .mobile-accessory-actions-primary>.btn{flex:1 1 0;min-width:0;min-height:36px;padding:7px 4px;font-size:10px}
+ #equipamentos .mobile-accessory-actions-bottom>.btn{flex:1 1 45px;min-width:0;min-height:36px;padding:7px 3px;font-size:9px}
+ #equipamentos .mobile-accessory-actions-bottom>.stock-adjust{display:inline-flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;gap:3px;min-width:0;max-width:100%}
+ #equipamentos .mobile-accessory-actions-bottom .stock-adjust-input{width:32px!important;min-width:0!important;max-width:32px!important;min-height:34px;padding:4px 2px;font-size:12px}
+ #equipamentos .mobile-accessory-actions-bottom .stock-adjust-btn{width:25px;min-width:25px;max-width:25px;min-height:34px;padding:5px 0!important;font-size:13px}
+}
+
+#mainApp .nav{top:calc(var(--erp-header-height) - 2px);height:calc(100dvh - var(--erp-header-height) + 2px)}
+.permissions-label{position:relative;display:flex;align-items:center;gap:7px;min-width:0}
+.permissions-label strong{display:inline;min-width:0;overflow-wrap:anywhere}
+.permission-info-button{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:17px;height:17px;padding:0;border:1px solid #9ba8ae;border-radius:50%;background:#f7f9fa;color:#53616a;font-size:11px;font-weight:800;line-height:1;cursor:pointer}
+.permission-info-button:is(:hover,:focus-visible,.is-open)::after{content:attr(data-description);position:absolute;top:calc(100% + 7px);left:-4px;z-index:500;width:min(260px,calc(100vw - 75px));max-width:none;padding:10px 12px;border-radius:7px;background:#343b40;color:#fff;font-size:11px;font-weight:400;line-height:1.4;text-align:left;white-space:normal;overflow-wrap:anywhere;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.permissions-card{overflow:visible}
+.permissions-row{position:relative}
+.permissions-row:has(.permission-info-button:is(:hover,:focus-visible,.is-open)){z-index:5}
+.permissions-role-short{display:none}
+.edit-kit-add-mobile-button{display:none}
+@media(max-width:700px){
+ body:has(.modal-backdrop.open){overflow:hidden}
+ :root{--mobile-sidebar-peek:13.5px}
+ #mainApp .nav{top:calc(var(--erp-header-height) - 2px);height:calc(100dvh - var(--erp-header-height) + 2px)}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal).open{position:fixed;inset:0;align-items:stretch;padding:0}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal)>.modal{display:flex;flex-direction:column;width:100%;height:100dvh;max-height:none;min-height:0;margin:0;border:0;border-radius:0;overflow:hidden}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-head{position:relative;flex:0 0 auto;padding:13px 15px;z-index:3}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:13px 14px calc(20px + env(safe-area-inset-bottom))}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-footer{position:relative;flex:0 0 auto;z-index:3}
+ body:has(.modal-backdrop.open)>#sidebarPin{visibility:hidden;pointer-events:none}
+ #equipmentModal .checkboxes,#productModal .checkboxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #equipmentModal .check,#productModal .check{min-width:0;min-height:37px;padding:5px 7px;display:flex;align-items:center;gap:5px;font-size:11px;overflow-wrap:anywhere}
+ #equipmentModal .check input,#productModal .check input{flex:0 0 15px;width:15px;height:15px;min-width:15px;min-height:15px;max-height:15px;margin:0}
+ #montar .kit-builder{display:flex;flex-direction:column;gap:12px;min-width:0}
+ #montar .builder-available-panel{display:contents}
+ #montar .builder-search-panel{order:1;margin:0!important;padding:12px!important;background:#fff;border:1px solid var(--border)!important;border-radius:9px;min-width:0}
+ #montar .builder-product-field{display:none!important}
+ #montar .builder-selected-panel{order:2;min-width:0}
+ #montar .builder-available-panel>h3{order:3;font-size:15px;margin:4px 3px 0}
+ #montar .builder-available-panel>.available-list{order:4;min-width:0;background:#fff;padding:10px;border:1px solid var(--border);border-radius:9px;max-height:none}
+ #montar .equip-option,#montar .selected-item{min-width:0}
+ #montar .equip-info,.edit-kit-picker-stack .equip-info{min-width:0;overflow-wrap:anywhere}
+ #kits .kit-name-toolbar .field{min-width:0}
+ #kits .kit-print-button{display:none!important}
+ #kitEditModal .edit-kit-add-desktop-label,#kitEditModal #editKitAdd{display:none!important}
+ #kitEditModal .edit-kit-add-mobile-button{display:block;width:100%;min-height:43px}
+ .edit-kit-picker-stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+ .edit-kit-picker-stack .card{min-width:0;box-shadow:none}
+ .edit-kit-picker-stack .available-list{max-height:none;overflow:visible}
+ .edit-kit-picker-stack .selected-item,.edit-kit-picker-stack .equip-option{gap:8px;min-width:0}
+ .edit-kit-picker-stack .equip-info small{overflow-wrap:anywhere}
+ .permissions-card{overflow:visible}
+ .permissions-head,.permissions-row{grid-template-columns:minmax(0,1fr) repeat(3,39px);gap:4px;min-width:0;width:100%;padding:9px 6px}
+ .permissions-head strong{min-width:0;font-size:11px;overflow-wrap:anywhere}
+ .permissions-role{font-size:9px;letter-spacing:0}
+ .permissions-role-long{display:none}
+ .permissions-role-short{display:inline}
+ .permissions-label strong{font-size:10px;line-height:1.2}
+ .permissions-label{gap:4px}
+ .permission-cell input{width:17px;height:17px;min-width:17px;padding:0}
+ .permission-info-button{width:16px;height:16px;min-width:16px}
+ .permission-info-button:is(:hover,:focus-visible,.is-open)::after{width:min(225px,calc(100vw - 50px));left:0}
+}
+
+
+.product-manager-search{margin:0 0 14px;min-width:0}
+.product-manager-search input{width:100%;min-width:0}
+#kitEditModal #editKitAdd{display:none!important}
+#kitEditModal .edit-kit-add-mobile-button{display:block;width:100%;min-height:43px}
+.mobile-permission-tooltip[hidden]{display:none!important}
+.mobile-permission-tooltip{display:none}
+@media(max-width:700px){
+ #editKitPickerModal .edit-kit-picker-selected{display:none!important}
+ .permissions-label strong{font-size:11.5px;line-height:1.25}
+ .permission-info-button:is(:hover,:focus-visible,.is-open)::after{display:none!important}
+ .mobile-permission-tooltip:not([hidden]){display:block;position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 36px);min-width:min(220px,calc(100vw - 36px));padding:12px 14px;border-radius:9px;background:#343b40;color:#fff;font-size:12px;font-weight:400;line-height:1.5;white-space:normal;overflow-wrap:anywhere;box-shadow:0 9px 26px rgba(0,0,0,.25);z-index:5000;text-align:left;pointer-events:none}
+}
+
+
+@media(max-width:700px){
+ #mainApp .header-inner{grid-template-columns:minmax(0,1fr) max-content minmax(0,1fr);grid-template-areas:"logo title avatar" "logo sync avatar";column-gap:5px;row-gap:3px}
+ #mainApp .brand-logo{width:84px;justify-self:start}
+ #mainApp .brand-text{justify-self:center;text-align:center}
+ #mainApp .brand h1{text-align:center}
+ #mainApp .header-actions .sync-status{justify-self:center;text-align:center}
+ #mainApp .header-profile-wrap{justify-self:end}
+ #mainApp .nav button[data-page]{border:2px solid #886427;margin-left:calc(var(--mobile-sidebar-peek) - (var(--mobile-sidebar-open) - 10px) - 3px);transition:margin-left .24s cubic-bezier(.4,0,.2,1),background .14s ease,color .14s ease,border-color .14s ease,box-shadow .14s ease}
+ #mainApp .nav button[data-page].active{border-color:#765720}
+ body.mobile-sidebar-open #mainApp .nav button[data-page]{margin-left:0}
+ #mainApp .nav .nav-icon{transition:opacity .24s ease,transform .24s cubic-bezier(.4,0,.2,1)}
+ #mainApp .nav .nav-label{transition:opacity .24s ease}
+ body > #sidebarPin{left:0;width:24px;min-width:0;max-width:none;height:44px;min-height:44px;justify-content:flex-end;padding-right:4px;transition:width .24s cubic-bezier(.4,0,.2,1),padding-right .24s ease,background .14s ease,color .14s ease}
+ body.mobile-sidebar-open > #sidebarPin{left:0;width:var(--mobile-sidebar-open);height:44px;min-height:44px;padding-right:9px}
+}
+@media(max-width:420px){
+ #mainApp .brand-logo{width:80px}
+ body > #sidebarPin{width:23px;height:42px;min-height:42px}
+ body.mobile-sidebar-open > #sidebarPin{width:var(--mobile-sidebar-open);height:42px;min-height:42px}
+}
+
+
+@media(max-width:700px){
+ #mainApp .nav button[data-page]{touch-action:manipulation;-webkit-touch-callout:none}
+}
+
+#mainApp .nav{
+ background:rgba(254,193,35,.72);
+ -webkit-backdrop-filter:blur(55px) saturate(150%);
+ backdrop-filter:blur(55px) saturate(150%);
+ isolation:isolate;
+}
+#mainApp .nav::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ z-index:1;
+ pointer-events:none;
+ background-image:var(--sidebar-noise-texture);
+ background-repeat:repeat;
+ background-size:160px 160px;
+ opacity:.54;
+ mix-blend-mode:soft-light;
+}
+#mainApp .nav .nav-links{position:relative;z-index:2}
+
+:root{--sidebar-noise-texture:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cfilter%20id%3D%22grain%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.78%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20filter%3D%22url%28%23grain%29%22%20opacity%3D%221%22%2F%3E%3C%2Fsvg%3E")}
+#mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,body > #sidebarPin{
+ background:rgba(255,175,16,.88);
+ -webkit-backdrop-filter:blur(55px) saturate(140%);
+ backdrop-filter:blur(55px) saturate(140%);
+}
+#mainApp .nav button[data-page]::before,#mainApp .nav .sidebar-pin::before,body > #sidebarPin::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ z-index:0;
+ border-radius:inherit;
+ background-image:var(--sidebar-noise-texture);
+ background-repeat:repeat;
+ background-size:160px 160px;
+ opacity:.22;
+ mix-blend-mode:soft-light;
+ pointer-events:none;
+}
+#mainApp .nav button[data-page] .nav-icon,#mainApp .nav button[data-page] .nav-label,#mainApp .nav .sidebar-pin .nav-icon,#mainApp .nav .sidebar-pin .nav-label,body > #sidebarPin .nav-icon{position:relative;z-index:1}
+#mainApp .nav button[data-page].active,#mainApp .nav .sidebar-pin[aria-pressed="true"]{background:rgba(255,240,166,.88)}
+#mainApp .nav button[data-page]:hover:not(.active),#mainApp .nav .sidebar-pin:hover:not([aria-pressed="true"]){background:rgba(255,219,105,.88)}
+body.mobile-sidebar-open > #sidebarPin{background:rgba(240,229,155,.78)}
+
+@media(min-width:701px){
+ #mainApp .nav button[data-page]{
+  box-shadow:0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12);
+ }
+ #mainApp .nav button[data-page].active{
+  box-shadow:inset 3px 0 #7a5200,0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12);
+ }
+}
+@media(max-width:700px){
+ #mainApp .nav button[data-page]{border:0;box-shadow:0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
+ #mainApp .nav button[data-page].active{border:0;box-shadow:inset 3px 0 #7a5200,0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:hover,body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:focus-visible{box-shadow:0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
+}
+
+@media(max-width:700px){
+ #mainApp .nav{
+  background:rgba(254,193,35,.80);
+  -webkit-backdrop-filter:blur(2px) saturate(150%);
+  backdrop-filter:blur(2px) saturate(150%);
+ }
+ #mainApp .nav::before{opacity:.24}
+ body::before{display:none}
+ #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,body > #sidebarPin{
+  background:rgba(255,175,16,.60);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+  backdrop-filter:blur(12px) saturate(140%);
+ }
+ #mainApp .nav button[data-page]::before,#mainApp .nav .sidebar-pin::before,body > #sidebarPin::before{opacity:.24}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:not(.active){background:rgba(255,175,16,.60)}
+ #mainApp .nav button[data-page].active,#mainApp .nav .sidebar-pin[aria-pressed="true"],body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active{background:rgba(255,240,166,.60)}
+ #mainApp .nav button[data-page]:hover:not(.active),#mainApp .nav .sidebar-pin:hover:not([aria-pressed="true"]){background:rgba(255,219,105,.60)}
+ body.mobile-sidebar-open > #sidebarPin{background:rgba(240,229,155,.60)}
+}
 </style>
 </head>
 <body>
@@ -826,7 +1200,7 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 <div id="forgotPasswordModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Recuperar senha</h3><button class="close" onclick="closeModal('forgotPasswordModal')">×</button></div><div class="modal-body"><form id="forgotPasswordForm" onsubmit="sendPasswordRecovery(event)"><div class="field"><label>E-mail</label><input id="forgotPasswordEmail" type="email" autocomplete="email" required placeholder="voce@empresa.com"><div class="hint">Enviaremos um link para definir uma nova senha.</div></div></form><div id="forgotPasswordMessage" class="auth-message"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('forgotPasswordModal')">CANCELAR</button><button id="forgotPasswordButton" class="btn btn-primary" onclick="document.getElementById('forgotPasswordForm').requestSubmit()">ENVIAR LINK</button></div></div></div>
 
 <div id="mainApp" class="app auth-locked">
-<header class="header"><img class="brand-logo" src="assets/logo_text.png" alt="CPE Tecnologia"><div class="header-inner"><div class="brand"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions">
+<header class="header"><div class="header-inner"><div class="brand"><img class="brand-logo" src="assets/logo.png" alt="CPE Tecnologia"><div class="brand-text"><h1>ERP Giocapo</h1><p>Organização e controle de equipamentos de estoque</p></div></div><div class="header-actions">
 <div id="syncStatus" class="sync-status" data-state="local" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncStatusText">Local</span></div>
 <div id="headerProfileWrap" class="header-profile-wrap">
   <button id="headerProfileTrigger" class="header-profile-trigger" type="button" aria-label="Abrir menu do perfil" aria-haspopup="true" aria-expanded="false" aria-controls="headerProfileMenu" title="Meu perfil" onclick="toggleHeaderProfileMenu(event)"><span id="headerAvatarInitials" class="header-profile-initials" aria-hidden="true">U</span></button>
@@ -840,11 +1214,6 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 </div></div></header>
 <main class="container">
 <nav class="nav" id="appSidebar" aria-label="Navegação principal">
-<div class="nav-top">
-  <div class="nav-brand-lockup">
-    <img class="nav-brand-image" src="assets/logo.png" alt="CPE Tecnologia">
-  </div>
-</div>
 <div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><g><g><path d="M10.697 16.127 C9.63 16.127 5.626 15.582 5.219 14.546 C5.215 14.537 5.198 14.471 5.166 14.349 L4.77 12.826 C4.751 12.752 4.285 12.1 3.399 10.904 C3.272 10.733 3.166 10.5 3.033 10.132 C2.671 9.134 2.61 8.279 2.862 7.763 C3.994 5.453 7.137 4.308 11 4.308 M10.812 16.127 C11.879 16.127 15.883 15.582 16.29 14.546 C16.294 14.537 16.311 14.471 16.343 14.349 L16.739 12.826 C16.758 12.752 17.224 12.1 18.11 10.904 C18.237 10.733 18.343 10.5 18.476 10.132 C18.838 9.134 18.899 8.279 18.647 7.763 C17.515 5.453 14.372 4.308 10.509 4.308" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.618 13.475 C10.35 13.475 8.368 13.369 8.179 13.18 C7.99 12.991 7.883 12.734 7.883 12.467 L7.883 10.45 C7.883 10.183 7.99 9.926 8.179 9.737 C8.368 9.548 10.35 9.544 10.618 9.544 M10.891 13.475 C11.159 13.475 13.141 13.369 13.33 13.18 C13.519 12.991 13.626 12.734 13.626 12.467 L13.626 10.45 C13.626 10.183 13.519 9.926 13.33 9.737 C13.141 9.548 11.159 9.544 10.891 9.544" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.686 11.412 C10.686 11.825 10.686 11.825 10.274 11.825 C9.808 11.825 9.861 11.825 9.861 11.412 C9.861 11 9.861 11 10.274 11 C10.686 11 10.686 11 10.686 11.412 Z M10.823 11.412 C10.823 11.825 10.823 11.825 11.235 11.825 C11.701 11.825 11.648 11.825 11.648 11.412 C11.648 11 11.648 11 11.235 11 C10.823 11 10.823 11 10.823 11.412 Z" fill="#000000"/><path d="M9.717 11.412 C9.717 11.825 9.717 11.825 9.305 11.825 C8.839 11.825 8.892 11.825 8.892 11.412 C8.892 11 8.892 11 9.305 11 C9.717 11 9.717 11 9.717 11.412 Z M11.792 11.412 C11.792 11.825 11.792 11.825 12.204 11.825 C12.67 11.825 12.617 11.825 12.617 11.412 C12.617 11 12.617 11 12.204 11 C11.792 11 11.792 11 11.792 11.412 Z" fill="#000000"/></g><path d="M2.991 8.514 C2.991 8.514 6.368 6.907 8.723 6.609 C9.348 6.509 10.665 6.472 10.665 6.472 C10.665 6.472 11.814 6.507 12.469 6.609 C14.389 6.724 18.382 8.377 18.382 8.377" fill="none" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/><path d="M9.969 7.94 C9.969 7.564 10.259 7.258 10.618 7.258 C10.976 7.258 11.267 7.564 11.267 7.94 C11.267 8.317 10.976 8.623 10.618 8.623 C10.259 8.623 9.969 8.317 9.969 7.94 Z" fill="#000000"/><path d="M9.304 17.142 L12.22 17.142" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/><g><path d="M9.452 11.248 C9.497 11.288 9.525 11.347 9.525 11.412 C9.525 11.534 9.426 11.632 9.304 11.632 C9.182 11.632 9.083 11.534 9.083 11.412 C9.083 11.346 9.112 11.286 9.158 11.246" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M9.304 11.139 L9.304 11.467" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/></g><g><path d="M10.12 11.139 L10.502 11.139 L10.502 11.577 L10.12 11.577 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/><path d="M10.01 11.248 L10.393 11.248 L10.393 11.686 L10.01 11.686 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/></g><g><g></g></g><g><g><g><g><path d="M11.113 11.632 L10.987 11.507" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.074 11.629 L11.2 11.504" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.093 11.149 L11.093 11.568" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.374 11.654 L11.374 11.234" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.354 11.17 L11.48 11.295" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.393 11.173 L11.267 11.299" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></g><g><path d="M11.985 11.282 L12.509 11.282 L12.509 11.541 L11.985 11.541 Z" fill="#000000" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.931 11.329 L11.931 11.474" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M12.316 11.282 L12.487 11.282 L12.487 11.541 L12.191 11.541 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M10.438 7.941 C10.438 7.833 10.519 7.746 10.618 7.746 C10.717 7.746 10.798 7.833 10.798 7.941 C10.798 8.049 10.717 8.136 10.618 8.136 C10.519 8.136 10.438 8.049 10.438 7.941 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button id="historyNavButton" class="admin-only" data-page="historico" type="button" title="Histórico" aria-label="Histórico"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="7" y="7" width="13" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1M10 11h7M10 15h7"/></svg></span><span class="nav-label">Histórico</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
 <div class="nav-bottom">
   <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar menu" title="Fixar menu"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar menu</span></button>
@@ -855,7 +1224,8 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 <div class="page-title"><div><h2>Equipamentos</h2><p>Cadastre, pesquise e acompanhe os equipamentos do estoque.</p></div><button class="btn btn-primary" data-permission="equipment.create" onclick="openEquipmentModal()">+ CADASTRAR EQUIPAMENTO</button></div>
 <div class="dashboard"><div class="card metric"><div class="label">Equipamentos</div><div class="value" id="mTotal">0</div></div><div class="card metric"><div class="label">Disponíveis</div><div class="value" id="mAvailable">0</div></div><div class="card metric"><div class="label">Em kits</div><div class="value" id="mInKit">0</div></div><div class="card metric"><div class="label">Kits ativos</div><div class="value" id="mKits">0</div></div></div>
 <div class="card toolbar"><div class="field grow"><label>Pesquisar</label><input id="filterSearch" placeholder="Produto, código, local, série..." oninput="renderEquipmentTable()"></div><div class="field"><label>Disponibilidade</label><select id="filterStatus" onchange="renderEquipmentTable()"><option value="">Todos</option><option value="available">Disponível</option><option value="kit">Em kit</option></select></div><div class="field"><label>Categoria</label><select id="filterVariable" onchange="renderEquipmentTable()"><option value="">Todas</option><option value="Receptor">Receptor</option><option value="Coletora">Coletora</option><option value="Estação Total">Estação Total</option><option value="Laser">Laser</option><option value="Drone">Drone</option><option value="Ecobatímetro">Ecobatímetro</option><option value="Nível">Nível</option><option value="Rádio">Rádio</option><option value="Bateria">Bateria</option><option value="Lidar">Lidar</option><option value="Acessório">Acessório</option></select></div><button class="btn" onclick="clearEquipmentFilters()">LIMPAR</button><div class="equipment-print-actions" data-permission="equipment.print"><button type="button" id="equipmentPrintToggle" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" aria-controls="equipmentPrintMenu" onclick="toggleEquipmentPrintMenu(event)">Impressão ▼</button><div id="equipmentPrintMenu" class="equipment-print-menu" aria-label="Etiquetas avulsas"><button type="button" onclick="closeEquipmentPrintMenu();openPrintOsModal()">Imprimir O.S.</button><button type="button" onclick="closeEquipmentPrintMenu();openPrintLocalModal()">Imprimir local</button><button type="button" title="Clique: imprimir · Ctrl+clique: abrir PDF" onclick="printConsumptionLabel(event)">Imprimir consumo</button></div></div></div>
-<div class="card table-wrap"><table class="table equipment-table"><thead><tr><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Código</span><button type="button" class="equipment-sort-btn" data-sort-field="code" aria-label="Classificar Código" onclick="toggleEquipmentSortMenu(event,'code')">▼</button></span></div><div id="equipment-sort-code" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('code','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('code','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Local</span><button type="button" class="equipment-sort-btn" data-sort-field="location" aria-label="Classificar Local" onclick="toggleEquipmentSortMenu(event,'location')">▼</button></span></div><div id="equipment-sort-location" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('location','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('location','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Produto</span><button type="button" class="equipment-sort-btn" data-sort-field="product" aria-label="Classificar Produto" onclick="toggleEquipmentSortMenu(event,'product')">▼</button></span></div><div id="equipment-sort-product" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('product','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('product','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Software</span><button type="button" class="equipment-sort-btn" data-sort-field="software" aria-label="Classificar Software" onclick="toggleEquipmentSortMenu(event,'software')">▼</button></span></div><div id="equipment-sort-software" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('software','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('software','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Série</span><button type="button" class="equipment-sort-btn" data-sort-field="series" aria-label="Classificar Série" onclick="toggleEquipmentSortMenu(event,'series')">▼</button></span></div><div id="equipment-sort-series" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('series','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('series','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Tipo</span><button type="button" class="equipment-sort-btn" data-sort-field="type" aria-label="Classificar Tipo" onclick="toggleEquipmentSortMenu(event,'type')">▼</button></span></div><div id="equipment-sort-type" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('type','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('type','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span class="equipment-th-title-wrap"><span>Status</span><button type="button" class="equipment-sort-btn" data-sort-field="status" aria-label="Classificar Status" onclick="toggleEquipmentSortMenu(event,'status')">▼</button></span></div><div id="equipment-sort-status" class="equipment-sort-menu"><button type="button" data-direction="asc" onclick="setEquipmentSort('status','asc')">Classificar de A a Z</button><button type="button" data-direction="desc" onclick="setEquipmentSort('status','desc')">Classificar de Z a A</button><button type="button" class="equipment-sort-reset" onclick="restoreDefaultEquipmentSort()">Restaurar padrão</button></div></th><th><div class="equipment-th-inner"><span>Ações</span></div></th></tr></thead><tbody id="equipmentTable"></tbody></table></div>
+<div class="card table-wrap"><table class="table equipment-table"><thead><tr><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="code" aria-label="Classificar Código de A a Z" onclick="toggleEquipmentColumnSort('code')"><span>Código</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="location" aria-label="Classificar Local de A a Z" onclick="toggleEquipmentColumnSort('location')"><span>Local</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="product" aria-label="Classificar Produto de A a Z" onclick="toggleEquipmentColumnSort('product')"><span>Produto</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="software" aria-label="Classificar Software de A a Z" onclick="toggleEquipmentColumnSort('software')"><span>Software</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="series" aria-label="Classificar Série de A a Z" onclick="toggleEquipmentColumnSort('series')"><span>Série</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="type" aria-label="Classificar Tipo de A a Z" onclick="toggleEquipmentColumnSort('type')"><span>Tipo</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><button type="button" class="equipment-column-sort" data-sort-field="status" aria-label="Classificar Status de A a Z" onclick="toggleEquipmentColumnSort('status')"><span>Status</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button></div></th><th><div class="equipment-th-inner"><span>Ações</span></div></th></tr></thead><tbody id="equipmentTable"></tbody></table></div>
+<div id="equipmentMobileList" class="equipment-mobile-list" aria-label="Equipamentos em tabela compacta"></div>
 </section>
 <section id="produtos" class="page">
 <div class="page-title"><div><h2>Produtos</h2><p>Cadastre e gerencie os produtos usados nos equipamentos.</p></div><button class="btn btn-primary" data-permission="products.create" onclick="openProductModal()">+ CADASTRAR PRODUTO</button></div>
@@ -864,12 +1234,12 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 </section>
 <section id="montar" class="page">
 <div class="page-title"><div><h2>Montar Kit</h2><p>Kits são temporários e podem ser alterados depois.</p></div></div>
-<div class="kit-builder"><div class="card panel"><h3>Equipamentos disponíveis</h3><div class="toolbar" style="padding:0;margin:0 0 12px;border:0;box-shadow:none"><div class="field grow"><label>Filtrar</label><input id="builderSearch" placeholder="Produto, código, local ou série" oninput="renderBuilder()"></div><div class="field"><label>Produto</label><select id="builderProduct" onchange="renderBuilder()"><option value="">Todos</option></select></div></div><div id="availableList" class="available-list"></div></div>
-<div class="card panel"><div class="hint">O nome do kit pode ser personalizado em Kits Ativos.</div><div style="height:14px"></div><h3>Equipamentos selecionados <span id="selectedCount" class="badge badge-blue">0</span></h3><div id="selectedList" class="selected-list"></div><div style="height:15px"></div><button class="btn btn-primary" data-permission="kits.create" style="width:100%" onclick="createKit()">CRIAR KIT</button></div></div>
+<div class="kit-builder"><div class="card panel builder-available-panel"><h3>Equipamentos disponíveis</h3><div class="toolbar builder-search-panel" style="padding:0;margin:0 0 12px;border:0;box-shadow:none"><div class="field grow"><label>Filtrar</label><input id="builderSearch" placeholder="Produto, código, local ou série" oninput="renderBuilder()"></div><div class="field builder-product-field"><label>Produto</label><select id="builderProduct" onchange="renderBuilder()"><option value="">Todos</option></select></div></div><div id="availableList" class="available-list"></div></div>
+<div class="card panel builder-selected-panel"><div class="hint">O nome do kit pode ser personalizado em Kits Ativos.</div><div style="height:14px"></div><h3>Equipamentos selecionados <span id="selectedCount" class="badge badge-blue">0</span></h3><div id="selectedList" class="selected-list"></div><div style="height:15px"></div><button class="btn btn-primary" data-permission="kits.create" style="width:100%" onclick="createKit()">CRIAR KIT</button></div></div>
 </section>
 <section id="kits" class="page">
 <div class="page-title"><div><h2>Kits Ativos</h2><p>Consulte, filtre, edite ou desmonte os kits existentes.</p></div></div>
-<div class="card toolbar"><div class="field grow"><label>Nome / ID</label><input id="kitFilterName" placeholder="Ex.: Campo 01 ou KIT-001" oninput="renderKits()"></div><div class="field"><label>Tipo</label><select id="kitFilterNtrip" onchange="renderKits()"><option value="">Todos</option><option value="true">NTrip</option><option value="false">Completo</option></select></div><div class="field"><label>Criação a partir de</label><input id="kitFilterCreatedFrom" type="date" onchange="renderKits()"></div><div class="field"><label>Criação até</label><input id="kitFilterCreatedTo" type="date" onchange="renderKits()"></div><div class="field"><label>Alteração a partir de</label><input id="kitFilterUpdatedFrom" type="date" onchange="renderKits()"></div><div class="field"><label>Alteração até</label><input id="kitFilterUpdatedTo" type="date" onchange="renderKits()"></div><button class="btn" onclick="clearKitFilters()">LIMPAR</button></div>
+<div class="card toolbar kit-name-toolbar"><div class="field grow"><label>Nome / ID</label><input id="kitFilterName" placeholder="Ex.: Campo 01 ou KIT-001" oninput="renderKits()"></div></div>
 <div id="kitGrid" class="kit-grid"></div>
 </section>
 <section id="calculadora" class="page">
@@ -979,9 +1349,12 @@ body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!importan
 
 <div id="productModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3 id="productModalTitle">Cadastrar produto</h3><button class="close" onclick="closeModal('productModal')">×</button></div><div class="modal-body"><form id="productForm" onsubmit="saveProduct(event)"><input type="hidden" id="productId"><div class="field"><label>Nome do produto</label><input id="productName" required placeholder="Ex.: Adap. P/Base Niv."><div class="hint">Nome de exibição nas etiquetas.</div></div><div style="height:12px"></div><div class="field"><label>Nome de exibição <span style="font-weight:400">(opcional)</span></label><input id="productDisplayName" placeholder="Ex.: Adaptador para base nivelante com prumo óptico"><div class="hint">Quando preenchido, este será o nome exibido no site.</div></div><div style="height:15px"></div><div class="field"><label>Variáveis do produto</label><div class="checkboxes"><label class="check"><input id="varReceiver" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Receptor</label><label class="check"><input id="varCollector" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Coletora</label><label class="check"><input id="varTotalStation" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Estação Total</label><label class="check"><input id="varLaser" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Laser</label><label class="check"><input id="varDrone" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Drone</label><label class="check"><input id="varEcho" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Ecobatímetro</label><label class="check"><input id="varLevel" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Nível</label><label class="check"><input id="varRadio" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Rádio</label><label class="check"><input id="varBattery" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Bateria</label><label class="check"><input id="varLidar" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Lidar</label><label class="check"><input id="varAccessory" class="product-category" type="checkbox" onchange="selectSingleProductCategory(this)"> Acessório</label></div></div><p class="hint">Selecione apenas uma categoria por produto.</p></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('productModal')">CANCELAR</button><button class="btn btn-primary" onclick="document.getElementById('productForm').requestSubmit()">SALVAR PRODUTO</button></div></div></div>
 
-<div id="productManagerModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Gerenciar produtos</h3><button class="close" onclick="closeModal('productManagerModal')">×</button></div><div class="modal-body"><div class="product-manager" id="productManager"></div></div></div></div>
+<div id="productManagerModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Gerenciar produtos</h3><button class="close" onclick="closeModal('productManagerModal')">×</button></div><div class="modal-body"><div class="field product-manager-search"><label for="productManagerSearch">Buscar produto</label><input id="productManagerSearch" type="search" placeholder="Nome ou variável do produto" oninput="renderProductManager()" autocomplete="off"></div><div class="product-manager" id="productManager"></div></div></div></div>
 
-<div id="kitEditModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3 id="kitEditTitle">Editar kit</h3><button class="close" onclick="closeModal('kitEditModal')">×</button></div><div class="modal-body"><div class="form-grid"><div class="field full"><label>Nome do kit</label><input id="editKitName"></div><div class="field full"><label>Adicionar equipamento disponível</label><select id="editKitAdd" onchange="addToEditingKit(this.value);this.value=''"><option value="">Selecione um equipamento...</option></select></div></div><div style="height:15px"></div><h3>Equipamentos do kit</h3><div id="editKitList" class="selected-list"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('kitEditModal')">CANCELAR</button><button class="btn btn-primary" onclick="saveKitEdit()">SALVAR ALTERAÇÕES</button></div></div></div>
+<div id="kitEditModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3 id="kitEditTitle">Editar kit</h3><button class="close" onclick="closeModal('kitEditModal')">×</button></div><div class="modal-body"><div class="form-grid"><div class="field full"><label>Nome do kit</label><input id="editKitName"></div><div class="field full edit-kit-add-field"><select id="editKitAdd" hidden aria-hidden="true" tabindex="-1"><option value="">Selecione um equipamento...</option></select><button type="button" class="btn btn-primary edit-kit-add-mobile-button" onclick="openEditKitPicker()">Adicionar equipamento disponível</button></div></div><div style="height:15px"></div><h3>Equipamentos do kit</h3><div id="editKitList" class="selected-list"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('kitEditModal')">CANCELAR</button><button class="btn btn-primary" onclick="saveKitEdit()">SALVAR ALTERAÇÕES</button></div></div></div>
+
+
+<div id="editKitPickerModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3>Editar Kit</h3><button class="close" type="button" aria-label="Fechar seleção de equipamentos" onclick="closeModal('editKitPickerModal')">×</button></div><div class="modal-body"><div class="edit-kit-picker-stack"><div class="card panel edit-kit-picker-search"><div class="field"><label>Pesquisar equipamentos</label><input id="editKitPickerSearch" placeholder="Produto, código, local ou série" oninput="renderEditKitPicker()" autocomplete="off"></div></div><div class="card panel edit-kit-picker-selected"><h3>Equipamentos selecionados <span id="editKitPickerCount" class="badge badge-blue">0</span></h3><div id="editKitPickerSelected" class="selected-list"></div></div><div class="card panel edit-kit-picker-available"><h3>Equipamentos disponíveis</h3><div id="editKitPickerAvailable" class="available-list"></div></div></div></div></div></div>
 
 <div id="printLocalModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Imprimir local</h3><button class="close" onclick="closeModal('printLocalModal')">×</button></div><div class="modal-body"><form id="printLocalForm" onsubmit="printLocalLabel(event)"><div class="field"><label>Local</label><input id="printLocalValue" maxlength="16" autocomplete="off" required placeholder="Ex.: 1501, 1503..."><div class="hint">Insira o código do local imobilizado ou de terceiros acima.</div></div></form></div><div class="modal-footer"><button class="btn" onclick="closeModal('printLocalModal')">CANCELAR</button><button class="btn btn-primary" onclick="submitPrintForm('printLocalForm',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button></div></div></div>
 
@@ -2600,7 +2973,7 @@ function openModal(id){
     closeProductDropdown();
     const modal=$(id);
     if(!modal)return;
-    const minimumLevel=id==='forgotPasswordModal'?510:100;
+    const minimumLevel=isMobileSidebarLayout()?1000:(id==='forgotPasswordModal'?510:100);
     modalStackLevel=Math.max(modalStackLevel,minimumLevel)+10;
     modal.style.zIndex=String(modalStackLevel);
     modal.classList.add('open');
@@ -2839,16 +3212,36 @@ async function loadCurrentRolePermissions(){
   if(error)throw error;
   currentPermissions=data?.permissions||{};
 }
+function closePermissionInfo(){
+ document.querySelectorAll('.permission-info-button.is-open').forEach(b=>{b.classList.remove('is-open');b.setAttribute('aria-expanded','false')});
+ const tooltip=$('mobilePermissionTooltip');if(tooltip){tooltip.hidden=true;tooltip.textContent=''}
+}
+function togglePermissionInfo(event,button){
+ event.preventDefault();event.stopPropagation();
+ const open=button.classList.contains('is-open');
+ closePermissionInfo();
+ if(open)return;
+ button.classList.add('is-open');button.setAttribute('aria-expanded','true');
+ if(isMobileSidebarLayout()){
+  let tooltip=$('mobilePermissionTooltip');
+  if(!tooltip){tooltip=document.createElement('div');tooltip.id='mobilePermissionTooltip';tooltip.className='mobile-permission-tooltip';tooltip.setAttribute('role','tooltip');tooltip.hidden=true;document.body.appendChild(tooltip)}
+  tooltip.textContent=button.dataset.description||'';
+  tooltip.hidden=false;
+ }
+}
+document.addEventListener('click',event=>{
+ if(!event.target.closest('.permission-info-button'))closePermissionInfo();
+});
 function renderPermissionsMatrixGroup(group){
   const roles=['admin','operator','viewer'];
   const names={admin:'Administrador',operator:'Operador',viewer:'Consulta'};
   return `<div class="card permissions-card">
     <div class="permissions-head">
       <strong>${esc(group.title)}</strong>
-      ${roles.map(r=>`<div class="permissions-role">${names[r]}</div>`).join('')}
+      ${roles.map(r=>`<div class="permissions-role"><span class="permissions-role-long">${names[r]}</span><span class="permissions-role-short">${r==='admin'?'ADM':r==='operator'?'OPE':'CON'}</span></div>`).join('')}
     </div>
     ${group.items.map(item=>`<div class="permissions-row">
-      <div class="permissions-label"><strong>${esc(item.label)}</strong><span>${esc(item.desc)}</span></div>
+      <div class="permissions-label"><strong>${esc(item.label)}</strong><button type="button" class="permission-info-button" aria-label="Informação: ${esc(item.label)}" aria-expanded="false" onclick="togglePermissionInfo(event,this)" data-description="${esc(item.desc)}">i</button></div>
       ${roles.map(role=>{
         const fixed=role==='admin'||group.fixed;
         const checked=role==='admin'?true:!!rolePermissionsCache[role]?.[item.key];
@@ -2860,6 +3253,7 @@ function renderPermissionsMatrixGroup(group){
   </div>`;
 }
 async function renderPermissionsPage(){
+  closePermissionInfo();
   const el=$('permissionsPageContent');if(!el)return;
   if(!canAdmin()){el.innerHTML='<div class="card empty">Acesso restrito a administradores.</div>';return}
   el.innerHTML='<div class="card empty">Carregando permissões...</div>';
@@ -3979,11 +4373,11 @@ function hideEquipmentOverflowTooltip(){
     if(equipmentOverflowTooltip)equipmentOverflowTooltip.classList.remove('show');
 }
 
-function showEquipmentOverflowTooltip(chip){
+function showEquipmentOverflowTooltip(chip,force=false){
     const textEl=chip?.querySelector?.('.equipment-cell-chip-text');
     if(!textEl)return;
     const forcedTooltip=chip?.querySelector?.('[data-tooltip-full]')?.getAttribute('data-tooltip-full')||'';
-    if(!forcedTooltip&&textEl.scrollWidth<=textEl.clientWidth+1){
+    if(!force&&!forcedTooltip&&textEl.scrollWidth<=textEl.clientWidth+1){
         hideEquipmentOverflowTooltip();
         return;
     }
@@ -4121,13 +4515,10 @@ function renderEquipmentCodeGroup(group){
     return html;
 }
 
-const equipmentSortState={field:'type',direction:'desc'};
+const equipmentSortState={field:'type',direction:'desc',userSelected:false};
 const EQUIPMENT_TYPE_SORT_ORDER=['Receptor','Coletora','Estação Total','Laser','Drone','Ecobatímetro','Nível','Rádio','Bateria','Lidar','Acessório'];
 
 
-function closeEquipmentSortMenus(){
-    document.querySelectorAll('.equipment-sort-menu.open').forEach(menu=>menu.classList.remove('open'));
-}
 function closeEquipmentPrintMenu(){
     const menu=$('equipmentPrintMenu');
     const button=$('equipmentPrintToggle');
@@ -4142,7 +4533,6 @@ function toggleEquipmentPrintMenu(event){
     const button=$('equipmentPrintToggle');
     if(!menu||!button)return;
     const willOpen=!menu.classList.contains('open');
-    closeEquipmentSortMenus();
     closeEquipmentPrintMenu();
     if(willOpen){
         menu.classList.add('open');
@@ -4151,38 +4541,23 @@ function toggleEquipmentPrintMenu(event){
 }
 
 function updateEquipmentSortIndicators(){
-    document.querySelectorAll('.equipment-sort-btn').forEach(btn=>{
-        btn.classList.toggle('active',btn.dataset.sortField===equipmentSortState.field);
-    });
-    document.querySelectorAll('.equipment-sort-menu button').forEach(btn=>{
-        const menu=btn.closest('.equipment-sort-menu');
-        const field=menu?.id?.replace('equipment-sort-','')||'';
-        btn.classList.toggle('active',field===equipmentSortState.field&&btn.dataset.direction===equipmentSortState.direction);
+    document.querySelectorAll('.equipment-column-sort').forEach(button=>{
+        const selected=equipmentSortState.userSelected&&button.dataset.sortField===equipmentSortState.field;
+        button.classList.toggle('active',selected);
+        button.querySelector('.equipment-column-arrow').textContent=selected&&equipmentSortState.direction==='asc'?'▲':'▼';
+        const label=button.querySelector('span:first-child')?.textContent||'coluna';
+        const next=selected&&equipmentSortState.direction==='asc'?'Z a A':'A a Z';
+        button.setAttribute('aria-label',`Classificar ${label} de ${next}`);
+        button.title=`Classificar de ${next}`;
+        const heading=button.closest('th');
+        if(heading)heading.setAttribute('aria-sort',selected?(equipmentSortState.direction==='asc'?'ascending':'descending'):'none');
     });
 }
-
-function toggleEquipmentSortMenu(event,field){
-    event.stopPropagation();
-    const target=$(`equipment-sort-${field}`);
-    if(!target)return;
-    const willOpen=!target.classList.contains('open');
-    closeEquipmentSortMenus();
-    closeEquipmentPrintMenu();
-    if(willOpen)target.classList.add('open');
-    updateEquipmentSortIndicators();
-}
-
-function setEquipmentSort(field,direction){
+function toggleEquipmentColumnSort(field){
+    if(!['code','location','product','software','series','type','status'].includes(field))return;
+    equipmentSortState.direction=equipmentSortState.userSelected&&equipmentSortState.field===field&&equipmentSortState.direction==='asc'?'desc':'asc';
     equipmentSortState.field=field;
-    equipmentSortState.direction=direction;
-    closeEquipmentSortMenus();
-    renderEquipmentTable();
-}
-
-function restoreDefaultEquipmentSort(){
-    equipmentSortState.field='type';
-    equipmentSortState.direction='desc';
-    closeEquipmentSortMenus();
+    equipmentSortState.userSelected=true;
     renderEquipmentTable();
 }
 
@@ -4224,7 +4599,7 @@ function equipmentSortValueFromGroup(group,field){
 }
 
 function compareEquipmentSortValues(a,b,field=''){
-    if(field==='type'){
+    if(field==='type'&&!equipmentSortState.userSelected){
         const normalize=value=>String(value??'').trim().toLowerCase();
         const rankOf=value=>{
             const idx=EQUIPMENT_TYPE_SORT_ORDER.findIndex(type=>normalize(type)===normalize(value));
@@ -4241,9 +4616,6 @@ function compareEquipmentSortValues(a,b,field=''){
 }
 
 document.addEventListener('click',event=>{
-    if(!event.target.closest('.equipment-sort-menu')&&!event.target.closest('.equipment-sort-btn')){
-        closeEquipmentSortMenus();
-    }
     if(!event.target.closest('.equipment-print-actions'))closeEquipmentPrintMenu();
 });
 document.addEventListener('keydown',event=>{
@@ -4253,6 +4625,108 @@ document.addEventListener('keydown',event=>{
         if(menu.contains(document.activeElement))$('equipmentPrintToggle')?.focus();
         closeEquipmentPrintMenu();
     }
+});
+
+let mobileExpandedEquipmentId=null;
+function mobileEquipmentActions(e){
+ const id=String(e.id);
+ const edit=hasPermission('equipment.edit')?`<button type="button" class="btn btn-small" onclick="openEquipmentModal('${id}')">EDITAR</button>`:'';
+ const duplicate=hasPermission('equipment.duplicate')?`<button type="button" class="btn btn-small" onclick="openDuplicateEquipment('${id}')">DUPLICAR</button>`:'';
+ const remove=hasPermission('equipment.delete')?`<button type="button" class="btn btn-small btn-danger" onclick="deleteEquipment('${id}')">EXCLUIR</button>`:'';
+ const balance=accessoryBalanceActions(e);
+ if(isAccessoryEquipment(e)&&balance){
+  const top=[edit,duplicate].filter(Boolean).join('');
+  return `<div class="mobile-equipment-actions mobile-accessory-actions">${top?`<div class="mobile-accessory-actions-primary">${top}</div>`:''}<div class="mobile-accessory-actions-bottom">${remove}${balance}</div></div>`;
+ }
+ const actions=[edit,duplicate,remove,balance].filter(Boolean).join('');
+ return actions?`<div class="mobile-equipment-actions">${actions}</div>`:'<span class="mobile-equipment-detail-label">Sem ações disponíveis</span>';
+}
+function mobileEquipmentDetailLine(label,content,mode='copy'){
+ return `<div class="mobile-equipment-detail-line"><span class="mobile-equipment-detail-label">${label}:</span><div class="mobile-equipment-detail-value">${equipmentCellChipHtml(content,false,mode)}</div></div>`;
+}
+function renderMobileEquipmentItem(e){
+ const p=getProduct(e.productId);
+ const isAccessory=isAccessoryEquipment(e);
+ const series=isAccessory?'N/S':String(e.series||'-');
+ const opened=mobileExpandedEquipmentId===String(e.id);
+ const chip=(html,mode='copy')=>`<div class="mobile-equipment-cell">${equipmentCellChipHtml(html,false,mode)}</div>`;
+ const main=[chip(esc(e.code||'-')),chip(esc(e.location||'-')),chip(`<strong>${esc(productSiteName(p))}</strong>`),chip(esc(series),isAccessory?'no-series':'copy')].join('');
+ const details=[
+  mobileEquipmentDetailLine('Código',esc(e.code||'-')),
+  mobileEquipmentDetailLine('Local',esc(e.location||'-')),
+  mobileEquipmentDetailLine('Produto',`<strong>${esc(productSiteName(p))}</strong>`),
+  mobileEquipmentDetailLine('Software',equipmentMetricHtml(e)),
+  ...(!isAccessory?[mobileEquipmentDetailLine('Série',esc(series))]:[]),
+  mobileEquipmentDetailLine('Tipo',esc(varsText(p))),
+  mobileEquipmentDetailLine(isAccessory?'Saldo':'Status',equipmentStatusHtml(e)),
+  `<div class="mobile-equipment-detail-line"><span class="mobile-equipment-detail-label">Ações:</span>${mobileEquipmentActions(e)}</div>`
+ ].join('');
+ return `<div class="mobile-equipment-item${opened?' open':''}" data-mobile-equipment-id="${esc(String(e.id))}"><div class="mobile-equipment-row">${main}<button type="button" class="mobile-equipment-toggle" aria-label="${opened?'Fechar':'Abrir'} detalhes do equipamento" aria-expanded="${opened?'true':'false'}" onclick="toggleMobileEquipmentDetail(this)"><span aria-hidden="true">▼</span></button></div><div class="mobile-equipment-details">${details}</div></div>`;
+}
+function toggleMobileEquipmentDetail(button){
+ const item=button.closest('.mobile-equipment-item');
+ if(!item)return;
+ const wasOpen=item.classList.contains('open');
+ document.querySelectorAll('#equipmentMobileList .mobile-equipment-item.open').forEach(other=>{
+  other.classList.remove('open');
+  const toggle=other.querySelector('.mobile-equipment-toggle');
+  if(toggle){toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Abrir detalhes do equipamento')}
+ });
+ mobileExpandedEquipmentId=wasOpen?null:item.dataset.mobileEquipmentId;
+ if(!wasOpen){
+  item.classList.add('open');
+  button.setAttribute('aria-expanded','true');
+  button.setAttribute('aria-label','Fechar detalhes do equipamento');
+ }
+}
+function renderMobileEquipmentList(groups){
+ const list=$('equipmentMobileList');
+ if(!list)return;
+ const equipments=groups.flatMap(group=>group.items).sort((a,b)=>{
+  const primary=compareEquipmentSortValues(equipmentSortValueFromItem(a,equipmentSortState.field),equipmentSortValueFromItem(b,equipmentSortState.field),equipmentSortState.field);
+  return primary||String(a.code||'').localeCompare(String(b.code||''),'pt-BR',{numeric:true,sensitivity:'base'})||String(a.series||'').localeCompare(String(b.series||''),'pt-BR',{numeric:true,sensitivity:'base'});
+ });
+ const mobileHead=[['code','Código'],['location','Local'],['product','Produto'],['series','Série']].map(([field,label])=>`<button type="button" class="equipment-column-sort" data-sort-field="${field}" aria-label="Classificar ${label} de A a Z" onclick="toggleEquipmentColumnSort('${field}')"><span>${label}</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button>`).join('');
+ list.innerHTML=`<div class="mobile-equipment-header">${mobileHead}<span></span></div><div class="mobile-equipment-body">${equipments.length?equipments.map(renderMobileEquipmentItem).join(''):'<div class="mobile-equipment-empty">Nenhum equipamento encontrado.</div>'}</div>`;
+}
+let mobileEquipmentHold=null;
+function clearMobileEquipmentHold(suppressClick=false){
+ if(!mobileEquipmentHold)return;
+ clearTimeout(mobileEquipmentHold.timer);
+ if(mobileEquipmentHold.longPressed){
+  if(suppressClick)mobileEquipmentHold.chip.dataset.mobileHoldIgnoreClick='1';
+  hideEquipmentOverflowTooltip();
+ }
+ mobileEquipmentHold=null;
+}
+document.addEventListener('pointerdown',event=>{
+ if(!window.matchMedia('(max-width:700px)').matches||event.pointerType==='mouse')return;
+ const chip=event.target.closest('#equipmentMobileList .equipment-cell-chip');
+ if(!chip)return;
+ clearMobileEquipmentHold();
+ const hold={chip,x:event.clientX,y:event.clientY,longPressed:false,timer:null};
+ hold.timer=setTimeout(()=>{
+  if(mobileEquipmentHold!==hold)return;
+  hold.longPressed=true;
+  showEquipmentOverflowTooltip(chip,true);
+ },480);
+ mobileEquipmentHold=hold;
+},{passive:true});
+document.addEventListener('pointermove',event=>{
+ if(!mobileEquipmentHold||event.pointerType==='mouse')return;
+ if(Math.hypot(event.clientX-mobileEquipmentHold.x,event.clientY-mobileEquipmentHold.y)>12)clearMobileEquipmentHold();
+},{passive:true});
+document.addEventListener('pointerup',()=>clearMobileEquipmentHold(true),{passive:true});
+document.addEventListener('pointercancel',()=>clearMobileEquipmentHold(),{passive:true});
+document.addEventListener('click',event=>{
+ const chip=event.target.closest('#equipmentMobileList .equipment-cell-chip');
+ if(chip?.dataset.mobileHoldIgnoreClick==='1'){
+  delete chip.dataset.mobileHoldIgnoreClick;
+  event.preventDefault();event.stopImmediatePropagation();
+ }
+},true);
+document.addEventListener('contextmenu',event=>{
+ if(window.matchMedia('(max-width:700px)').matches&&event.target.closest('#equipmentMobileList .equipment-cell-chip'))event.preventDefault();
 });
 
 function renderEquipmentTable(){
@@ -4298,6 +4772,7 @@ function renderEquipmentTable(){
     $('equipmentTable').innerHTML=displayGroups.length
         ?displayGroups.map(group=>group.items.length===1?renderSingleEquipmentRow(group.items[0]):renderEquipmentCodeGroup(group)).join('')
         :'<tr><td colspan="8"><div class="empty">Nenhum equipamento encontrado.</div></td></tr>';
+    renderMobileEquipmentList(displayGroups);
     updateEquipmentSortIndicators();
 }
 function clearEquipmentFilters(){$('filterSearch').value='';$('filterStatus').value='';$('filterVariable').value='';renderEquipmentTable()}
@@ -4353,7 +4828,7 @@ function selectSingleProductCategory(selected){
 function openProductModal(id=''){if(!requirePermission(id?'products.edit':'products.create'))return;$('productForm').reset();$('productId').value=id;if(id){const p=getProduct(id);$('productModalTitle').textContent='Editar produto';$('productName').value=p.name;$('productDisplayName').value=p.displayName||'';$('varReceiver').checked=p.variables.includes('Receptor');$('varCollector').checked=p.variables.includes('Coletora');$('varAccessory').checked=p.variables.includes('Acessório');$('varEcho').checked=p.variables.includes('Ecobatímetro');$('varLevel').checked=p.variables.includes('Nível');$('varRadio').checked=p.variables.includes('Rádio');$('varBattery').checked=p.variables.includes('Bateria');$('varLidar').checked=p.variables.includes('Lidar');$('varLaser').checked=p.variables.includes('Laser');$('varDrone').checked=p.variables.includes('Drone');$('varTotalStation').checked=p.variables.includes('Estação Total')}else $('productModalTitle').textContent='Cadastrar produto';openModal('productModal')}
 function saveProduct(ev){const permissionKey=$('productId').value?'products.edit':'products.create';if(!requirePermission(permissionKey)){ev.preventDefault();return}ev.preventDefault();const id=$('productId').value;const name=$('productName').value.trim();const displayName=$('productDisplayName').value.trim();const checkedCategories=[...document.querySelectorAll('.product-category:checked')];if(checkedCategories.length!==1){toast('Selecione exatamente uma categoria para o produto.');return}const variables=[];if($('varReceiver').checked)variables.push('Receptor');if($('varCollector').checked)variables.push('Coletora');if($('varEcho').checked)variables.push('Ecobatímetro');if($('varLevel').checked)variables.push('Nível');if($('varRadio').checked)variables.push('Rádio');if($('varBattery').checked)variables.push('Bateria');if($('varLidar').checked)variables.push('Lidar');if($('varLaser').checked)variables.push('Laser');if($('varDrone').checked)variables.push('Drone');if($('varTotalStation').checked)variables.push('Estação Total');if($('varAccessory').checked)variables.push('Acessório');if(!name){toast('Informe o nome do produto.');return}const duplicate=state.products.find(p=>p.id!==id&&p.name.toLowerCase()===name.toLowerCase());if(duplicate){toast('Já existe um produto com esse nome.');return}let productId=id;if(id){const p=getProduct(id);p.name=name;p.displayName=displayName;p.variables=variables;state.equipments.filter(e=>e.productId===id).forEach(e=>{if(variables.includes('Acessório')){e.series='N/S';e.type='';e.hce={landstar:false,smartgo:false}}else{if(!variables.includes('Receptor'))e.type='';if(!variables.includes('Coletora'))e.hce={landstar:false,smartgo:false};else if(!e.hce)e.hce={landstar:false,smartgo:false}}})}else{productId=uid('prd');state.products.push({id:productId,name,displayName,variables})}save(permissionKey);closeModal('productModal');renderAll();renderProductManager();if($('equipmentModal').classList.contains('open')){renderProductSelect(productId);updateProductFields();$('eqProductInput').focus();openProductDropdown()}toast(id?'Produto atualizado.':'Produto cadastrado.');
 }
-function openProductManager(){renderProductManager();openModal('productManagerModal')}
+function openProductManager(){if($('productManagerSearch'))$('productManagerSearch').value='';renderProductManager();openModal('productManagerModal')}
 function renderProductPage(){
     const el=$('productPageManager');if(!el)return;
     const q=($('productPageSearch')?.value||'').toLowerCase().trim();
@@ -4361,7 +4836,14 @@ function renderProductPage(){
     el.innerHTML=list.length?list.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openProductModal('${p.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteProduct('${p.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
 }
 function clearProductPageSearch(){const el=$('productPageSearch');if(el)el.value='';renderProductPage()}
-function renderProductManager(){renderProductPage();$('productManager').innerHTML=state.products.length?state.products.slice().sort((a,b)=>productSiteName(a).localeCompare(productSiteName(b),'pt-BR')).map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openProductModal('${p.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteProduct('${p.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto cadastrado.</div>'}
+function renderProductManager(){
+ renderProductPage();
+ const el=$('productManager');if(!el)return;
+ const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');
+ const query=normalize($('productManagerSearch')?.value||'').trim();
+ const products=state.products.slice().sort((a,b)=>productSiteName(a).localeCompare(productSiteName(b),'pt-BR')).filter(p=>!query||normalize([productSiteName(p),p.name,p.displayName||'',...(p.variables||[])].join(' ')).includes(query));
+ el.innerHTML=products.length?products.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openProductModal('${p.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteProduct('${p.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
+}
 function deleteProduct(id){if(!requirePermission('products.delete'))return;if(state.equipments.some(e=>e.productId===id)){toast('Não é possível excluir um produto que possui equipamentos cadastrados.');return}confirm('Excluir este produto?',()=>{state.products=state.products.filter(p=>p.id!==id);save('products.delete');renderAll();renderProductManager();toast('Produto excluído.')})}
 
 function isLaserEquipment(e){return !!getProduct(e?.productId)?.variables?.includes('Laser')}
@@ -4383,7 +4865,7 @@ function canAddToLaserKit(id,currentIds){
     return result.ok;
 }
 function renderBuilder(){
-    const q=($('builderSearch').value||'').toLowerCase().trim();const pf=$('builderProduct').value;
+    const q=($('builderSearch').value||'').toLowerCase().trim();const pf=isMobileSidebarLayout()?'':$('builderProduct').value;
     const selected=new Set(selectedEquipment);const list=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!selected.has(e.id)).filter(e=>{const p=getProduct(e.productId);const txt=[e.code,e.location,e.series,productSiteName(p),p?.name||''].join(' ').toLowerCase();return(!q||txt.includes(q))&&(!pf||e.productId===pf)});
     $('availableList').innerHTML=list.length?list.map(e=>{const p=getProduct(e.productId);return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</small></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-primary" onclick="addSelected('${e.id}')">+</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento disponível.</div>';
     $('selectedList').innerHTML=selectedEquipment.length?selectedEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">${esc(e?.series||'')}${e?.type?' · '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-danger" onclick="removeSelected('${id}')">REMOVER</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento selecionado.</div>';$('selectedCount').textContent=selectedEquipment.length;
@@ -4396,14 +4878,36 @@ function openKitEdit(id){if(!requirePermission('kits.edit'))return;const k=state
 function renderEditKit(){$('editKitList').innerHTML=editingKitEquipment.length?editingKitEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">Cód. ${esc(e?.code)} · Série: ${esc(e?.series)}${e?.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div><button class="btn btn-small btn-danger" onclick="removeFromEditingKit('${id}')">REMOVER</button></div>`}).join(''):'<div class="empty">Nenhum equipamento no kit.</div>';
     const avail=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!editingKitEquipment.includes(e.id));$('editKitAdd').innerHTML='<option value="">Selecione um equipamento...</option>'+avail.map(e=>{const p=getProduct(e.productId);return `<option value="${e.id}">${esc(productSiteName(p))} · ${esc(e.series)} · ${esc(e.location)}</option>`}).join('')
 }
-function addToEditingKit(id){if(!requirePermission('kits.edit'))return;const e=getEquipment(id);if(id&&e&&!isAccessoryEquipment(e)&&!editingKitEquipment.includes(id)){if(!canAddToLaserKit(id,editingKitEquipment))return;editingKitEquipment.push(id);renderEditKit()}}
-function removeFromEditingKit(id){if(!requirePermission('kits.edit'))return;editingKitEquipment=editingKitEquipment.filter(x=>x!==id);renderEditKit()}
+function addToEditingKit(id){if(!requirePermission('kits.edit'))return;const e=getEquipment(id);if(id&&e&&!isAccessoryEquipment(e)&&!editingKitEquipment.includes(id)){if(!canAddToLaserKit(id,editingKitEquipment))return;editingKitEquipment.push(id);renderEditKit();if($('editKitPickerModal')?.classList.contains('open')){if(isMobileSidebarLayout())closeModal('editKitPickerModal');else renderEditKitPicker()}}}
+function openEditKitPicker(){
+ if(!requirePermission('kits.edit'))return;
+ $('editKitPickerSearch').value='';
+ renderEditKitPicker();
+ openModal('editKitPickerModal');
+}
+function renderEditKitPicker(){
+ const available=$('editKitPickerAvailable'),selectedList=$('editKitPickerSelected');
+ if(!available||!selectedList)return;
+ const query=($('editKitPickerSearch').value||'').trim().toLocaleLowerCase('pt-BR');
+ const allowed=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!editingKitEquipment.includes(e.id));
+ const filtered=allowed.filter(e=>{const p=getProduct(e.productId);return !query||[e.code,e.location,e.series,productSiteName(p),p?.name||''].join(' ').toLocaleLowerCase('pt-BR').includes(query)});
+ selectedList.innerHTML=editingKitEquipment.length?editingKitEquipment.map(id=>{
+  const e=getEquipment(id),p=getProduct(e?.productId);
+  return `<div class="selected-item"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>${esc(e?.code||'')} · ${esc(e?.location||'')} · ${esc(e?.series||'')}</small></div><button class="btn btn-small btn-danger" type="button" onclick="removeFromEditingKit('${id}')">REMOVER</button></div>`;
+ }).join(''):'<div class="empty">Nenhum equipamento selecionado.</div>';
+ $('editKitPickerCount').textContent=editingKitEquipment.length;
+ available.innerHTML=filtered.length?filtered.map(e=>{
+  const p=getProduct(e.productId);
+  return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · '+esc(e.type):''}</small></div><button class="btn btn-small btn-primary" type="button" onclick="addToEditingKit('${e.id}')" aria-label="Adicionar equipamento">+</button></div>`;
+ }).join(''):'<div class="empty">Nenhum equipamento disponível.</div>';
+}
+function removeFromEditingKit(id){if(!requirePermission('kits.edit'))return;editingKitEquipment=editingKitEquipment.filter(x=>x!==id);renderEditKit();if($('editKitPickerModal')?.classList.contains('open'))renderEditKitPicker()}
 function saveKitEdit(){if(!requirePermission('kits.edit'))return;if(!editingKitEquipment.length){toast('O kit precisa ter pelo menos um equipamento.');return}const compatibility=validateLaserHceCompatibility(editingKitEquipment);if(!compatibility.ok){toast(compatibility.message);return}const k=state.kits.find(x=>x.id===editingKitId);if(!k)return;k.name=$('editKitName').value.trim()||'Kit sem nome';k.equipmentIds=[...editingKitEquipment];k.updatedAt=now();k.ntrip=calcNtrip(k.equipmentIds);save('kits.edit');closeModal('kitEditModal');renderAll();toast('Kit atualizado.')}
 function disassembleKit(id){if(!requirePermission('kits.disassemble'))return;const k=state.kits.find(x=>x.id===id);if(!k)return;confirm(`Desmontar ${k.id}? Os equipamentos serão liberados e o kit deixará de aparecer em Kits Ativos.`,()=>{state.kits=state.kits.filter(x=>x.id!==id);save('kits.disassemble');renderAll();toast('Kit desmontado.')})}
 function renderKits(){
-    const name=($('kitFilterName').value||'').toLowerCase().trim();const nt=$('kitFilterNtrip').value;const cf=$('kitFilterCreatedFrom').value;const ct=$('kitFilterCreatedTo').value;const uf=$('kitFilterUpdatedFrom').value;const ut=$('kitFilterUpdatedTo').value;
-    const kits=state.kits.filter(k=>{if(name&&!`${k.id} ${k.name}`.toLowerCase().includes(name))return false;if(nt&&String(k.ntrip)!==nt)return false;const c=dateOnly(k.createdAt),u=dateOnly(k.updatedAt);if(cf&&c<cf)return false;if(ct&&c>ct)return false;if(uf&&u<uf)return false;if(ut&&u>ut)return false;return true}).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
-    $('kitGrid').innerHTML=kits.length?kits.map(k=>`<div class="card kit-card"><div class="kit-head"><div><h3>${esc(k.name)}</h3><div class="kit-meta">${esc(k.id)} · Criado ${fmtDate(k.createdAt)}</div><div class="kit-meta">Última alteração ${fmtDate(k.updatedAt)}</div></div><span class="badge ${k.ntrip?'badge-blue':'badge-green'}">${k.ntrip?'NTrip':'Completo'}</span></div><div class="kit-equipments">${k.equipmentIds.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="kit-eq"><strong>${esc(productSiteName(p))}</strong><span>${esc(e?.series||'')} ${e?.type?'· Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''} · Cód. ${esc(e?.code||'')}</span></div>`}).join('')}</div><div class="kit-footer"><span class="hint">${k.equipmentIds.length} equipamento${k.equipmentIds.length===1?'':'s'}</span><div class="table-actions">${hasPermission('kits.print')?`<button class="btn btn-small btn-primary" onclick="printKitLabel('${k.id}')">IMPRIMIR IDENTIFICAÇÃO</button>`:''}${hasPermission('kits.edit')?`<button class="btn btn-small" onclick="openKitEdit('${k.id}')">EDITAR</button>`:''}${hasPermission('kits.disassemble')?`<button class="btn btn-small btn-danger" onclick="disassembleKit('${k.id}')">DESMONTAR</button>`:''}</div></div></div>`).join(''):'<div class="card empty" style="grid-column:1/-1">Nenhum kit encontrado.</div>';
+    const name=($('kitFilterName').value||'').toLowerCase().trim();
+    const kits=state.kits.filter(k=>!name||`${k.id} ${k.name}`.toLowerCase().includes(name)).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+    $('kitGrid').innerHTML=kits.length?kits.map(k=>`<div class="card kit-card"><div class="kit-head"><div><h3>${esc(k.name)}</h3><div class="kit-meta">${esc(k.id)} · Criado ${fmtDate(k.createdAt)}</div><div class="kit-meta">Última alteração ${fmtDate(k.updatedAt)}</div></div><span class="badge ${k.ntrip?'badge-blue':'badge-green'}">${k.ntrip?'NTrip':'Completo'}</span></div><div class="kit-equipments">${k.equipmentIds.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="kit-eq"><strong>${esc(productSiteName(p))}</strong><span>${esc(e?.series||'')} ${e?.type?'· Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''} · Cód. ${esc(e?.code||'')}</span></div>`}).join('')}</div><div class="kit-footer"><span class="hint">${k.equipmentIds.length} equipamento${k.equipmentIds.length===1?'':'s'}</span><div class="table-actions">${hasPermission('kits.print')?`<button class="btn btn-small btn-primary kit-print-button" onclick="printKitLabel('${k.id}')">IMPRIMIR IDENTIFICAÇÃO</button>`:''}${hasPermission('kits.edit')?`<button class="btn btn-small" onclick="openKitEdit('${k.id}')">EDITAR</button>`:''}${hasPermission('kits.disassemble')?`<button class="btn btn-small btn-danger" onclick="disassembleKit('${k.id}')">DESMONTAR</button>`:''}</div></div></div>`).join(''):'<div class="card empty" style="grid-column:1/-1">Nenhum kit encontrado.</div>';
 }
 
 function pdfEscapeText(value){
@@ -4919,7 +5423,7 @@ function generateKitEquipmentLocalLabel(kitId,equipmentId,ev){
         toast('Não foi possível gerar a etiqueta de local.');
     }
 }
-function clearKitFilters(){['kitFilterName','kitFilterCreatedFrom','kitFilterCreatedTo','kitFilterUpdatedFrom','kitFilterUpdatedTo'].forEach(id=>$(id).value='');$('kitFilterNtrip').value='';renderKits()}
+function clearKitFilters(){$('kitFilterName').value='';renderKits()}
 
 function updateCharts(){
     const total=state.equipments.length, avail=state.equipments.filter(e=>!isInKit(e.id)).length, inKit=total-avail;const p1=total?inKit/total*100:0;
@@ -5574,12 +6078,45 @@ document.addEventListener('keydown',event=>{
 
 /* v5.13.2 | Expansão individual, ampliação no hover e fixação compacta. */
 const appSidebar=document.getElementById('appSidebar');
+const appHeader=document.querySelector('#mainApp > .header');
+function updateAppHeaderHeight(){
+ if(!appHeader)return;
+ const height=appHeader.getBoundingClientRect().height;
+ if(height>0)document.documentElement.style.setProperty('--erp-header-height',`${Math.ceil(height)}px`);
+}
+if(appHeader){
+ if(typeof ResizeObserver!=='undefined')new ResizeObserver(updateAppHeaderHeight).observe(appHeader);
+ window.addEventListener('resize',updateAppHeaderHeight);
+ updateAppHeaderHeight();
+}
+
+function isMobileSidebarLayout(){
+ return window.matchMedia('(max-width: 700px)').matches;
+}
+const sidebarPinHome=document.querySelector('#appSidebar .nav-bottom');
+function placeSidebarPin(){
+ const button=document.getElementById('sidebarPin');
+ if(!button||!sidebarPinHome)return;
+ const destination=isMobileSidebarLayout()?document.body:sidebarPinHome;
+ if(button.parentElement!==destination)destination.appendChild(button);
+}
 function updateSidebarPin(){
+ placeSidebarPin();
+ const mobile=isMobileSidebarLayout();
  const pinned=document.body.classList.contains('sidebar-pinned');
+ const mobileOpen=document.body.classList.contains('mobile-sidebar-open');
  const control=document.getElementById('sidebarPin');
  const label=document.getElementById('sidebarPinLabel');
  const iconElement=document.getElementById('sidebarPinIcon');
  if(!control)return;
+ if(mobile){
+  control.setAttribute('aria-pressed',String(mobileOpen));
+  control.setAttribute('aria-label',mobileOpen?'Fechar menu':'Abrir menu');
+  control.title=mobileOpen?'Fechar menu':'Abrir menu';
+  if(label)label.textContent=mobileOpen?'Fechar menu':'Abrir menu';
+  if(iconElement)iconElement.innerHTML=mobileOpen?'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15.6 5.4 9 12l6.6 6.6-2.2 2.1L4.6 12l8.8-8.7z"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false"><path d="m8.4 5.4 6.6 6.6-6.6 6.6 2.2 2.1 8.8-8.7-8.8-8.7z"/></svg>';
+  return;
+ }
  control.setAttribute('aria-pressed',String(pinned));
  control.setAttribute('aria-label',pinned?'Desfixar menu':'Fixar menu');
  control.title=pinned?'Desfixar menu':'Fixar menu';
@@ -5587,13 +6124,47 @@ function updateSidebarPin(){
  if(iconElement)iconElement.innerHTML=pinned?'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-3 3M12 13l-1 4-2 2-1-5-4-1 2-2 4-1 2-2"/><path d="M4 20l6-6M2 2l20 20"/></svg>':'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg>';
 }
 function toggleSidebarPin(){
+ if(isMobileSidebarLayout()){
+  document.body.classList.toggle('mobile-sidebar-open');
+  updateSidebarPin();
+  return;
+ }
  const pinned=document.body.classList.toggle('sidebar-pinned');
- try{localStorage.setItem('giocapo_sidebar_pinned',pinned?'1':'0')}catch(_){}
+ try{localStorage.setItem('giocapo_sidebar_pinned',pinned?'1':'0')}catch(_){ }
  updateSidebarPin();
 }
-try{if(localStorage.getItem('giocapo_sidebar_pinned')==='1')document.body.classList.add('sidebar-pinned')}catch(_){}
+try{if(localStorage.getItem('giocapo_sidebar_pinned')==='1')document.body.classList.add('sidebar-pinned')}catch(_){ }
+if(isMobileSidebarLayout())document.body.classList.remove('sidebar-pinned');
 document.body.classList.remove('sidebar-expanded');
 updateSidebarPin();
+window.addEventListener('resize',()=>{
+ if(isMobileSidebarLayout()){
+  document.body.classList.remove('sidebar-pinned');
+ }else{
+  document.body.classList.remove('mobile-sidebar-open');
+  try{document.body.classList.toggle('sidebar-pinned',localStorage.getItem('giocapo_sidebar_pinned')==='1')}catch(_){ }
+ }
+ updateSidebarPin();
+});
+
+let sidebarTouchStart=null;
+document.addEventListener('touchstart',event=>{
+ if(!isMobileSidebarLayout()||document.querySelector('.modal-backdrop.open')||event.touches.length!==1){sidebarTouchStart=null;return}
+ const touch=event.touches[0],open=document.body.classList.contains('mobile-sidebar-open');
+ if((!open&&touch.clientX<=32)||(open&&touch.clientX<=210))sidebarTouchStart={x:touch.clientX,y:touch.clientY,open};
+ else sidebarTouchStart=null;
+},{passive:true});
+document.addEventListener('touchend',event=>{
+ if(!sidebarTouchStart||!isMobileSidebarLayout()||!event.changedTouches.length)return;
+ const touch=event.changedTouches[0],dx=touch.clientX-sidebarTouchStart.x,dy=touch.clientY-sidebarTouchStart.y;
+ const open=sidebarTouchStart.open;sidebarTouchStart=null;
+ if(Math.abs(dx)<38||Math.abs(dx)<Math.abs(dy)*1.2)return;
+ if((!open&&dx>0)||(open&&dx<0)){
+  document.body.classList.toggle('mobile-sidebar-open',!open);
+  updateSidebarPin();
+ }
+},{passive:true});
+document.addEventListener('touchcancel',()=>{sidebarTouchStart=null},{passive:true});
 
 const sidebarHoverMedia=window.matchMedia('(hover: hover) and (pointer: fine)');
 const sidebarHoverEdge=44;
@@ -5636,23 +6207,51 @@ document.querySelectorAll('#appSidebar button[data-page]').forEach(button=>{
  });
 });
 
-document.querySelectorAll('.nav button[data-page]').forEach(btn=>btn.addEventListener('click',()=>{
- const page=btn.dataset.page;
- const target=$(page);
- if(!target)return;
- if(auditArchive)leaveAuditArchive(false);
- lastMainPage=page;
- if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
- document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.remove('active'));
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- btn.classList.add('active');
- target.classList.add('active');
- if(page==='dados')updateCharts();
- if(page==='produtos')renderProductPage();
- if(page==='usuarios')renderUsersPage();
- if(page==='permissoes')renderPermissionsPage();
- if(page==='historico'){loadAuditHistory(true);if(!auditRealtimeChannel)startAuditRealtime();}
-}));
+document.querySelectorAll('.nav button[data-page]').forEach(btn=>{
+ let touchStart=null;
+ btn.addEventListener('touchstart',event=>{
+  if(!isMobileSidebarLayout()||event.touches.length!==1){touchStart=null;return}
+  const touch=event.touches[0];
+  touchStart={id:touch.identifier,x:touch.clientX,y:touch.clientY};
+ },{passive:true});
+ btn.addEventListener('touchend',event=>{
+  if(!touchStart||!isMobileSidebarLayout())return;
+  const start=touchStart;touchStart=null;
+  const touch=Array.from(event.changedTouches).find(t=>t.identifier===start.id);
+  if(!touch||Math.hypot(touch.clientX-start.x,touch.clientY-start.y)>12)return;
+  if(btn.disabled||btn.classList.contains('permission-hidden'))return;
+  if(event.cancelable)event.preventDefault();
+  btn.click();
+ },{passive:false});
+ btn.addEventListener('touchcancel',()=>{touchStart=null},{passive:true});
+ btn.addEventListener('click',()=>{
+  const page=btn.dataset.page;
+  const target=$(page);
+  if(!target)return;
+  if(auditArchive)leaveAuditArchive(false);
+  lastMainPage=page;
+  if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
+  document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  target.classList.add('active');
+  const mobile=isMobileSidebarLayout();
+  if(mobile){
+   document.body.classList.remove('mobile-sidebar-open');
+   updateSidebarPin();
+  }
+  const renderSelected=()=>{
+   if(!target.classList.contains('active'))return;
+   if(page==='dados')updateCharts();
+   if(page==='produtos')renderProductPage();
+   if(page==='usuarios')renderUsersPage();
+   if(page==='permissoes')renderPermissionsPage();
+   if(page==='historico'){loadAuditHistory(true);if(!auditRealtimeChannel)startAuditRealtime();}
+  };
+  if(mobile)requestAnimationFrame(()=>requestAnimationFrame(renderSelected));
+  else renderSelected();
+ });
+});
 bootApp();
 
 const responsiveTableObserver=new MutationObserver(()=>applyResponsiveTableLabels());
