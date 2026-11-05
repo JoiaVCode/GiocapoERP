@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.17.8 -->
+<!-- v6.18.2 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -381,7 +381,7 @@ body.role-admin .admin-only.flex{display:flex!important}
 body.role-admin .admin-only.grid{display:grid!important}
 .permission-note{padding:12px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--muted);font-size:12px;line-height:1.45}
 .user-list{display:grid;gap:10px}
-.user-row{display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(180px,1.2fr) 150px 120px auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:9px;background:#fff}
+.user-row{display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(145px,1fr) minmax(145px,1fr) 150px 95px auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:9px;background:#fff}
 .user-main{min-width:0}
 .user-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-main small{display:block;color:var(--muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -408,6 +408,34 @@ body.role-admin .admin-only.grid{display:grid!important}
  .user-row .btn{width:100%}
 }
 
+
+
+.user-actions{display:flex;align-items:stretch;gap:7px}
+.user-actions .btn{flex:1;min-width:86px}
+.user-permission-select{width:100%;min-height:40px}
+.user-permission-help{margin-top:5px;font-size:10px;color:var(--muted)}
+.user-permission-edit{display:flex;align-items:center;justify-content:center;width:100%;min-height:29px;margin-top:5px;padding:5px 8px;border:1px solid #d6a31a;border-radius:7px;background:#fec123;color:#352900;font-size:11px;font-weight:800;line-height:1.15;text-align:center;text-decoration:none;cursor:pointer;box-shadow:0 2px 4px rgba(76,53,4,.13)}
+.user-permission-edit:hover{background:#ffcf43;border-color:#c99713}
+.user-permission-edit:focus-visible{outline:2px solid #725217;outline-offset:2px}
+.user-permission-editor{display:grid;gap:14px}
+.user-permission-group{border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.user-permission-group h4{margin:0;padding:11px 13px;background:var(--surface-2);font-size:13px}
+.user-permission-option{display:flex;align-items:center;gap:11px;justify-content:space-between;padding:11px 13px;border-top:1px solid var(--border);cursor:pointer}
+.user-permission-option:first-of-type{border-top:0}
+.user-permission-option span{font-size:12px;font-weight:600;line-height:1.3}
+.user-permission-option input{width:19px;height:19px;flex:0 0 19px;accent-color:var(--primary)}
+.user-permission-description{font-size:11px;color:var(--muted);margin:0 0 12px}
+@media(max-width:1050px){.user-row{grid-template-columns:repeat(2,minmax(0,1fr))}.user-main{grid-column:1/-1}.user-actions{grid-column:1/-1}}
+@media(max-width:700px){.user-row{grid-template-columns:1fr}.user-main,.user-actions{grid-column:auto}}
+.user-delete-btn{var(--danger);border-color:var(--danger);color:#fff}
+.user-delete-btn:disabled,.user-delete-btn:disabled:hover{background:#aeb2b7;border-color:#aeb2b7;color:#fff;cursor:not-allowed;box-shadow:none;opacity:1}
+.user-delete-btn:not(:disabled):hover{filter:brightness(.92)}
+#deleteUserConfirmName{font-weight:800;overflow-wrap:anywhere}
+#deleteUserConfirmEmail{overflow-wrap:anywhere}
+#deleteUserConfirmInput{text-transform:uppercase;font-weight:700;letter-spacing:1px}
+#deleteUserConfirmInput::placeholder{text-transform:none;letter-spacing:normal;font-weight:400}
+#deleteUserConfirmButton:disabled{background:#aeb2b7;border-color:#aeb2b7;cursor:not-allowed;opacity:1}
+@media(max-width:700px){.user-actions{width:100%}.user-actions .btn{width:auto;min-width:0}}
 
 /* ===== B22.3 · Nome de exibição editável somente por administradores ===== */
 .user-name-editor{display:grid;gap:5px}
@@ -605,7 +633,7 @@ body.guest-calculator-mode #mainApp .nav{display:none!important}
 @media(max-width:700px){body{border-top:0}#mainApp .header{border-top:4px solid var(--primary)}}
 @media(max-width:420px){#mainApp .header{border-top-width:3px}}
 /* Perfis e indicador de sincronização preservados */
-body.role-admin #mainApp .nav button.admin-only[data-page]{display:flex!important}
+#mainApp .nav button.delegated-nav[data-page]:not(.permission-hidden){display:flex!important}
 #mainApp .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
 #mainApp .header-actions .sync-status{display:inline-flex;justify-content:center;max-width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(255,255,255,.08);font-size:10px;font-weight:700;color:#eee}
 @media(max-width:700px){#mainApp .header-actions{width:auto;align-self:flex-end;display:flex;grid-template-columns:none}}
@@ -813,7 +841,7 @@ img,svg{-webkit-user-drag:none}
 }
 
 
-/* v6.17.8 | Navegacao e cabecalho fixos; rolagem somente do conteudo */
+/* v6.18.2 | Navegacao e cabecalho fixos; rolagem somente do conteudo */
 html{scroll-padding-top:calc(var(--erp-header-height) + 12px)}
 #mainApp{padding-top:var(--erp-header-height);min-height:100dvh}
 #mainApp .header{
@@ -908,11 +936,11 @@ body.guest-calculator-mode #mainApp{padding-top:0}
  body:has(.modal-backdrop.open){overflow:hidden}
  :root{--mobile-sidebar-peek:13.5px}
  #mainApp .nav{top:calc(var(--erp-header-height) - 2px);height:calc(100dvh - var(--erp-header-height) + 2px)}
- .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal).open{position:fixed;inset:0;align-items:stretch;padding:0}
- .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal)>.modal{display:flex;flex-direction:column;width:100%;height:100dvh;max-height:none;min-height:0;margin:0;border:0;border-radius:0;overflow:hidden}
- .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-head{position:relative;flex:0 0 auto;padding:13px 15px;z-index:3}
- .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:13px 14px calc(20px + env(safe-area-inset-bottom))}
- .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal) .modal-footer{position:relative;flex:0 0 auto;z-index:3}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal,#userPermissionsModal).open{position:fixed;inset:0;align-items:stretch;padding:0}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal,#userPermissionsModal)>.modal{display:flex;flex-direction:column;width:100%;height:100dvh;max-height:none;min-height:0;margin:0;border:0;border-radius:0;overflow:hidden}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal,#userPermissionsModal) .modal-head{position:relative;flex:0 0 auto;padding:13px 15px;z-index:3}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal,#userPermissionsModal) .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:13px 14px calc(20px + env(safe-area-inset-bottom))}
+ .modal-backdrop:is(#equipmentModal,#productModal,#productManagerModal,#kitEditModal,#pendingApprovalsModal,#editKitPickerModal,#userPermissionsModal) .modal-footer{position:relative;flex:0 0 auto;z-index:3}
  body:has(.modal-backdrop.open)>#sidebarPin{visibility:hidden;pointer-events:none}
  #equipmentModal .checkboxes,#productModal .checkboxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
  #equipmentModal .check,#productModal .check{min-width:0;min-height:37px;padding:5px 7px;display:flex;align-items:center;gap:5px;font-size:11px;overflow-wrap:anywhere}
@@ -1224,7 +1252,7 @@ body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
 </div></div></header>
 <main class="container">
 <nav class="nav" id="appSidebar" aria-label="Navegação principal">
-<div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><g><g><path d="M10.697 16.127 C9.63 16.127 5.626 15.582 5.219 14.546 C5.215 14.537 5.198 14.471 5.166 14.349 L4.77 12.826 C4.751 12.752 4.285 12.1 3.399 10.904 C3.272 10.733 3.166 10.5 3.033 10.132 C2.671 9.134 2.61 8.279 2.862 7.763 C3.994 5.453 7.137 4.308 11 4.308 M10.812 16.127 C11.879 16.127 15.883 15.582 16.29 14.546 C16.294 14.537 16.311 14.471 16.343 14.349 L16.739 12.826 C16.758 12.752 17.224 12.1 18.11 10.904 C18.237 10.733 18.343 10.5 18.476 10.132 C18.838 9.134 18.899 8.279 18.647 7.763 C17.515 5.453 14.372 4.308 10.509 4.308" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.618 13.475 C10.35 13.475 8.368 13.369 8.179 13.18 C7.99 12.991 7.883 12.734 7.883 12.467 L7.883 10.45 C7.883 10.183 7.99 9.926 8.179 9.737 C8.368 9.548 10.35 9.544 10.618 9.544 M10.891 13.475 C11.159 13.475 13.141 13.369 13.33 13.18 C13.519 12.991 13.626 12.734 13.626 12.467 L13.626 10.45 C13.626 10.183 13.519 9.926 13.33 9.737 C13.141 9.548 11.159 9.544 10.891 9.544" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.686 11.412 C10.686 11.825 10.686 11.825 10.274 11.825 C9.808 11.825 9.861 11.825 9.861 11.412 C9.861 11 9.861 11 10.274 11 C10.686 11 10.686 11 10.686 11.412 Z M10.823 11.412 C10.823 11.825 10.823 11.825 11.235 11.825 C11.701 11.825 11.648 11.825 11.648 11.412 C11.648 11 11.648 11 11.235 11 C10.823 11 10.823 11 10.823 11.412 Z" fill="#000000"/><path d="M9.717 11.412 C9.717 11.825 9.717 11.825 9.305 11.825 C8.839 11.825 8.892 11.825 8.892 11.412 C8.892 11 8.892 11 9.305 11 C9.717 11 9.717 11 9.717 11.412 Z M11.792 11.412 C11.792 11.825 11.792 11.825 12.204 11.825 C12.67 11.825 12.617 11.825 12.617 11.412 C12.617 11 12.617 11 12.204 11 C11.792 11 11.792 11 11.792 11.412 Z" fill="#000000"/></g><path d="M2.991 8.514 C2.991 8.514 6.368 6.907 8.723 6.609 C9.348 6.509 10.665 6.472 10.665 6.472 C10.665 6.472 11.814 6.507 12.469 6.609 C14.389 6.724 18.382 8.377 18.382 8.377" fill="none" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/><path d="M9.969 7.94 C9.969 7.564 10.259 7.258 10.618 7.258 C10.976 7.258 11.267 7.564 11.267 7.94 C11.267 8.317 10.976 8.623 10.618 8.623 C10.259 8.623 9.969 8.317 9.969 7.94 Z" fill="#000000"/><path d="M9.304 17.142 L12.22 17.142" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/><g><path d="M9.452 11.248 C9.497 11.288 9.525 11.347 9.525 11.412 C9.525 11.534 9.426 11.632 9.304 11.632 C9.182 11.632 9.083 11.534 9.083 11.412 C9.083 11.346 9.112 11.286 9.158 11.246" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M9.304 11.139 L9.304 11.467" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/></g><g><path d="M10.12 11.139 L10.502 11.139 L10.502 11.577 L10.12 11.577 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/><path d="M10.01 11.248 L10.393 11.248 L10.393 11.686 L10.01 11.686 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/></g><g><g></g></g><g><g><g><g><path d="M11.113 11.632 L10.987 11.507" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.074 11.629 L11.2 11.504" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.093 11.149 L11.093 11.568" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.374 11.654 L11.374 11.234" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.354 11.17 L11.48 11.295" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.393 11.173 L11.267 11.299" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></g><g><path d="M11.985 11.282 L12.509 11.282 L12.509 11.541 L11.985 11.541 Z" fill="#000000" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.931 11.329 L11.931 11.474" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M12.316 11.282 L12.487 11.282 L12.487 11.541 L12.191 11.541 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M10.438 7.941 C10.438 7.833 10.519 7.746 10.618 7.746 C10.717 7.746 10.798 7.833 10.798 7.941 C10.798 8.049 10.717 8.136 10.618 8.136 C10.519 8.136 10.438 8.049 10.438 7.941 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="admin-only" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="admin-only" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button id="historyNavButton" class="admin-only" data-page="historico" type="button" title="Histórico" aria-label="Histórico"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="7" y="7" width="13" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1M10 11h7M10 15h7"/></svg></span><span class="nav-label">Histórico</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
+<div class="nav-links"><button class="active" data-page="equipamentos" type="button" title="Equipamentos" aria-label="Equipamentos"><span class="nav-icon"><svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><g><g><path d="M10.697 16.127 C9.63 16.127 5.626 15.582 5.219 14.546 C5.215 14.537 5.198 14.471 5.166 14.349 L4.77 12.826 C4.751 12.752 4.285 12.1 3.399 10.904 C3.272 10.733 3.166 10.5 3.033 10.132 C2.671 9.134 2.61 8.279 2.862 7.763 C3.994 5.453 7.137 4.308 11 4.308 M10.812 16.127 C11.879 16.127 15.883 15.582 16.29 14.546 C16.294 14.537 16.311 14.471 16.343 14.349 L16.739 12.826 C16.758 12.752 17.224 12.1 18.11 10.904 C18.237 10.733 18.343 10.5 18.476 10.132 C18.838 9.134 18.899 8.279 18.647 7.763 C17.515 5.453 14.372 4.308 10.509 4.308" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.618 13.475 C10.35 13.475 8.368 13.369 8.179 13.18 C7.99 12.991 7.883 12.734 7.883 12.467 L7.883 10.45 C7.883 10.183 7.99 9.926 8.179 9.737 C8.368 9.548 10.35 9.544 10.618 9.544 M10.891 13.475 C11.159 13.475 13.141 13.369 13.33 13.18 C13.519 12.991 13.626 12.734 13.626 12.467 L13.626 10.45 C13.626 10.183 13.519 9.926 13.33 9.737 C13.141 9.548 11.159 9.544 10.891 9.544" fill="none" stroke="#000000" stroke-width="1.604" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.686 11.412 C10.686 11.825 10.686 11.825 10.274 11.825 C9.808 11.825 9.861 11.825 9.861 11.412 C9.861 11 9.861 11 10.274 11 C10.686 11 10.686 11 10.686 11.412 Z M10.823 11.412 C10.823 11.825 10.823 11.825 11.235 11.825 C11.701 11.825 11.648 11.825 11.648 11.412 C11.648 11 11.648 11 11.235 11 C10.823 11 10.823 11 10.823 11.412 Z" fill="#000000"/><path d="M9.717 11.412 C9.717 11.825 9.717 11.825 9.305 11.825 C8.839 11.825 8.892 11.825 8.892 11.412 C8.892 11 8.892 11 9.305 11 C9.717 11 9.717 11 9.717 11.412 Z M11.792 11.412 C11.792 11.825 11.792 11.825 12.204 11.825 C12.67 11.825 12.617 11.825 12.617 11.412 C12.617 11 12.617 11 12.204 11 C11.792 11 11.792 11 11.792 11.412 Z" fill="#000000"/></g><path d="M2.991 8.514 C2.991 8.514 6.368 6.907 8.723 6.609 C9.348 6.509 10.665 6.472 10.665 6.472 C10.665 6.472 11.814 6.507 12.469 6.609 C14.389 6.724 18.382 8.377 18.382 8.377" fill="none" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/><path d="M9.969 7.94 C9.969 7.564 10.259 7.258 10.618 7.258 C10.976 7.258 11.267 7.564 11.267 7.94 C11.267 8.317 10.976 8.623 10.618 8.623 C10.259 8.623 9.969 8.317 9.969 7.94 Z" fill="#000000"/><path d="M9.304 17.142 L12.22 17.142" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"/><g><path d="M9.452 11.248 C9.497 11.288 9.525 11.347 9.525 11.412 C9.525 11.534 9.426 11.632 9.304 11.632 C9.182 11.632 9.083 11.534 9.083 11.412 C9.083 11.346 9.112 11.286 9.158 11.246" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M9.304 11.139 L9.304 11.467" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/></g><g><path d="M10.12 11.139 L10.502 11.139 L10.502 11.577 L10.12 11.577 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/><path d="M10.01 11.248 L10.393 11.248 L10.393 11.686 L10.01 11.686 Z" fill="#000000" stroke="#ffffff" stroke-width="0.08" stroke-miterlimit="10"/></g><g><g></g></g><g><g><g><g><path d="M11.113 11.632 L10.987 11.507" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.074 11.629 L11.2 11.504" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.093 11.149 L11.093 11.568" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.374 11.654 L11.374 11.234" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M11.354 11.17 L11.48 11.295" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.393 11.173 L11.267 11.299" fill="none" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></g><g><path d="M11.985 11.282 L12.509 11.282 L12.509 11.541 L11.985 11.541 Z" fill="#000000" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/><path d="M11.931 11.329 L11.931 11.474" fill="none" stroke="#ffffff" stroke-width="0.1" stroke-miterlimit="10"/><path d="M12.316 11.282 L12.487 11.282 L12.487 11.541 L12.191 11.541 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g><path d="M10.438 7.941 C10.438 7.833 10.519 7.746 10.618 7.746 C10.717 7.746 10.798 7.833 10.798 7.941 C10.798 8.049 10.717 8.136 10.618 8.136 C10.519 8.136 10.438 8.049 10.438 7.941 Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.06" stroke-miterlimit="10"/></g></svg></span><span class="nav-label">Equipamentos</span></button><button data-page="produtos" type="button" title="Produtos" aria-label="Produtos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3h7l11 11-7 7L3 10V3Z"/><circle cx="7" cy="7" r="1.1"/></svg></span><span class="nav-label">Produtos</span></button><button data-page="montar" type="button" title="Montar Kit" aria-label="Montar Kit"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5M3 8v8l9 5 9-5V8M12 13v8"/><path d="M17 2v5M14.5 4.5h5"/></svg></span><span class="nav-label">Montar Kit</span></button><button data-page="kits" type="button" title="Kits Ativos" aria-label="Kits Ativos"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></svg></span><span class="nav-label">Kits Ativos</span></button><button data-page="calculadora" type="button" title="Calculadora de Diárias" aria-label="Calculadora de Diárias"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="nav-label">Calculadora de Diárias</span></button><button id="usersNavButton" class="delegated-nav" data-page="usuarios" type="button" title="Usuários" aria-label="Usuários"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="nav-label">Usuários</span></button><button id="permissionsNavButton" class="delegated-nav" data-page="permissoes" type="button" title="Permissões" aria-label="Permissões"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="nav-label">Permissões</span></button><button id="historyNavButton" class="delegated-nav" data-page="historico" type="button" title="Histórico" aria-label="Histórico"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="7" y="7" width="13" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h1M10 11h7M10 15h7"/></svg></span><span class="nav-label">Histórico</span></button><button data-page="dados" type="button" title="Dados" aria-label="Dados"><span class="nav-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18M7 16v-4M12 16V8M17 16V5"/></svg></span><span class="nav-label">Dados</span></button></div>
 <div class="nav-bottom">
   <button id="sidebarPin" class="sidebar-pin" type="button" onclick="toggleSidebarPin()" aria-pressed="false" aria-label="Fixar menu" title="Fixar menu"><span class="nav-icon" id="sidebarPinIcon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5-3 1-4 4-1 5-2 2-1-6-6-1 2-2 5-1 4-4 1-3Z"/><path d="m4 20 6-6"/></svg></span><span class="nav-label" id="sidebarPinLabel">Fixar menu</span></button>
 </div>
@@ -1299,7 +1327,7 @@ body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
 </section>
 
 <section id="historico" class="page">
-<div class="page-title"><div><h2>Histórico</h2><p>Registro de alterações de equipamentos e produtos realizadas por usuários não administradores.</p></div><div class="actions"><button id="auditExport" class="btn" type="button" onclick="exportAuditHistory()">EXPORTAR</button><button class="btn" type="button" onclick="document.getElementById('auditLogUpload').click()">VER REGISTRO</button><input type="file" id="auditLogUpload" accept=".log" hidden onchange="importAuditLog(event)"></div></div><div id="auditArchiveNotice" class="audit-archive-notice" hidden></div>
+<div class="page-title"><div><h2>Histórico</h2><p>Registro de alterações de equipamentos e produtos realizadas por usuários não administradores.</p></div><div class="actions"><button id="auditExport" data-permission="history.export" class="btn" type="button" onclick="exportAuditHistory()">EXPORTAR</button><button class="btn" data-permission="history.export" type="button" onclick="document.getElementById('auditLogUpload').click()">VER REGISTRO</button><input type="file" id="auditLogUpload" accept=".log" hidden onchange="importAuditLog(event)"></div></div><div id="auditArchiveNotice" class="audit-archive-notice" hidden></div>
 <div class="card audit-filters">
   <div class="field grow"><label for="auditSearch">Pesquisar item ou usuário</label><input id="auditSearch" placeholder="Produto, equipamento, série, usuário..." oninput="scheduleAuditSearch()"></div>
   <div class="field"><label for="auditEntity">Categoria</label><select id="auditEntity" onchange="loadAuditHistory(true)"><option value="">Todas</option><option value="equipment">Equipamentos</option><option value="product">Produtos</option></select></div>
@@ -1376,6 +1404,8 @@ body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
 <div id="changePasswordModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Trocar senha</h3><button class="close" onclick="closeModal('changePasswordModal')">×</button></div><div class="modal-body"><form id="changePasswordForm" onsubmit="changeOwnPassword(event)"><div class="form-grid"><div class="field full"><label>Senha atual</label><div class="auth-input-wrap"><input id="currentPasswordValue" class="auth-password-input" type="password" autocomplete="current-password" required><button class="auth-eye" type="button" onclick="togglePasswordVisibility('currentPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div></div><div class="field full"><label>Nova senha</label><div class="auth-input-wrap"><input id="newPasswordValue" class="auth-password-input" type="password" autocomplete="new-password" minlength="8" required oninput="updatePasswordStrength('newPasswordValue','changePasswordStrength')"><button class="auth-eye" type="button" onclick="togglePasswordVisibility('newPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div><div id="changePasswordStrength" class="password-strength" data-level="0"><div class="password-strength-track"><div class="password-strength-fill"></div></div><div class="password-strength-label">Use 8+ caracteres, maiúscula, minúscula e número.</div></div></div><div class="field full"><label>Confirmar nova senha</label><div class="auth-input-wrap"><input id="confirmNewPasswordValue" class="auth-password-input" type="password" autocomplete="new-password" minlength="8" required><button class="auth-eye" type="button" onclick="togglePasswordVisibility('confirmNewPasswordValue',this)" aria-label="Mostrar ou ocultar senha">◉</button></div></div></div></form><div id="changePasswordMessage" class="auth-message"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('changePasswordModal')">CANCELAR</button><button id="changePasswordButton" class="btn btn-primary" onclick="document.getElementById('changePasswordForm').requestSubmit()">ALTERAR SENHA</button></div></div></div>
 
 <div id="pendingApprovalsModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3>Aprovações pendentes</h3><button class="close" onclick="closeModal('pendingApprovalsModal')">×</button></div><div class="modal-body"><div class="approval-tabs"><button class="btn active" data-approval-tab="all" onclick="setApprovalTab('all',this)">TODOS</button><button class="btn" data-approval-tab="activation" onclick="setApprovalTab('activation',this)">NOVOS USUÁRIOS</button><button class="btn" data-approval-tab="display_name" onclick="setApprovalTab('display_name',this)">ALTERAÇÃO DE NOME</button></div><div id="pendingApprovalsList" class="approval-list"></div></div><div class="modal-footer"><button class="btn" onclick="closeModal('pendingApprovalsModal')">FECHAR</button></div></div></div>
+<div id="userPermissionsModal" class="modal-backdrop"><div class="modal wide"><div class="modal-head"><h3>Permissões personalizadas</h3><button class="close" type="button" onclick="cancelUserPermissionsEditor()" aria-label="Cancelar alterações">×</button></div><div class="modal-body"><p class="user-permission-description" id="userPermissionDescription"></p><div id="userPermissionEditor" class="user-permission-editor"></div><p class="permission-fixed-note">Permissões administrativas podem ser delegadas individualmente; o administrador mantém a proteção de sua própria conta.</p></div><div class="modal-footer"><button class="btn" type="button" onclick="cancelUserPermissionsEditor()">CANCELAR</button><button class="btn btn-primary" type="button" id="saveUserPermissionsButton" onclick="saveUserCustomPermissions()">SALVAR PERMISSÕES</button></div></div></div>
+<div id="deleteUserConfirmModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Excluir usuário permanentemente</h3><button class="close" type="button" onclick="closeModal('deleteUserConfirmModal')" aria-label="Cancelar exclusão">×</button></div><div class="modal-body"><p><strong>Atenção:</strong> esta operação é irreversível. A conta será excluída do <strong>Supabase Auth</strong> e do cadastro de usuários do ERP.</p><p>Usuário: <span id="deleteUserConfirmName"></span><br>E-mail: <span id="deleteUserConfirmEmail"></span></p><p>As alterações administrativas permanecerão registradas, mas referências de aprovação e atualização poderão ficar sem o ID do responsável.</p><div class="field"><label for="deleteUserConfirmInput">Digite <strong>EXCLUIR</strong> para confirmar (maiúsculas ou minúsculas)</label><input type="text" id="deleteUserConfirmInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="EXCLUIR" oninput="updateDeleteUserConfirmation()"></div></div><div class="modal-footer"><button class="btn" type="button" onclick="closeModal('deleteUserConfirmModal')">CANCELAR</button><button class="btn btn-danger" type="button" id="deleteUserConfirmButton" disabled onclick="executeUserDeletion()">EXCLUIR PERMANENTEMENTE</button></div></div></div>
 <div id="confirmModal" class="modal-backdrop"><div class="modal"><div class="modal-head"><h3>Confirmar ação</h3><button class="close" onclick="closeModal('confirmModal')">×</button></div><div class="modal-body"><p id="confirmText"></p></div><div class="modal-footer"><button class="btn" onclick="closeModal('confirmModal')">CANCELAR</button><button id="confirmAction" class="btn btn-danger">CONFIRMAR</button></div></div></div>
 <div id="modalHora" class="calc-time-modal"><div class="calc-time-dialog"><h3>Informe a hora</h3><div class="calc-time-body"><input type="text" id="horaManual" maxlength="4" inputmode="numeric" placeholder="HHMM" oninput="atualizarPreviewHora()" onkeydown="if(event.key==='Enter') confirmarHora()"><div class="calc-time-preview" id="previewHora">--:--</div><div class="calc-time-actions"><button type="button" class="btn" onclick="cancelarHora()">CANCELAR</button><button type="button" class="btn btn-primary" onclick="confirmarHora()">CONFIRMAR</button></div></div></div></div>
 <div id="labelPrintLoading" class="label-print-loading" role="status" aria-live="polite" aria-hidden="true">
@@ -2701,13 +2731,18 @@ const PERMISSION_GROUPS=[
     {key:'data.clear',label:'Apagar todos os dados',desc:'Limpar produtos, equipamentos e kits.'}
   ]},
   {title:'Administração',fixed:true,items:[
-    {key:'users.view',label:'Visualizar usuários',desc:'Reservado ao Administrador.'},
-    {key:'users.manage',label:'Gerenciar usuários',desc:'Ativar, desativar, trocar cargo e nome de exibição.'},
-    {key:'permissions.manage',label:'Configurar permissões',desc:'Editar esta matriz de permissões.'}
+    {key:'users.view',label:'Visualizar usuários',desc:'Consultar a lista de usuários e os respectivos cadastros.'},
+    {key:'users.manage',label:'Gerenciar usuários',desc:'Alterar cadastros de operadores e usuários de consulta, sem afetar administradores ou a própria conta.'},
+    {key:'permissions.manage',label:'Configurar permissões',desc:'Editar permissões individuais de outros usuários, sem conceder novos privilégios administrativos.'},
+    {key:'history.view',label:'Visualizar histórico de alterações',desc:'Consultar o histórico atual e seus registros.'},
+    {key:'history.export',label:'Exportar e abrir registros',desc:'Exportar o histórico atual e abrir arquivos LOG antigos.'},
+    {key:'approvals.activation',label:'Aprovar novos usuários',desc:'Aprovar ou rejeitar novos usuários, sem conceder cargo de Administrador.'},
+    {key:'approvals.name',label:'Aprovar alterações de nome',desc:'Aprovar ou rejeitar solicitações de alteração de nome.'}
   ]}
 ];
 const ALL_PERMISSION_KEYS=PERMISSION_GROUPS.flatMap(g=>g.items.map(i=>i.key));
 let currentPermissions={};
+let permissionRefreshTimer=null;
 let rolePermissionsCache={admin:{},operator:{},viewer:{}};
 let pendingCloudAction='';
 let currentSession=null;
@@ -2890,6 +2925,7 @@ function stopRealtimeSync(){
   remoteSyncDeferred=false;
   remoteSyncInFlight=false;
   remoteSyncToastShown=false;
+  if(permissionRefreshTimer){clearInterval(permissionRefreshTimer);permissionRefreshTimer=null}
   stopAuditRealtime();
 }
 function startRealtimeSync(){
@@ -2911,7 +2947,7 @@ function startRealtimeSync(){
         if(remoteRevision<=cloudRevision)return;
         remoteSyncDeferred=true;
         applyLatestCloudState('realtime',false);
-        if(canAdmin())queueAuditRefresh(160);
+        if(hasPermission('history.view'))queueAuditRefresh(160);
       }
     )
     .subscribe(status=>{
@@ -2922,7 +2958,8 @@ function startRealtimeSync(){
 
   // Rede de segurança caso o WebSocket seja interrompido sem aviso.
   realtimeFallbackTimer=setInterval(checkCloudRevisionAndSync,60000);
-  if(canAdmin())startAuditRealtime();
+  permissionRefreshTimer=setInterval(refreshOwnProfileHeader,20000);
+  if(hasPermission('history.view'))startAuditRealtime();
 }
 
 async function reloadStateFromCloudAfterDenied(){
@@ -3152,6 +3189,10 @@ function load(){
 function canAdmin(){
   return !!(currentAccess?.active && currentAccess.role==='admin');
 }
+function canViewUsers(){return hasPermission('users.view')||hasPermission('users.manage')||hasPermission('permissions.manage')||hasPermission('approvals.activation')||hasPermission('approvals.name')}
+function canViewApprovals(){return hasPermission('approvals.activation')||hasPermission('approvals.name')}
+function canManageTarget(user){return !!user&&(canAdmin()||hasPermission('users.manage')&&user.role!=='admin'&&user.user_id!==currentSession?.user?.id)}
+function canEditTargetPermissions(user){return !!user&&(canAdmin()||hasPermission('permissions.manage')&&user.role!=='admin'&&user.user_id!==currentSession?.user?.id)}
 function hasPermission(key){
   if(!currentAccess?.active)return false;
   if(currentAccess.role==='admin')return true;
@@ -3196,13 +3237,17 @@ function applyPermissionVisibility(){
   document.querySelectorAll('.nav button[data-page]').forEach(btn=>{
     const page=btn.dataset.page;
     let allowed=true;
-    if(page==='usuarios'||page==='permissoes'||page==='historico')allowed=canAdmin();
+    if(page==='usuarios')allowed=canViewUsers();
+    else if(page==='permissoes')allowed=canAdmin();
+    else if(page==='historico')allowed=hasPermission('history.view');
     else if(map[page])allowed=hasPermission(map[page]);
     btn.classList.toggle('permission-hidden',!allowed);
   });
   document.querySelectorAll('[data-permission]').forEach(el=>{
     el.classList.toggle('permission-hidden',!hasPermission(el.dataset.permission));
   });
+  const pendingBtn=$('pendingApprovalsButton');if(pendingBtn)pendingBtn.classList.toggle('permission-hidden',!canViewApprovals());
+  document.querySelectorAll('[data-permission="history.export"]').forEach(el=>el.classList.toggle('permission-hidden',!hasPermission('history.export')));
   const activeBtn=document.querySelector('.nav button.active');
   if(activeBtn?.classList.contains('permission-hidden')){
     const first=[...document.querySelectorAll('.nav button[data-page]')].find(b=>!b.classList.contains('permission-hidden'));
@@ -3213,6 +3258,10 @@ async function loadCurrentRolePermissions(){
   if(!currentAccess?.active){currentPermissions={};return}
   if(currentAccess.role==='admin'){
     currentPermissions=Object.fromEntries(ALL_PERMISSION_KEYS.map(k=>[k,true]));
+    return;
+  }
+  if(currentAccess.permission_mode==='custom'){
+    currentPermissions=currentAccess.permissions||{};
     return;
   }
   const {data,error}=await supabaseClient.from('role_permissions')
@@ -3274,7 +3323,7 @@ async function renderPermissionsPage(){
   rolePermissionsCache={admin:{},operator:{},viewer:{}};
   data.forEach(r=>rolePermissionsCache[r.role]=r.permissions||{});
   el.innerHTML=PERMISSION_GROUPS.map(renderPermissionsMatrixGroup).join('')+
-    '<div class="permission-fixed-note">Permissões administrativas são exclusivas do cargo Administrador e não podem ser delegadas.</div>';
+    '<div class="permission-fixed-note">Permissões administrativas são fixas na matriz de cargos. Podem ser concedidas individualmente em Usuários → Permissões → Personalizadas.</div>';
 }
 async function saveRolePermissions(){
   if(!requireAdmin())return;
@@ -3311,7 +3360,7 @@ function updateOnlineUsersSummary(){
   el.textContent=total===1?'1 online':`${total} online`;
 }
 async function refreshLastSeenForUsers(userIds=[]){
-  if(!canAdmin()||!userIds.length)return;
+  if(!canViewUsers()||!userIds.length)return;
   const ids=[...new Set(userIds.filter(Boolean))];
   if(!ids.length)return;
   const {data,error}=await supabaseClient.from('app_users').select('user_id,last_seen_at').in('user_id',ids);
@@ -3331,7 +3380,7 @@ function syncOnlineUsersFromPresence(){
   });
   onlineUserConnections=next;
   updateOnlineUsersSummary();
-  if(canAdmin()&&usersPageCache.length)filterUsersPage();
+  if(canViewUsers()&&usersPageCache.length)filterUsersPage();
   const nowOnline=new Set([...next.keys()]);
   const wentOffline=[...previous].filter(id=>!nowOnline.has(id));
   if(wentOffline.length)refreshLastSeenForUsers(wentOffline);
@@ -3391,6 +3440,8 @@ async function startUserPresence(){
 let usersPageCache=[];
 let pendingApprovalCache={activations:[],changes:[]};
 let currentApprovalTab='all';
+let pendingDeletionUserId=null;
+let userDeletionInProgress=false;
 
 function roleLabel(role){return role==='admin'?'Administrador':role==='operator'?'Operador':'Consulta'}
 function userStatusLabel(u){
@@ -3404,19 +3455,28 @@ function renderUsersPageRows(list){
     const self=currentSession?.user?.id===u.user_id;
     const status=userStatusLabel(u);
     const statusClass=u.active?'user-status-active':'user-status-inactive';
+    const editable=canManageTarget(u),permissionEditable=canEditTargetPermissions(u);
     return `<div class="user-row">
       <div class="user-main user-name-editor">
         <div class="user-role-label">Nome de exibição</div>
-        <input id="userDisplayName_${u.user_id}" type="text" minlength="3" maxlength="40" value="${esc(u.display_name||'')}" placeholder="Nome de exibição" oninput="sanitizeProfileDisplayNameInput(this)">
+        <input id="userDisplayName_${u.user_id}" type="text" minlength="3" maxlength="40" value="${esc(u.display_name||'')}" placeholder="Nome de exibição" ${editable?'':'disabled'} oninput="sanitizeProfileDisplayNameInput(this)">
         <small>${esc(u.email||'E-mail indisponível')}${self?' · você':''}</small>
       </div>
       <div>
         <div class="user-role-label">Perfil</div>
-        <select id="userRole_${u.user_id}">
-          <option value="admin" ${u.role==='admin'?'selected':''}>Administrador</option>
+        <select id="userRole_${u.user_id}" ${editable?'':'disabled'}>
+          <option value="admin" ${u.role==='admin'?'selected':''} ${!canAdmin()?'disabled':''}>Administrador</option>
           <option value="operator" ${u.role==='operator'?'selected':''}>Operador</option>
           <option value="viewer" ${u.role==='viewer'?'selected':''}>Consulta</option>
         </select>
+      </div>
+      <div>
+        <div class="user-role-label">Permissões</div>
+        <select id="userPermissionMode_${u.user_id}" class="user-permission-select" onchange="changeUserPermissionMode('${u.user_id}',this.value)" ${!permissionEditable?'disabled title="Você não pode editar as permissões desta conta"':''}>
+          <option value="role" ${(u.permission_mode||'role')==='role'?'selected':''}>Função</option>
+          <option value="custom" ${u.permission_mode==='custom'?'selected':''}>Personalizadas</option>
+        </select>
+        ${u.role==='admin'?'<div class="user-permission-help">Acesso administrativo fixo</div>':u.permission_mode==='custom'&&permissionEditable?`<button type="button" class="user-permission-edit" onclick="openUserPermissionsEditor('${u.user_id}').catch(err=>{console.error(err);toast('Não foi possível abrir as permissões.')})">Editar permissões</button>`:''}
       </div>
       <div>
         <div class="user-role-label">Status</div>
@@ -3425,13 +3485,199 @@ function renderUsersPageRows(list){
       </div>
       <div>
         <label class="check" style="justify-content:center">
-          <input id="userActive_${u.user_id}" type="checkbox" ${u.active?'checked':''}>
+          <input id="userActive_${u.user_id}" type="checkbox" ${u.active?'checked':''} ${editable?'':'disabled'} onchange="updateUserDeleteButton('${u.user_id}')">
           Ativo
         </label>
       </div>
-      <button class="btn btn-primary" onclick="saveUserAccess('${u.user_id}')">SALVAR</button>
+      <div class="user-actions"><button class="btn btn-primary" type="button" ${editable?'':'disabled'} onclick="saveUserAccess('${u.user_id}')">SALVAR</button><button id="userDelete_${u.user_id}" class="btn user-delete-btn" type="button" ${u.active||self||!canAdmin()?'disabled':''} title="${!canAdmin()?'Exclusão permanente exclusiva para administradores.':u.active?'Desative e salve este usuário antes de excluir.':self?'Não é permitido excluir sua própria conta.':'Excluir usuário permanentemente do Supabase'}" onclick="openDeleteUserConfirmation('${u.user_id}')">EXCLUIR</button></div>
     </div>`;
   }).join(''):'<div class="card empty">Nenhum usuário encontrado.</div>';
+}
+let editedPermissionsUserId=null;
+let editedPermissionsRole=null;
+let editedPermissionsMode=null;
+let userPermissionsSaving=false;
+const ADMIN_PERMISSION_KEYS=new Set(['users.view','users.manage','permissions.manage','history.view','history.export','approvals.activation','approvals.name']);
+function permissionDiffersFromRole(custom,defaults){
+  return ALL_PERMISSION_KEYS.some(k=>Boolean(custom?.[k])!==Boolean(defaults?.[k]));
+}
+async function fetchRolePermissions(role){
+  const {data,error}=await supabaseClient.from('role_permissions').select('permissions').eq('role',role).single();
+  if(error)throw error;
+  return data?.permissions||{};
+}
+function resetUserPermissionSelect(userId){
+  const select=$('userPermissionMode_'+userId);
+  const user=usersPageCache.find(u=>u.user_id===userId);
+  if(select&&user)select.value=user.permission_mode||'role';
+}
+async function changeUserPermissionMode(userId,mode){
+  if(!requirePermission('permissions.manage'))return;
+  const user=usersPageCache.find(u=>u.user_id===userId);
+  const selector=$('userPermissionMode_'+userId);
+  if(!user||!selector||!canEditTargetPermissions(user)){resetUserPermissionSelect(userId);return}
+  if($('userRole_'+userId)?.value!==user.role){
+    toast('Salve primeiro a alteração de Perfil.');resetUserPermissionSelect(userId);return;
+  }
+  if(user.role==='admin'){
+    toast('As permissões administrativas são fixas.');resetUserPermissionSelect(userId);return;
+  }
+  if(mode==='custom'){
+    try{await openUserPermissionsEditor(userId)}catch(err){console.error(err);toast('Não foi possível carregar as permissões.');resetUserPermissionSelect(userId)}
+    return;
+  }
+  if(mode!=='role'||user.permission_mode!=='custom'){resetUserPermissionSelect(userId);return}
+  try{
+    const roleDefaults=await fetchRolePermissions(user.role);
+    const proceed=()=>resetUserPermissionsToRole(userId,user.role);
+    if(permissionDiffersFromRole(user.permissions,roleDefaults)){
+      resetUserPermissionSelect(userId);
+      confirm('Este usuário possui permissões específicas. Deseja continuar? Esta ação descartará as permissões personalizadas e redefinirá o acesso com base na função '+roleLabel(user.role)+'.',proceed);
+    }else{
+      await proceed();
+    }
+  }catch(err){console.error(err);toast('Não foi possível conferir as permissões.');resetUserPermissionSelect(userId)}
+}
+async function resetUserPermissionsToRole(userId,expectedRole){
+  try{
+    const {data,error}=await supabaseClient.from('app_users')
+      .update({permission_mode:'role',permissions:null})
+      .eq('user_id',userId).eq('role',expectedRole)
+      .select('user_id,permission_mode').maybeSingle();
+    if(error||!data)throw error||new Error('Cadastro alterado por outro administrador.');
+    toast('Permissões redefinidas para a função.');
+    await renderUsersPage();
+    if(userId===currentSession?.user?.id)await refreshOwnProfileHeader();
+  }catch(err){console.error(err);toast('Não foi possível redefinir as permissões.');resetUserPermissionSelect(userId)}
+}
+async function openUserPermissionsEditor(userId){
+  const user=usersPageCache.find(u=>u.user_id===userId);
+  if(!canEditTargetPermissions(user)||user.role==='admin'||(!canAdmin()&&user.user_id===currentSession?.user?.id))return;
+  const [{data:profile,error:profileError},defaults]=await Promise.all([
+    supabaseClient.from('app_users').select('role,permission_mode,permissions').eq('user_id',userId).single(),
+    fetchRolePermissions(user.role)
+  ]);
+  if(profileError)throw profileError;
+  if(profile.role!==user.role)throw new Error('O perfil foi alterado. Atualize a lista.');
+  editedPermissionsUserId=userId;
+  editedPermissionsRole=user.role;
+  editedPermissionsMode=profile.permission_mode;
+  const initial=profile.permission_mode==='custom'?profile.permissions||{}:defaults;
+  $('userPermissionDescription').textContent=`${user.display_name||user.email||'Usuário'} · ${roleLabel(user.role)}. ${profile.permission_mode==='custom'?'Editando permissões individuais.':'Iniciando com as permissões padrão da função.'}`;
+  $('userPermissionEditor').innerHTML=PERMISSION_GROUPS.map(group=>
+    `<div class="user-permission-group"><h4>${esc(group.title)}</h4>${group.items.map(item=>
+    `<label class="user-permission-option" title="${esc(item.desc)}"><span>${esc(item.label)}</span><input type="checkbox" data-key="${item.key}" ${initial?.[item.key]===true?'checked':''} ${!canAdmin()&&ADMIN_PERMISSION_KEYS.has(item.key)?'disabled':''}></label>`).join('')}</div>`
+  ).join('');
+  $('saveUserPermissionsButton').disabled=false;
+  $('userPermissionEditor').onchange=event=>{
+    const field=event.target;
+    if(!field.matches('input[data-key]'))return;
+    const view=$('userPermissionEditor').querySelector('[data-key="history.view"]');
+    const archive=$('userPermissionEditor').querySelector('[data-key="history.export"]');
+    if(field===archive&&archive.checked&&view&&!view.checked&&!view.disabled)view.checked=true;
+    if(field===view&&!view.checked&&archive&&!archive.disabled)archive.checked=false;
+  };
+  openModal('userPermissionsModal');
+}
+function cancelUserPermissionsEditor(){
+  if(userPermissionsSaving)return;
+  const id=editedPermissionsUserId;
+  closeModal('userPermissionsModal');
+  editedPermissionsUserId=null;editedPermissionsRole=null;editedPermissionsMode=null;
+  if(id)resetUserPermissionSelect(id);
+}
+async function saveUserCustomPermissions(){
+  if(!requirePermission('permissions.manage')||userPermissionsSaving)return;
+  const id=editedPermissionsUserId,role=editedPermissionsRole;
+  if(!id||!['operator','viewer'].includes(role))return;
+  const permissions=!canAdmin()&&editedPermissionsMode==='custom'?
+    {...(usersPageCache.find(u=>u.user_id===id)?.permissions||{})}:{};
+  $('userPermissionEditor').querySelectorAll('input[data-key]').forEach(input=>{
+    if(input.disabled)return;
+    permissions[input.dataset.key]=input.checked;
+  });
+  if(!canAdmin()){
+    for(const key of ADMIN_PERMISSION_KEYS)permissions[key]=Boolean(usersPageCache.find(u=>u.user_id===id)?.permissions?.[key]);
+  }
+  permissions['state.write']=false;
+  userPermissionsSaving=true;
+  const button=$('saveUserPermissionsButton');button.disabled=true;button.textContent='SALVANDO...';
+  try{
+    const {data,error}=await supabaseClient.from('app_users').update({permission_mode:'custom',permissions})
+      .eq('user_id',id).eq('role',role)
+      .select('user_id,permission_mode').maybeSingle();
+    if(error||!data)throw error||new Error('O perfil foi alterado. Atualize a lista.');
+    closeModal('userPermissionsModal');
+    editedPermissionsUserId=null;editedPermissionsRole=null;editedPermissionsMode=null;
+    toast('Permissões personalizadas salvas.');
+    await renderUsersPage();
+    if(id===currentSession?.user?.id)await refreshOwnProfileHeader();
+  }catch(err){console.error(err);toast('Não foi possível salvar as permissões do usuário.');}
+  finally{userPermissionsSaving=false;button.disabled=false;button.textContent='SALVAR PERMISSÕES';}
+}
+function updateUserDeleteButton(userId){
+  const button=$('userDelete_'+userId);
+  const original=usersPageCache.find(u=>u.user_id===userId);
+  if(!button||!original)return;
+  const self=currentSession?.user?.id===userId;
+  const savedInactive=original.active===false;
+  const currentlyInactive=$('userActive_'+userId)?.checked===false;
+  button.disabled=userDeletionInProgress||self||!savedInactive||!currentlyInactive;
+  button.title=self?'Não é permitido excluir sua própria conta.':!savedInactive?'Desative e salve o usuário antes de excluir.':!currentlyInactive?'O usuário precisa permanecer inativo para ser excluído.':'Excluir usuário permanentemente do Supabase';
+}
+function isDeleteUserConfirmationValid(){
+  return $('deleteUserConfirmInput')?.value.trim().toUpperCase()==='EXCLUIR';
+}
+function updateDeleteUserConfirmation(){
+  const button=$('deleteUserConfirmButton');
+  if(button)button.disabled=userDeletionInProgress||!isDeleteUserConfirmationValid();
+}
+function openDeleteUserConfirmation(userId){
+  if(!requireAdmin()||userDeletionInProgress)return;
+  const user=usersPageCache.find(u=>u.user_id===userId);
+  if(!user||user.active!==false||$('userActive_'+userId)?.checked!==false||user.user_id===currentSession?.user?.id){
+    toast('Só é possível excluir outra conta após salvar sua desativação.');
+    return;
+  }
+  pendingDeletionUserId=userId;
+  $('deleteUserConfirmName').textContent=user.display_name||'Sem nome';
+  $('deleteUserConfirmEmail').textContent=user.email||'E-mail indisponível';
+  $('deleteUserConfirmInput').value='';
+  updateDeleteUserConfirmation();
+  openModal('deleteUserConfirmModal');
+}
+async function executeUserDeletion(){
+  if(!requireAdmin()||userDeletionInProgress||!isDeleteUserConfirmationValid())return;
+  const userId=pendingDeletionUserId;
+  if(!userId||userId===currentSession?.user?.id)return;
+  const original=usersPageCache.find(u=>u.user_id===userId);
+  if(!original||original.active!==false)return;
+  userDeletionInProgress=true;
+  const button=$('deleteUserConfirmButton');
+  if(button){button.disabled=true;button.textContent='EXCLUINDO...'}
+  try{
+    const {data,error}=await supabaseClient.functions.invoke('giocapo-delete-user',{body:{userId}});
+    if(error){
+      let message='Não foi possível excluir a conta no Supabase.';
+      try{const body=await error.context?.json();if(typeof body?.error==='string')message=body.error}catch(_){}
+      throw new Error(message);
+    }
+    if(data?.ok!==true||data?.deletedUserId!==userId)throw new Error('O Supabase não confirmou a exclusão da conta.');
+    const {data:remaining,error:verifyError}=await supabaseClient.from('app_users').select('user_id').eq('user_id',userId).maybeSingle();
+    if(verifyError||remaining)throw new Error('A conta foi processada, mas não foi possível confirmar a remoção do cadastro. Atualize a lista.');
+    closeModal('deleteUserConfirmModal');
+    pendingDeletionUserId=null;
+    toast('Usuário excluído do Supabase Auth e do ERP.');
+    await renderUsersPage();
+  }catch(err){
+    console.error('Falha na exclusão de usuário:',err);
+    toast(err?.message||'Falha ao excluir usuário do Supabase.');
+    await renderUsersPage();
+  }finally{
+    userDeletionInProgress=false;
+    if(button)button.textContent='EXCLUIR PERMANENTEMENTE';
+    updateDeleteUserConfirmation();
+  }
 }
 function filterUsersPage(){
   const q=normalizeEquipmentSearch($('usersSearch')?.value||'');
@@ -3443,13 +3689,13 @@ function filterUsersPage(){
 }
 async function renderUsersPage(){
   const el=$('usersPageList');if(!el)return;
-  if(!canAdmin()){
-    el.innerHTML='<div class="card empty">Acesso restrito a administradores.</div>';
+  if(!canViewUsers()){
+    el.innerHTML='<div class="card empty">Acesso restrito.</div>';
     return;
   }
   el.innerHTML='<div class="card empty">Carregando usuários...</div>';
   const {data,error}=await supabaseClient.from('app_users')
-    .select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at')
+    .select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions')
     .order('created_at',{ascending:true});
   if(error){
     console.error('Falha ao listar usuários:',error);
@@ -3461,8 +3707,9 @@ async function renderUsersPage(){
   await refreshPendingApprovalCount();
 }
 async function saveUserAccess(userId){
-  if(!requireAdmin())return;
+  if(!requirePermission('users.manage'))return;
   const original=usersPageCache.find(u=>u.user_id===userId);
+  if(!canManageTarget(original)){toast('Você não pode alterar esta conta.');return}
   const displayName=normalizeDisplayName($('userDisplayName_'+userId)?.value);
   const role=$('userRole_'+userId)?.value;
   const active=!!$('userActive_'+userId)?.checked;
@@ -3473,8 +3720,28 @@ async function saveUserAccess(userId){
   }
   if(!['admin','operator','viewer'].includes(role))return;
 
+  if(!original)return;
+  if(role!==original.role&&original.permission_mode==='custom'){
+    let differs=true;
+    try{
+      const newDefaults=role==='admin'?{}:await fetchRolePermissions(role);
+      differs=role==='admin'||permissionDiffersFromRole(original.permissions,newDefaults);
+    }catch(err){console.error(err);toast('Não foi possível conferir as permissões da nova função.');return}
+    if(differs){
+      confirm('Este usuário possui permissões específicas. Alterar o Perfil para '+roleLabel(role)+' descartará as configurações personalizadas e aplicará as permissões padrão da nova função. Deseja continuar?',()=>commitUserAccessChange(userId,displayName,role,active));
+      return;
+    }
+  }
+  await commitUserAccessChange(userId,displayName,role,active);
+}
+async function commitUserAccessChange(userId,displayName,role,active){
+  const original=usersPageCache.find(u=>u.user_id===userId);
+  if(!original||!canManageTarget(original))return;
+  if(!canAdmin()&&role==='admin'){toast('Somente administradores podem conceder este cargo.');return}
+  if(!canAdmin()&&original.approval_status==='pending'&&active){toast('Use a aprovação de novos usuários para liberar este cadastro.');return}
   const update={display_name:displayName,role,active};
-  if(active&&original?.approval_status!=='approved')update.approval_status='approved';
+  if(role!==original.role){update.permission_mode='role';update.permissions=null;}
+  if(canAdmin()&&active&&original?.approval_status!=='approved')update.approval_status='approved';
 
   const {error}=await supabaseClient.from('app_users').update(update).eq('user_id',userId);
   if(error){
@@ -3492,30 +3759,41 @@ async function saveUserAccess(userId){
     $('currentUserName').textContent=displayName;
     $('currentUserRole').textContent=roleLabel(role);
     updateHeaderAvatar();
+    if(role!==original.role){
+      currentAccess={...currentAccess,permission_mode:'role',permissions:null};
+      await loadCurrentRolePermissions();
+    }
     applyRoleToInterface();
   }
   toast('Usuário atualizado.');
   await renderUsersPage();
 }
 async function refreshPendingApprovalCount(){
-  if(!canAdmin())return;
+  if(!canViewApprovals()){$('pendingApprovalsButton').classList.add('permission-hidden');return}
+  $('pendingApprovalsButton').classList.remove('permission-hidden');
   const [{count:c1},{count:c2}]=await Promise.all([
     supabaseClient.from('app_users').select('user_id',{count:'exact',head:true}).eq('approval_status','pending'),
     supabaseClient.from('user_change_requests').select('id',{count:'exact',head:true}).eq('status','pending')
   ]);
-  const total=(c1||0)+(c2||0);
+  const total=(hasPermission('approvals.activation')?c1||0:0)+(hasPermission('approvals.name')?c2||0:0);
   const b=$('pendingApprovalsButton');if(b)b.textContent=total?`APROVAÇÕES PENDENTES (${total})`:'APROVAÇÕES PENDENTES';
 }
 async function openPendingApprovals(){
-  if(!requireAdmin())return;
+  if(!canViewApprovals()){toast('Sem permissão para aprovações.');return}
   openModal('pendingApprovalsModal');
+  const allowActivation=hasPermission('approvals.activation'),allowName=hasPermission('approvals.name');
+  document.querySelectorAll('[data-approval-tab]').forEach(b=>{
+    b.classList.toggle('permission-hidden',(b.dataset.approvalTab==='activation'&&!allowActivation)||(b.dataset.approvalTab==='display_name'&&!allowName));
+  });
+  if(currentApprovalTab==='activation'&&!allowActivation||currentApprovalTab==='display_name'&&!allowName)currentApprovalTab='all';
+  document.querySelectorAll('[data-approval-tab]').forEach(b=>b.classList.toggle('active',b.dataset.approvalTab===currentApprovalTab));
   $('pendingApprovalsList').innerHTML='<div class="card empty">Carregando aprovações...</div>';
   const [usersRes,changesRes]=await Promise.all([
-    supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at').eq('approval_status','pending').order('created_at',{ascending:true}),
+    supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('approval_status','pending').order('created_at',{ascending:true}),
     supabaseClient.from('user_change_requests').select('id,user_id,request_type,requested_value,status,requested_at,review_note').eq('status','pending').order('requested_at',{ascending:true})
   ]);
   if(usersRes.error||changesRes.error){console.error(usersRes.error||changesRes.error);$('pendingApprovalsList').innerHTML='<div class="card empty">Não foi possível carregar as aprovações.</div>';return}
-  const allUsers=usersPageCache.length?usersPageCache:(await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at')).data||[];
+  const allUsers=usersPageCache.length?usersPageCache:(await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions')).data||[];
   pendingApprovalCache={activations:usersRes.data||[],changes:(changesRes.data||[]).map(r=>({...r,user:allUsers.find(u=>u.user_id===r.user_id)||null}))};
   renderPendingApprovals();
 }
@@ -3531,17 +3809,18 @@ function formatDateTime(value){
 function renderPendingApprovals(){
   const el=$('pendingApprovalsList');if(!el)return;
   const blocks=[];
-  if(currentApprovalTab==='all'||currentApprovalTab==='activation'){
-    pendingApprovalCache.activations.forEach(u=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(u.display_name||'Novo usuário')}</strong><span class="approval-kind">Novo usuário</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(u.email||'')}" disabled></div><div class="field"><label>Solicitado em</label><input value="${esc(formatDateTime(u.created_at))}" disabled></div><div class="field"><label>Cargo inicial</label><select id="approvalRole_${u.user_id}"><option value="viewer">Consulta</option><option value="operator">Operador</option><option value="admin">Administrador</option></select></div><div class="field"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalActivationNote_${u.user_id}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" onclick="reviewUserActivation('${u.user_id}','rejected')">REJEITAR</button><button class="btn btn-primary" onclick="reviewUserActivation('${u.user_id}','approved')">APROVAR</button></div></div>`));
+  if(hasPermission('approvals.activation')&&(currentApprovalTab==='all'||currentApprovalTab==='activation')){
+    pendingApprovalCache.activations.forEach(u=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(u.display_name||'Novo usuário')}</strong><span class="approval-kind">Novo usuário</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(u.email||'')}" disabled></div><div class="field"><label>Solicitado em</label><input value="${esc(formatDateTime(u.created_at))}" disabled></div><div class="field"><label>Cargo inicial</label><select id="approvalRole_${u.user_id}"><option value="viewer">Consulta</option><option value="operator">Operador</option>${canAdmin()?'<option value="admin">Administrador</option>':''}</select></div><div class="field"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalActivationNote_${u.user_id}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" onclick="reviewUserActivation('${u.user_id}','rejected')">REJEITAR</button><button class="btn btn-primary" onclick="reviewUserActivation('${u.user_id}','approved')">APROVAR</button></div></div>`));
   }
-  if(currentApprovalTab==='all'||currentApprovalTab==='display_name'){
+  if(hasPermission('approvals.name')&&(currentApprovalTab==='all'||currentApprovalTab==='display_name')){
     pendingApprovalCache.changes.forEach(r=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(r.user?.email||'Conta')}</strong><span class="approval-kind">Alteração de nome</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(r.user?.email||'')}" disabled></div><div class="field"><label>Nome atual</label><input value="${esc(r.user?.display_name||'')}" disabled></div><div class="field full"><label>Nome solicitado</label><input id="approvalName_${r.id}" minlength="3" maxlength="40" value="${esc(r.requested_value||'')}" oninput="sanitizeProfileDisplayNameInput(this)"></div><div class="field full"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalNameNote_${r.id}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" onclick="reviewDisplayNameRequest('${r.id}','rejected')">REJEITAR</button><button class="btn btn-primary" onclick="reviewDisplayNameRequest('${r.id}','approved')">APROVAR</button></div></div>`));
   }
   el.innerHTML=blocks.length?blocks.join(''):'<div class="card empty">Nenhuma aprovação pendente nesta categoria.</div>';
 }
 async function reviewUserActivation(userId,decision){
-  if(!requireAdmin())return;
+  if(!requirePermission('approvals.activation'))return;
   const role=$('approvalRole_'+userId)?.value||'viewer';
+  if(role==='admin'&&!canAdmin()){toast('A aprovação de administradores é exclusiva de administradores.');return}
   const review_note=$('approvalActivationNote_'+userId)?.value.trim()||null;
   const {error}=await supabaseClient.rpc('review_user_activation',{user_id:userId,decision,role,review_note});
   if(error){console.error(error);toast(error.message||'Não foi possível analisar o cadastro.');return}
@@ -3549,7 +3828,7 @@ async function reviewUserActivation(userId,decision){
   await renderUsersPage();await openPendingApprovals();
 }
 async function reviewDisplayNameRequest(requestId,decision){
-  if(!requireAdmin())return;
+  if(!requirePermission('approvals.name'))return;
   const approved_value=normalizeDisplayName($('approvalName_'+requestId)?.value||'');
   const review_note=$('approvalNameNote_'+requestId)?.value.trim()||null;
   if(decision==='approved'&&(!isValidDisplayNameCharacters(approved_value)||approved_value.length<3||approved_value.length>40)){toast('O nome aprovado deve conter apenas letras e espaços e ter entre 3 e 40 caracteres.');return}
@@ -3559,7 +3838,7 @@ async function reviewDisplayNameRequest(requestId,decision){
   await renderUsersPage();await openPendingApprovals();
 }
 async function getOwnAccess(){
-  const {data,error}=await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at').eq('user_id',currentSession.user.id).maybeSingle();
+  const {data,error}=await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',currentSession.user.id).maybeSingle();
   if(error)throw error;
   return data;
 }
@@ -3798,7 +4077,7 @@ function showMainPage(page){
 async function renderAccountPage(){
   if(!currentSession)return;
   const [{data:profile,error:profileError},{data:pending,error:pendingError}]=await Promise.all([
-    supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at').eq('user_id',currentSession.user.id).single(),
+    supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',currentSession.user.id).single(),
     supabaseClient.from('user_change_requests').select('id,requested_value').eq('user_id',currentSession.user.id).eq('request_type','display_name').eq('status','pending').maybeSingle()
   ]);
   if(profileError||pendingError){console.error(profileError||pendingError);toast('Não foi possível carregar sua conta.');return}
@@ -3823,9 +4102,19 @@ async function requestDisplayNameChange(){
 }
 async function refreshOwnProfileHeader(){
   if(!currentSession||!currentAccess?.active)return;
-  const {data}=await supabaseClient.from('app_users').select('display_name,role,active,approval_status').eq('user_id',currentSession.user.id).maybeSingle();
+  const {data}=await supabaseClient.from('app_users').select('display_name,role,active,approval_status,permission_mode,permissions').eq('user_id',currentSession.user.id).maybeSingle();
   if(!data)return;
+  const previous=currentAccess;
+  const modeChanged=previous?.permission_mode!==data.permission_mode||previous?.role!==data.role;
+  const customChanged=JSON.stringify(previous?.permissions||null)!==JSON.stringify(data.permissions||null);
   currentAccess={...currentAccess,...data};
+  if(modeChanged||customChanged||data.permission_mode!=='custom'){
+    try{await loadCurrentRolePermissions()}catch(err){console.error('Falha ao atualizar permissões:',err);return}
+    applyRoleToInterface();
+    if(hasPermission('history.view')){if(!auditRealtimeChannel)startAuditRealtime()}
+    else stopAuditRealtime();
+    const pendingButton=$('pendingApprovalsButton');if(pendingButton)pendingButton.classList.toggle('permission-hidden',!canViewApprovals());
+  }
   $('currentUserName').textContent=data.display_name||currentSession.user.email||'Usuário';
   $('currentUserRole').textContent=roleLabel(data.role);
   updateHeaderAvatar();
@@ -4013,7 +4302,7 @@ async function bootApp(){
     const {data:{session},error}=await supabaseClient.auth.getSession();
     if(error)throw error;
     await activateAuthenticatedSession(session);
-    if(session&&canAdmin())restoreAuditArchiveRoute();
+    if(session&&hasPermission('history.view'))restoreAuditArchiveRoute();
   }catch(err){
     console.error('Falha ao verificar sessão:',err);
     showLoginGate('Não foi possível verificar a sessão. Tente entrar novamente.');
@@ -5800,7 +6089,7 @@ function applyResponsiveTableLabels(){
    });
  });
 }
-function renderAll(){updateDashboard();renderEquipmentTable();renderProductPage();renderBuilderProductFilter();renderBuilder();renderKits();updateCharts();renderProductManager();renderCodeManager();applyPermissionVisibility();if(canAdmin()){renderUsersPage();renderPermissionsPage()}}
+function renderAll(){updateDashboard();renderEquipmentTable();renderProductPage();renderBuilderProductFilter();renderBuilder();renderKits();updateCharts();renderProductManager();renderCodeManager();applyPermissionVisibility();if(canViewUsers())renderUsersPage();if(canAdmin())renderPermissionsPage()}
 
 
 
@@ -5914,7 +6203,7 @@ function renderAuditHistory(){
  more.disabled=auditHistoryLoading;
 }
 async function loadAuditHistory(reset=true,background=false){
- if(!canAdmin())return;
+ if(!hasPermission('history.view'))return;
  if(auditArchive){if(!background)renderAuditHistory();return}
  if(background&&auditHistoryLoading)return;
  if(auditHistoryLoading&&!reset)return;
@@ -5956,12 +6245,12 @@ async function loadAuditHistory(reset=true,background=false){
  }finally{if(request===auditHistoryRequest){auditHistoryLoading=false;if(more)more.disabled=false}}
 }
 function queueAuditRefresh(delay=180){
- if(auditArchive||!canAdmin()||!$('historico')?.classList.contains('active'))return;
+ if(auditArchive||!hasPermission('history.view')||!$('historico')?.classList.contains('active'))return;
  clearTimeout(auditRefreshTimer);
  auditRefreshTimer=setTimeout(()=>{auditRefreshTimer=null;loadAuditHistory(true,true)},delay);
 }
 function startAuditRealtime(){
- stopAuditRealtime();if(!canAdmin()||!currentSession)return;
+ stopAuditRealtime();if(!hasPermission('history.view')||!currentSession)return;
  auditRealtimeChannel=supabaseClient.channel('giocapo-audit-'+currentSession.user.id).on('postgres_changes',{event:'*',schema:'public',table:'erp_audit_history'},()=>queueAuditRefresh()).subscribe();
  auditRealtimeTimer=setInterval(()=>queueAuditRefresh(),15000);
 }
@@ -5972,7 +6261,7 @@ function stopAuditRealtime(){
 }
 function auditLogId(date){const n=x=>String(x).padStart(2,'0');return `LOG${n(date.getDate())}${n(date.getMonth()+1)}${date.getFullYear()}${n(date.getHours())}${n(date.getMinutes())}`}
 async function exportAuditHistory(){
- if(!canAdmin()||auditArchive)return;
+ if(!hasPermission('history.export')||!hasPermission('history.view')||auditArchive)return;
  const btn=$('auditExport');btn.disabled=true;
  try{
   const rows=[];const cutoff=auditCutoff();let offset=0;
@@ -5992,6 +6281,7 @@ function auditValidLog(data,basename){
 }
 async function importAuditLog(event){
  const file=event.target.files?.[0];event.target.value='';if(!file)return;
+ if(!hasPermission('history.view')||!requirePermission('history.export'))return;
  const basename=file.name.replace(/\.log$/i,'');
  if(!/^LOG\d{12}\.log$/.test(file.name)||file.size>30*1024*1024){toast('Selecione um arquivo LOGDDMMAAAAHHMM.log válido (até 30 MB).');return}
  try{
@@ -6003,7 +6293,7 @@ async function importAuditLog(event){
  }catch(err){toast('Não foi possível abrir o registro: '+(err.message||'arquivo inválido'))}
 }
 function restoreAuditArchiveRoute(){
- if(!canAdmin())return;
+ if(!hasPermission('history.view')||!hasPermission('history.export'))return;
  const requested=new URLSearchParams(location.search).get('auditRoute')||location.pathname.slice(1);
  if(!AUDIT_LOG_PATTERN.test(requested))return;
  const saved=sessionStorage.getItem('giocapo_log_'+requested);
@@ -6025,7 +6315,7 @@ function showAuditArchive(){
  const note=$('auditArchiveNotice');note.hidden=false;
  const when=new Date(auditArchive.exportedAt);const date=Number.isNaN(+when)?auditArchive.id:fmtDate(when);
  note.innerHTML=`<div><strong>Registro arquivado ${esc(auditArchive.id)}</strong><div>Histórico exportado em ${esc(date)} · ${auditArchive.records.length} registros · Somente leitura.</div></div><button class="btn" type="button" onclick="leaveAuditArchive(true)">VOLTAR AO HISTÓRICO ATUAL</button>`;
- $('auditExport').hidden=true;
+ $('auditExport').style.display='none';
  $('auditHistoryHint').textContent='Visualizando arquivo importado. Estes registros não fazem parte do histórico atual do Supabase.';
  document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page==='historico'));
  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='historico'));
