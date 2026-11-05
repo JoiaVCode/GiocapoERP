@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.17.6 -->
+<!-- v6.17.8 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -813,7 +813,7 @@ img,svg{-webkit-user-drag:none}
 }
 
 
-/* v6.17.6 | Navegacao e cabecalho fixos; rolagem somente do conteudo */
+/* v6.17.8 | Navegacao e cabecalho fixos; rolagem somente do conteudo */
 html{scroll-padding-top:calc(var(--erp-header-height) + 12px)}
 #mainApp{padding-top:var(--erp-header-height);min-height:100dvh}
 #mainApp .header{
@@ -990,82 +990,92 @@ body.guest-calculator-mode #mainApp{padding-top:0}
 }
 
 #mainApp .nav{
- background:rgba(254,193,35,.72);
- -webkit-backdrop-filter:blur(55px) saturate(150%);
- backdrop-filter:blur(55px) saturate(150%);
- isolation:isolate;
+ background:#fec123;
+ -webkit-backdrop-filter:none;
+ backdrop-filter:none;
+ isolation:auto;
 }
-#mainApp .nav::before{
- content:"";
- position:absolute;
- inset:0;
- z-index:1;
- pointer-events:none;
- background-image:var(--sidebar-noise-texture);
- background-repeat:repeat;
- background-size:160px 160px;
- opacity:.54;
- mix-blend-mode:soft-light;
-}
-#mainApp .nav .nav-links{position:relative;z-index:2}
-
-:root{--sidebar-noise-texture:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cfilter%20id%3D%22grain%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.78%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20filter%3D%22url%28%23grain%29%22%20opacity%3D%221%22%2F%3E%3C%2Fsvg%3E")}
+#mainApp .nav::before,#mainApp .nav button[data-page]::before,#mainApp .nav .sidebar-pin::before,body > #sidebarPin::before{content:none!important;display:none!important}
 #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,body > #sidebarPin{
- background:rgba(255,175,16,.88);
- -webkit-backdrop-filter:blur(55px) saturate(140%);
- backdrop-filter:blur(55px) saturate(140%);
+ background:#ffaf10;
+ -webkit-backdrop-filter:none;
+ backdrop-filter:none;
 }
-#mainApp .nav button[data-page]::before,#mainApp .nav .sidebar-pin::before,body > #sidebarPin::before{
- content:"";
- position:absolute;
- inset:0;
- z-index:0;
- border-radius:inherit;
- background-image:var(--sidebar-noise-texture);
- background-repeat:repeat;
- background-size:160px 160px;
- opacity:.22;
- mix-blend-mode:soft-light;
- pointer-events:none;
-}
-#mainApp .nav button[data-page] .nav-icon,#mainApp .nav button[data-page] .nav-label,#mainApp .nav .sidebar-pin .nav-icon,#mainApp .nav .sidebar-pin .nav-label,body > #sidebarPin .nav-icon{position:relative;z-index:1}
-#mainApp .nav button[data-page].active,#mainApp .nav .sidebar-pin[aria-pressed="true"]{background:rgba(255,240,166,.88)}
-#mainApp .nav button[data-page]:hover:not(.active),#mainApp .nav .sidebar-pin:hover:not([aria-pressed="true"]){background:rgba(255,219,105,.88)}
-body.mobile-sidebar-open > #sidebarPin{background:rgba(240,229,155,.78)}
-
+#mainApp .nav button[data-page].active,#mainApp .nav .sidebar-pin[aria-pressed="true"]{background:#fff0a6}
+#mainApp .nav button[data-page]:hover:not(.active),#mainApp .nav .sidebar-pin:hover:not([aria-pressed="true"]){background:#ffdb69}
+body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
 @media(min-width:701px){
- #mainApp .nav button[data-page]{
+ #mainApp .nav button[data-page]{box-shadow:0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12)}
+ #mainApp .nav button[data-page].active{box-shadow:inset 3px 0 #7a5200,0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12)}
+}
+@media(max-width:700px){
+ body::before{display:none}
+ #mainApp .nav{
+  left:0;
+  width:var(--mobile-sidebar-open)!important;
+  min-width:var(--mobile-sidebar-open);
+  overflow:hidden;
+  transform:translate3d(calc(var(--mobile-sidebar-peek) - var(--mobile-sidebar-open)),0,0);
+  transition:transform .24s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+  box-shadow:2px 0 13px rgba(0,0,0,.10);
+ }
+ body.mobile-sidebar-open #mainApp .nav{
+  width:var(--mobile-sidebar-open)!important;
+  transform:translate3d(0,0,0);
+ }
+ #mainApp .nav .nav-links{padding-left:0;padding-right:0;overflow:visible}
+ body:not(.sidebar-pinned) #mainApp .nav button[data-page],
+ body.mobile-sidebar-open #mainApp .nav button[data-page]{
+  width:calc(var(--mobile-sidebar-open) - 2px)!important;
+  margin-left:0!important;
+  border:0;
+  border-radius:0 10px 10px 0;
+  transform:none!important;
+  transition:background .14s ease,color .14s ease,box-shadow .14s ease!important;
   box-shadow:0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12);
  }
  #mainApp .nav button[data-page].active{
+  background:#fff0a6;
   box-shadow:inset 3px 0 #7a5200,0 3px 5px -2px rgba(75,49,12,.30),0 1px 2px rgba(75,49,12,.12);
  }
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:not(.active){background:#ffaf10}
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:hover,
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:focus-visible{
+  width:calc(var(--mobile-sidebar-open) - 2px)!important;
+  transform:none!important;
+ }
+ #mainApp .nav .nav-icon,#mainApp .nav .nav-label,
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active .nav-icon,
+ body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active .nav-label{
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
+ }
+ body > #sidebarPin{
+  left:0!important;
+  width:var(--mobile-sidebar-open)!important;
+  min-width:0!important;
+  max-width:none!important;
+  transform:translate3d(calc(var(--mobile-pin-peek) - var(--mobile-sidebar-open)),0,0);
+  transition:transform .24s cubic-bezier(.4,0,.2,1),background .14s ease;
+  will-change:transform;
+  background:#ffaf10;
+ }
+ body.mobile-sidebar-open > #sidebarPin{
+  left:0!important;
+  width:var(--mobile-sidebar-open)!important;
+  transform:translate3d(0,0,0);
+  background:#f0e59b;
+ }
+ #mainApp .nav button[data-page]::after{display:none}
 }
-@media(max-width:700px){
- #mainApp .nav button[data-page]{border:0;box-shadow:0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
- #mainApp .nav button[data-page].active{border:0;box-shadow:inset 3px 0 #7a5200,0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
- body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:hover,body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:focus-visible{box-shadow:0 3px 5px -2px rgba(75,49,12,.3),0 1px 2px rgba(75,49,12,.12)}
+@media(max-width:420px){:root{--mobile-pin-peek:23px}}
+@media(min-width:421px) and (max-width:700px){:root{--mobile-pin-peek:24px}}
+@media(prefers-reduced-motion:reduce){
+ #mainApp .nav,body > #sidebarPin{transition:none!important}
 }
 
-@media(max-width:700px){
- #mainApp .nav{
-  background:rgba(254,193,35,.80);
-  -webkit-backdrop-filter:blur(2px) saturate(150%);
-  backdrop-filter:blur(2px) saturate(150%);
- }
- #mainApp .nav::before{opacity:.24}
- body::before{display:none}
- #mainApp .nav button[data-page],#mainApp .nav .sidebar-pin,body > #sidebarPin{
-  background:rgba(255,175,16,.60);
-  -webkit-backdrop-filter:blur(12px) saturate(140%);
-  backdrop-filter:blur(12px) saturate(140%);
- }
- #mainApp .nav button[data-page]::before,#mainApp .nav .sidebar-pin::before,body > #sidebarPin::before{opacity:.24}
- body:not(.mobile-sidebar-open) #mainApp .nav button[data-page]:not(.active){background:rgba(255,175,16,.60)}
- #mainApp .nav button[data-page].active,#mainApp .nav .sidebar-pin[aria-pressed="true"],body:not(.mobile-sidebar-open) #mainApp .nav button[data-page].active{background:rgba(255,240,166,.60)}
- #mainApp .nav button[data-page]:hover:not(.active),#mainApp .nav .sidebar-pin:hover:not([aria-pressed="true"]){background:rgba(255,219,105,.60)}
- body.mobile-sidebar-open > #sidebarPin{background:rgba(240,229,155,.60)}
-}
 </style>
 </head>
 <body>
@@ -6137,34 +6147,129 @@ try{if(localStorage.getItem('giocapo_sidebar_pinned')==='1')document.body.classL
 if(isMobileSidebarLayout())document.body.classList.remove('sidebar-pinned');
 document.body.classList.remove('sidebar-expanded');
 updateSidebarPin();
+let sidebarWasMobile=isMobileSidebarLayout();
 window.addEventListener('resize',()=>{
- if(isMobileSidebarLayout()){
+ const mobile=isMobileSidebarLayout();
+ if(mobile===sidebarWasMobile)return;
+ sidebarWasMobile=mobile;
+ if(mobile){
   document.body.classList.remove('sidebar-pinned');
  }else{
   document.body.classList.remove('mobile-sidebar-open');
+  resetMobileSidebarTransforms();
   try{document.body.classList.toggle('sidebar-pinned',localStorage.getItem('giocapo_sidebar_pinned')==='1')}catch(_){ }
  }
  updateSidebarPin();
 });
 
 let sidebarTouchStart=null;
+let sidebarDragFrame=0;
+let sidebarDragProgress=0;
+function mobileDrawerTravel(){
+ const css=getComputedStyle(document.documentElement);
+ const width=parseFloat(css.getPropertyValue('--mobile-sidebar-open'))||240;
+ const peek=parseFloat(css.getPropertyValue('--mobile-sidebar-peek'))||13.5;
+ const pinPeek=parseFloat(css.getPropertyValue('--mobile-pin-peek'))||23;
+ return {drawer:width-peek,pin:width-pinPeek,width};
+}
+function paintMobileSidebarDrag(){
+ sidebarDragFrame=0;
+ if(!sidebarTouchStart||!sidebarTouchStart.dragging)return;
+ const drawer=document.getElementById('appSidebar');
+ const pin=document.getElementById('sidebarPin');
+ if(drawer)drawer.style.transform=`translate3d(${(sidebarDragProgress-1)*sidebarTouchStart.metrics.drawer}px,0,0)`;
+ if(pin)pin.style.transform=`translate3d(${(sidebarDragProgress-1)*sidebarTouchStart.metrics.pin}px,0,0)`;
+}
+function resetMobileSidebarTransforms(){
+ cancelAnimationFrame(sidebarDragFrame);
+ sidebarDragFrame=0;
+ const drawer=document.getElementById('appSidebar');
+ const pin=document.getElementById('sidebarPin');
+ if(drawer){drawer.style.transform='';drawer.style.transition=''}
+ if(pin){pin.style.transform='';pin.style.transition=''}
+}
+function finishMobileSidebarDrag(targetOpen){
+ const previous=sidebarTouchStart;
+ if(!previous)return;
+ if(sidebarDragFrame){paintMobileSidebarDrag();cancelAnimationFrame(sidebarDragFrame);sidebarDragFrame=0}
+ const drawer=document.getElementById('appSidebar');
+ const pin=document.getElementById('sidebarPin');
+ if(drawer)drawer.getBoundingClientRect();
+ if(pin)pin.getBoundingClientRect();
+ if(drawer)drawer.style.transition='';
+ if(pin)pin.style.transition='';
+ document.body.classList.toggle('mobile-sidebar-open',targetOpen);
+ if(drawer)drawer.style.transform='';
+ if(pin)pin.style.transform='';
+ sidebarTouchStart=null;
+ updateSidebarPin();
+}
 document.addEventListener('touchstart',event=>{
  if(!isMobileSidebarLayout()||document.querySelector('.modal-backdrop.open')||event.touches.length!==1){sidebarTouchStart=null;return}
  const touch=event.touches[0],open=document.body.classList.contains('mobile-sidebar-open');
- if((!open&&touch.clientX<=32)||(open&&touch.clientX<=210))sidebarTouchStart={x:touch.clientX,y:touch.clientY,open};
- else sidebarTouchStart=null;
+ const bounds=mobileDrawerTravel();
+ if((!open&&touch.clientX<=48)||(open&&touch.clientX<=bounds.width)){
+  sidebarTouchStart={id:touch.identifier,x:touch.clientX,y:touch.clientY,lastX:touch.clientX,lastTime:performance.now(),startTime:performance.now(),velocity:0,open,dragging:false,vertical:false,metrics:bounds,progress:open?1:0};
+ }else sidebarTouchStart=null;
 },{passive:true});
-document.addEventListener('touchend',event=>{
- if(!sidebarTouchStart||!isMobileSidebarLayout()||!event.changedTouches.length)return;
- const touch=event.changedTouches[0],dx=touch.clientX-sidebarTouchStart.x,dy=touch.clientY-sidebarTouchStart.y;
- const open=sidebarTouchStart.open;sidebarTouchStart=null;
- if(Math.abs(dx)<38||Math.abs(dx)<Math.abs(dy)*1.2)return;
- if((!open&&dx>0)||(open&&dx<0)){
-  document.body.classList.toggle('mobile-sidebar-open',!open);
-  updateSidebarPin();
+document.addEventListener('touchmove',event=>{
+ const state=sidebarTouchStart;
+ if(!state||!isMobileSidebarLayout()||state.vertical)return;
+ const touch=Array.from(event.touches).find(t=>t.identifier===state.id);
+ if(!touch)return;
+ const dx=touch.clientX-state.x,dy=touch.clientY-state.y;
+ if(!state.dragging){
+  if(Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.08){state.vertical=true;return}
+  if(Math.abs(dx)<7||Math.abs(dx)<Math.abs(dy)*1.08)return;
+  if((!state.open&&dx<0)||(state.open&&dx>0))return;
+  state.dragging=true;
+  const drawer=document.getElementById('appSidebar');
+  const pin=document.getElementById('sidebarPin');
+  if(drawer)drawer.style.transition='none';
+  if(pin)pin.style.transition='none';
  }
+ if(event.cancelable)event.preventDefault();
+ const now=performance.now();
+ const elapsed=now-state.lastTime;
+ if(elapsed>0){state.velocity=(touch.clientX-state.lastX)/elapsed;state.lastX=touch.clientX;state.lastTime=now}
+ state.progress=Math.max(0,Math.min(1,(state.open?1:0)+dx/state.metrics.drawer));
+ sidebarDragProgress=state.progress;
+ if(!sidebarDragFrame)sidebarDragFrame=requestAnimationFrame(paintMobileSidebarDrag);
+},{passive:false});
+document.addEventListener('touchend',event=>{
+ const state=sidebarTouchStart;
+ if(!state||!isMobileSidebarLayout())return;
+ const touch=Array.from(event.changedTouches).find(t=>t.identifier===state.id);
+ if(!touch)return;
+ if(!state.dragging){sidebarTouchStart=null;return}
+ const dx=touch.clientX-state.x,dy=touch.clientY-state.y;
+ if(event.cancelable)event.preventDefault();
+ let target=state.open;
+ if(Math.abs(dx)>=26&&Math.abs(dx)>Math.abs(dy)*1.08){
+  target=dx>0;
+ }else if(Math.abs(dx)>=12&&Math.abs(state.velocity)>=.45){
+  target=state.velocity>0;
+ }else if(state.progress>.5&&Math.abs(dx)>12){
+  target=true;
+ }else if(state.progress<.5&&Math.abs(dx)>12){
+  target=false;
+ }
+ finishMobileSidebarDrag(target);
+},{passive:false});
+document.addEventListener('touchcancel',()=>{
+ if(sidebarTouchStart?.dragging){
+  finishMobileSidebarDrag(sidebarTouchStart.open);
+ }else sidebarTouchStart=null;
 },{passive:true});
-document.addEventListener('touchcancel',()=>{sidebarTouchStart=null},{passive:true});
+document.addEventListener('pointerdown',event=>{
+ if(!isMobileSidebarLayout()||!document.body.classList.contains('mobile-sidebar-open'))return;
+ const target=event.target;
+ if(document.getElementById('appSidebar')?.contains(target)||document.getElementById('sidebarPin')?.contains(target))return;
+ document.body.classList.remove('mobile-sidebar-open');
+ sidebarTouchStart=null;
+ resetMobileSidebarTransforms();
+ updateSidebarPin();
+},{capture:true,passive:true});
 
 const sidebarHoverMedia=window.matchMedia('(hover: hover) and (pointer: fine)');
 const sidebarHoverEdge=44;
