@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.18.2 -->
+<!-- v6.18.3 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -2797,6 +2797,80 @@ function now(){return new Date().toISOString()}
 function fmtDate(value){if(!value)return '-';return new Date(value).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}
 function dateOnly(value){if(!value)return '';return new Date(value).toISOString().slice(0,10)}
 function esc(value){return String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function safeEventAttrs(type,action,args){
+ return `data-erp-${type}="${esc(action)}" data-erp-args="${esc(JSON.stringify(args))}"`;
+}
+function dispatchSafeEvent(event){
+ const element=event.target.closest?.(`[data-erp-${event.type}]`);
+ if(!element||element.disabled)return;
+ try{
+  const args=JSON.parse(element.getAttribute('data-erp-args')||'[]');
+  if(!Array.isArray(args))return;
+  switch(element.getAttribute(`data-erp-${event.type}`)){
+   case "a0": changeUserPermissionMode(args[0],element.value); break;
+   case "a1": openUserPermissionsEditor(args[0]).catch(err=>{console.error(err);toast('Não foi possível abrir as permissões.')}); break;
+   case "a2": updateUserDeleteButton(args[0]); break;
+   case "a3": saveUserAccess(args[0]); break;
+   case "a4": openDeleteUserConfirmation(args[0]); break;
+   case "a5": reviewUserActivation(args[0],'rejected'); break;
+   case "a6": reviewUserActivation(args[0],'approved'); break;
+   case "a7": reviewDisplayNameRequest(args[0],'rejected'); break;
+   case "a8": reviewDisplayNameRequest(args[0],'approved'); break;
+   case "a9": selectCode(args[0]); break;
+   case "a10": selectProduct(args[0]); break;
+   case "a11": adjustAccessoryBalance(args[0],1,args[1]); break;
+   case "a12": adjustAccessoryBalance(args[0],-1,args[1]); break;
+   case "a13": openEquipmentModal(args[0]); break;
+   case "a14": deleteEquipment(args[0]); break;
+   case "a15": openDuplicateEquipment(args[0]); break;
+   case "a16": printStandaloneEquipmentLabel(args[0],event); break;
+   case "a17": toggleEquipmentActions(args[0],element,args[1]); break;
+   case "a18": toggleEquipmentGroup(args[0]); break;
+   case "a19": openEquipmentModal(args[0]); break;
+   case "a20": openDuplicateEquipment(args[0]); break;
+   case "a21": deleteEquipment(args[0]); break;
+   case "a22": toggleEquipmentColumnSort(args[0]); break;
+   case "a23": openCodeModal(args[0]); break;
+   case "a24": deleteCode(args[0]); break;
+   case "a25": openProductModal(args[0]); break;
+   case "a26": deleteProduct(args[0]); break;
+   case "a27": openProductModal(args[0]); break;
+   case "a28": deleteProduct(args[0]); break;
+   case "a29": addSelected(args[0]); break;
+   case "a30": removeSelected(args[0]); break;
+   case "a31": removeFromEditingKit(args[0]); break;
+   case "a32": removeFromEditingKit(args[0]); break;
+   case "a33": addToEditingKit(args[0]); break;
+   case "a34": printKitLabel(args[0]); break;
+   case "a35": openKitEdit(args[0]); break;
+   case "a36": disassembleKit(args[0]); break;
+   case "a37": generateEquipmentLabel(args[0],args[1],event); break;
+   case "a38": generateKitEquipmentLocalLabel(args[0],args[1],event); break;
+
+  }
+ }catch(error){console.error('Falha na ação do ERP:',error);toast('Não foi possível concluir a ação.');}
+}
+for(const type of ['click','change','mousedown'])document.addEventListener(type,dispatchSafeEvent);
+function validateStateIdentifiers(data,allowLegacyMissing=false){
+ if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Estrutura de dados inválida');
+ const valid=id=>typeof id==='string'&&id.length>=1&&id.length<=64&&!/[^A-Za-z0-9_-]/.test(id);
+ for(const key of ['products','codes','equipments','kits']){
+  if(!Array.isArray(data[key]))continue;
+  const seen=new Set();
+  for(const item of data[key]){
+   if(!item||typeof item!=='object'||Array.isArray(item))throw new Error('Registro inválido em '+key);
+   const missing=item.id===undefined||item.id===null||item.id==='';
+   if(!(allowLegacyMissing&&missing&&(key==='equipments'||key==='kits'))&&!valid(item.id))throw new Error('ID inválido em '+key+': use 1 a 64 letras, números, hífen ou sublinhado.');
+   if(!missing&&seen.has(item.id))throw new Error('ID duplicado em '+key);
+   if(!missing)seen.add(item.id);
+   for(const field of key==='equipments'?['productId','codeId']:[]){
+    if(item[field]!==undefined&&item[field]!==null&&item[field]!==''&&!valid(item[field]))throw new Error('Referência inválida em '+key+'.');
+   }
+   if(key==='kits'&&Array.isArray(item.equipmentIds)&&item.equipmentIds.some(id=>!valid(id)))throw new Error('Referência inválida em kits.');
+  }
+ }
+}
+
 function varsText(p){return p?.variables?.length?p.variables.join(' · '):'Sem variável'}
 function hceText(e){const h=e?.hce||{};if(h.landstar&&h.smartgo)return 'LS/SMG';if(h.landstar)return 'LS';if(h.smartgo)return 'SMG';return ''}
 function equipmentMetricHtml(e){const p=getProduct(e?.productId);const out=[];if(p?.variables.includes('Receptor')&&e?.type)out.push(`<span class="badge badge-blue">${esc(e.type)}</span>`);if(p?.variables.includes('Coletora')){if(e?.hce?.landstar&&e?.hce?.smartgo)out.push('<span class="badge badge-blue" data-tooltip-full="Landstar SmartGO">LS/SGO</span>');else if(e?.hce?.landstar)out.push('<span class="badge badge-blue">Landstar</span>');else if(e?.hce?.smartgo)out.push('<span class="badge badge-blue">SmartGO</span>')}return out.length?out.join(' '):'-'}
@@ -3101,6 +3175,7 @@ function migrateData(data){
     return data;
 }
 function validateState(data){
+    validateStateIdentifiers(data);
     if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Estrutura inválida');
     for(const key of ['products','codes','equipments','kits'])if(!Array.isArray(data[key]))throw new Error('Lista '+key+' inválida');
     const productIds=new Set();
@@ -3136,12 +3211,17 @@ function validateState(data){
     return true;
 }
 function prepareState(raw){
+    const previous=state;
     const candidate=structuredClone(raw);
-    state=migrateData(candidate);
-    normalize();
-    state.dataVersion=CURRENT_DATA_VERSION;
-    validateState(state);
-    return state;
+    const legacy=!Number.isInteger(candidate?.dataVersion)||candidate.dataVersion<CURRENT_DATA_VERSION;
+    validateStateIdentifiers(candidate,legacy);
+    try{
+        state=migrateData(candidate);
+        normalize();
+        state.dataVersion=CURRENT_DATA_VERSION;
+        validateState(state);
+        return state;
+    }catch(error){state=previous;throw error;}
 }
 function normalize(){
     state.dataVersion=Number.isInteger(state.dataVersion)?state.dataVersion:CURRENT_DATA_VERSION;
@@ -3181,7 +3261,7 @@ function load(){
     }catch(e){
         console.error('Falha ao carregar dados:',e);
         state=emptyState();
-        toast('Os dados salvos não puderam ser carregados. O armazenamento original não foi sobrescrito.');
+        toast('Os dados salvos não puderam ser carregados: '+e.message+' O armazenamento original não foi sobrescrito.');
     }
 }
 
@@ -3459,12 +3539,12 @@ function renderUsersPageRows(list){
     return `<div class="user-row">
       <div class="user-main user-name-editor">
         <div class="user-role-label">Nome de exibição</div>
-        <input id="userDisplayName_${u.user_id}" type="text" minlength="3" maxlength="40" value="${esc(u.display_name||'')}" placeholder="Nome de exibição" ${editable?'':'disabled'} oninput="sanitizeProfileDisplayNameInput(this)">
+        <input id="userDisplayName_${esc(u.user_id)}" type="text" minlength="3" maxlength="40" value="${esc(u.display_name||'')}" placeholder="Nome de exibição" ${editable?'':'disabled'} oninput="sanitizeProfileDisplayNameInput(this)">
         <small>${esc(u.email||'E-mail indisponível')}${self?' · você':''}</small>
       </div>
       <div>
         <div class="user-role-label">Perfil</div>
-        <select id="userRole_${u.user_id}" ${editable?'':'disabled'}>
+        <select id="userRole_${esc(u.user_id)}" ${editable?'':'disabled'}>
           <option value="admin" ${u.role==='admin'?'selected':''} ${!canAdmin()?'disabled':''}>Administrador</option>
           <option value="operator" ${u.role==='operator'?'selected':''}>Operador</option>
           <option value="viewer" ${u.role==='viewer'?'selected':''}>Consulta</option>
@@ -3472,11 +3552,11 @@ function renderUsersPageRows(list){
       </div>
       <div>
         <div class="user-role-label">Permissões</div>
-        <select id="userPermissionMode_${u.user_id}" class="user-permission-select" onchange="changeUserPermissionMode('${u.user_id}',this.value)" ${!permissionEditable?'disabled title="Você não pode editar as permissões desta conta"':''}>
+        <select id="userPermissionMode_${esc(u.user_id)}" class="user-permission-select" ${safeEventAttrs("change","a0",[u.user_id])} ${!permissionEditable?'disabled title="Você não pode editar as permissões desta conta"':''}>
           <option value="role" ${(u.permission_mode||'role')==='role'?'selected':''}>Função</option>
           <option value="custom" ${u.permission_mode==='custom'?'selected':''}>Personalizadas</option>
         </select>
-        ${u.role==='admin'?'<div class="user-permission-help">Acesso administrativo fixo</div>':u.permission_mode==='custom'&&permissionEditable?`<button type="button" class="user-permission-edit" onclick="openUserPermissionsEditor('${u.user_id}').catch(err=>{console.error(err);toast('Não foi possível abrir as permissões.')})">Editar permissões</button>`:''}
+        ${u.role==='admin'?'<div class="user-permission-help">Acesso administrativo fixo</div>':u.permission_mode==='custom'&&permissionEditable?`<button type="button" class="user-permission-edit" ${safeEventAttrs("click","a1",[u.user_id])}>Editar permissões</button>`:''}
       </div>
       <div>
         <div class="user-role-label">Status</div>
@@ -3485,11 +3565,11 @@ function renderUsersPageRows(list){
       </div>
       <div>
         <label class="check" style="justify-content:center">
-          <input id="userActive_${u.user_id}" type="checkbox" ${u.active?'checked':''} ${editable?'':'disabled'} onchange="updateUserDeleteButton('${u.user_id}')">
+          <input id="userActive_${esc(u.user_id)}" type="checkbox" ${u.active?'checked':''} ${editable?'':'disabled'} ${safeEventAttrs("change","a2",[u.user_id])}>
           Ativo
         </label>
       </div>
-      <div class="user-actions"><button class="btn btn-primary" type="button" ${editable?'':'disabled'} onclick="saveUserAccess('${u.user_id}')">SALVAR</button><button id="userDelete_${u.user_id}" class="btn user-delete-btn" type="button" ${u.active||self||!canAdmin()?'disabled':''} title="${!canAdmin()?'Exclusão permanente exclusiva para administradores.':u.active?'Desative e salve este usuário antes de excluir.':self?'Não é permitido excluir sua própria conta.':'Excluir usuário permanentemente do Supabase'}" onclick="openDeleteUserConfirmation('${u.user_id}')">EXCLUIR</button></div>
+      <div class="user-actions"><button class="btn btn-primary" type="button" ${editable?'':'disabled'} ${safeEventAttrs("click","a3",[u.user_id])}>SALVAR</button><button id="userDelete_${esc(u.user_id)}" class="btn user-delete-btn" type="button" ${u.active||self||!canAdmin()?'disabled':''} title="${!canAdmin()?'Exclusão permanente exclusiva para administradores.':u.active?'Desative e salve este usuário antes de excluir.':self?'Não é permitido excluir sua própria conta.':'Excluir usuário permanentemente do Supabase'}" ${safeEventAttrs("click","a4",[u.user_id])}>EXCLUIR</button></div>
     </div>`;
   }).join(''):'<div class="card empty">Nenhum usuário encontrado.</div>';
 }
@@ -3810,10 +3890,10 @@ function renderPendingApprovals(){
   const el=$('pendingApprovalsList');if(!el)return;
   const blocks=[];
   if(hasPermission('approvals.activation')&&(currentApprovalTab==='all'||currentApprovalTab==='activation')){
-    pendingApprovalCache.activations.forEach(u=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(u.display_name||'Novo usuário')}</strong><span class="approval-kind">Novo usuário</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(u.email||'')}" disabled></div><div class="field"><label>Solicitado em</label><input value="${esc(formatDateTime(u.created_at))}" disabled></div><div class="field"><label>Cargo inicial</label><select id="approvalRole_${u.user_id}"><option value="viewer">Consulta</option><option value="operator">Operador</option>${canAdmin()?'<option value="admin">Administrador</option>':''}</select></div><div class="field"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalActivationNote_${u.user_id}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" onclick="reviewUserActivation('${u.user_id}','rejected')">REJEITAR</button><button class="btn btn-primary" onclick="reviewUserActivation('${u.user_id}','approved')">APROVAR</button></div></div>`));
+    pendingApprovalCache.activations.forEach(u=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(u.display_name||'Novo usuário')}</strong><span class="approval-kind">Novo usuário</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(u.email||'')}" disabled></div><div class="field"><label>Solicitado em</label><input value="${esc(formatDateTime(u.created_at))}" disabled></div><div class="field"><label>Cargo inicial</label><select id="approvalRole_${esc(u.user_id)}"><option value="viewer">Consulta</option><option value="operator">Operador</option>${canAdmin()?'<option value="admin">Administrador</option>':''}</select></div><div class="field"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalActivationNote_${esc(u.user_id)}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" ${safeEventAttrs("click","a5",[u.user_id])}>REJEITAR</button><button class="btn btn-primary" ${safeEventAttrs("click","a6",[u.user_id])}>APROVAR</button></div></div>`));
   }
   if(hasPermission('approvals.name')&&(currentApprovalTab==='all'||currentApprovalTab==='display_name')){
-    pendingApprovalCache.changes.forEach(r=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(r.user?.email||'Conta')}</strong><span class="approval-kind">Alteração de nome</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(r.user?.email||'')}" disabled></div><div class="field"><label>Nome atual</label><input value="${esc(r.user?.display_name||'')}" disabled></div><div class="field full"><label>Nome solicitado</label><input id="approvalName_${r.id}" minlength="3" maxlength="40" value="${esc(r.requested_value||'')}" oninput="sanitizeProfileDisplayNameInput(this)"></div><div class="field full"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalNameNote_${r.id}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" onclick="reviewDisplayNameRequest('${r.id}','rejected')">REJEITAR</button><button class="btn btn-primary" onclick="reviewDisplayNameRequest('${r.id}','approved')">APROVAR</button></div></div>`));
+    pendingApprovalCache.changes.forEach(r=>blocks.push(`<div class="approval-card"><div class="approval-card-head"><strong>${esc(r.user?.email||'Conta')}</strong><span class="approval-kind">Alteração de nome</span></div><div class="approval-fields"><div class="field"><label>E-mail</label><input value="${esc(r.user?.email||'')}" disabled></div><div class="field"><label>Nome atual</label><input value="${esc(r.user?.display_name||'')}" disabled></div><div class="field full"><label>Nome solicitado</label><input id="approvalName_${esc(r.id)}" minlength="3" maxlength="40" value="${esc(r.requested_value||'')}" oninput="sanitizeProfileDisplayNameInput(this)"></div><div class="field full"><label>Observação <span style="font-weight:400">(opcional)</span></label><input id="approvalNameNote_${esc(r.id)}" maxlength="250"></div></div><div class="approval-actions"><button class="btn btn-danger" ${safeEventAttrs("click","a7",[r.id])}>REJEITAR</button><button class="btn btn-primary" ${safeEventAttrs("click","a8",[r.id])}>APROVAR</button></div></div>`));
   }
   el.innerHTML=blocks.length?blocks.join(''):'<div class="card empty">Nenhuma aprovação pendente nesta categoria.</div>';
 }
@@ -4353,7 +4433,7 @@ function closeCodeDropdown(){const d=$('codeDropdown');if(d)d.classList.remove('
 function filterCodeDropdown(){
     const q=($('eqCodeInput').value||'').toLowerCase().trim();
     const codes=state.codes.slice().sort((a,b)=>String(a.code).localeCompare(String(b.code),'pt-BR',{numeric:true})).filter(c=>!q||String(c.code).toLowerCase().includes(q));
-    $('codeDropdown').innerHTML=codes.length?codes.map(c=>`<div class="product-option code-option" onmousedown="selectCode('${c.id}')"><strong>${esc(c.code)}</strong></div>`).join(''):'<div class="product-option empty code-option">Nenhum código encontrado.</div>';
+    $('codeDropdown').innerHTML=codes.length?codes.map(c=>`<div class="product-option code-option" ${safeEventAttrs("mousedown","a9",[c.id])}><strong>${esc(c.code)}</strong></div>`).join(''):'<div class="product-option empty code-option">Nenhum código encontrado.</div>';
 }
 function selectCode(id){const c=getCode(id);if(!c)return;$('eqCode').value=id;$('eqCodeInput').value=c.code;$('codeDropdown').classList.remove('open')}
 
@@ -4386,7 +4466,7 @@ function closeProductDropdown(){$('productDropdown').classList.remove('open')}
 function filterProductDropdown(){
     const q=($('eqProductInput').value||'').toLowerCase().trim();
     const products=state.products.slice().sort((a,b)=>productSiteName(a).localeCompare(productSiteName(b),'pt-BR')).filter(p=>!q||[productSiteName(p),p.name].join(' ').toLowerCase().includes(q));
-    $('productDropdown').innerHTML=products.length?products.map(p=>`<div class="product-option" onmousedown="selectProduct('${p.id}')">${esc(productSiteName(p))}</div>`).join(''):'<div class="product-option empty">Nenhum produto encontrado.</div>';
+    $('productDropdown').innerHTML=products.length?products.map(p=>`<div class="product-option" ${safeEventAttrs("mousedown","a10",[p.id])}>${esc(productSiteName(p))}</div>`).join(''):'<div class="product-option empty">Nenhum produto encontrado.</div>';
 }
 function selectProduct(id){const p=getProduct(id);if(!p)return;$('eqProduct').value=id;$('eqProductInput').value=productSiteName(p);$('productDropdown').classList.remove('open');updateProductFields()}
 let equipmentModalMode='create';
@@ -4613,26 +4693,26 @@ function commonEquipmentGroupValue(items,getter){
 function accessoryBalanceActions(e){
     if(!isAccessoryEquipment(e))return '';
     const inputId=`stock-adjust-${e.id}`;
-    const input=`<input id="${inputId}" class="stock-adjust-input" value="1" maxlength="2" inputmode="numeric" aria-label="Quantidade para ajustar" oninput="sanitizeStockAdjustInput(this)">`;
+    const input=`<input id="${esc(inputId)}" class="stock-adjust-input" value="1" maxlength="2" inputmode="numeric" aria-label="Quantidade para ajustar" oninput="sanitizeStockAdjustInput(this)">`;
     const add=hasPermission('equipment.add_stock')
-        ?`<button type="button" class="btn btn-small stock-adjust-btn" title="Adicionar ao saldo" onclick="adjustAccessoryBalance('${e.id}',1,'${inputId}')">+</button>`:'';
+        ?`<button type="button" class="btn btn-small stock-adjust-btn" title="Adicionar ao saldo" ${safeEventAttrs("click","a11",[e.id,inputId])}>+</button>`:'';
     const remove=hasPermission('equipment.delete')
-        ?`<button type="button" class="btn btn-small stock-adjust-btn" title="Diminuir do saldo" onclick="adjustAccessoryBalance('${e.id}',-1,'${inputId}')">−</button>`:'';
+        ?`<button type="button" class="btn btn-small stock-adjust-btn" title="Diminuir do saldo" ${safeEventAttrs("click","a12",[e.id,inputId])}>−</button>`:'';
     if(!add&&!remove)return '';
     return `<span class="stock-adjust">${input}${add}${remove}</span>`;
 }
 
 function equipmentRowActions(e){
-    const editBtn=hasPermission('equipment.edit')?`<button class="btn btn-small" onclick="openEquipmentModal('${e.id}')">EDITAR</button>`:'';
-    const deleteBtn=hasPermission('equipment.delete')?`<button class="btn btn-small btn-danger" onclick="deleteEquipment('${e.id}')">EXCLUIR</button>`:'';
-    const duplicateBtn=hasPermission('equipment.duplicate')?`<button class="btn btn-small" onclick="openDuplicateEquipment('${e.id}')">DUPLICAR</button>`:'';
+    const editBtn=hasPermission('equipment.edit')?`<button class="btn btn-small" ${safeEventAttrs("click","a13",[e.id])}>EDITAR</button>`:'';
+    const deleteBtn=hasPermission('equipment.delete')?`<button class="btn btn-small btn-danger" ${safeEventAttrs("click","a14",[e.id])}>EXCLUIR</button>`:'';
+    const duplicateBtn=hasPermission('equipment.duplicate')?`<button class="btn btn-small" ${safeEventAttrs("click","a15",[e.id])}>DUPLICAR</button>`:'';
     const balanceControls=accessoryBalanceActions(e);
-    const printBtn=hasPermission('equipment.print')?`<button class="btn btn-small btn-primary" onclick="printStandaloneEquipmentLabel('${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button>`:'';
+    const printBtn=hasPermission('equipment.print')?`<button class="btn btn-small btn-primary" ${safeEventAttrs("click","a16",[e.id])} title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR</button>`:'';
     const actions=[editBtn,deleteBtn,duplicateBtn,balanceControls,printBtn].filter(Boolean).join('');
     if(!actions)return '';
     const wrapperId=`equipment-actions-${e.id}`;
     const expanded=expandedEquipmentActions.has(e.id);
-    return `<div class="table-actions"><div id="${wrapperId}" class="equipment-actions-collapsed${expanded?' expanded':''}"><button class="btn btn-small equipment-action-toggle" type="button" aria-label="${expanded?'Recolher ações':'Expandir ações'}" aria-expanded="${expanded?'true':'false'}" onclick="toggleEquipmentActions('${wrapperId}',this,'${e.id}')">${expanded?'◀':'▶'}</button><div class="equipment-action-items">${actions}</div></div></div>`;
+    return `<div class="table-actions"><div id="${esc(wrapperId)}" class="equipment-actions-collapsed${expanded?' expanded':''}"><button class="btn btn-small equipment-action-toggle" type="button" aria-label="${expanded?'Recolher ações':'Expandir ações'}" aria-expanded="${expanded?'true':'false'}" ${safeEventAttrs("click","a17",[wrapperId,e.id])}>${expanded?'◀':'▶'}</button><div class="equipment-action-items">${actions}</div></div></div>`;
 }
 
 function toggleEquipmentActions(wrapperId,button,equipmentId){
@@ -4791,7 +4871,7 @@ function renderEquipmentCodeGroup(group){
     const seriesHtml=allAccessory?'N/S':(allSerialized?`<span class="badge badge-green">${esc(seriesText)}</span>`:'Vários');
     const seriesCopyMode=allAccessory?'no-series':(allSerialized?'no-info':'copy');
 
-    let html=`<tr class="equipment-group-row"><td data-label="Código">${equipmentCellChipHtml(esc(first.code))}</td><td data-label="Local">${equipmentCellChipHtml(localHtml,false,localCopyMode)}</td><td data-label="Produto">${equipmentCellChipHtml(`<strong>${esc(productText)}</strong>`)}</td><td data-label="Software">${equipmentCellChipHtml(softwareHtml,false,'disabled')}</td><td data-label="Série">${equipmentCellChipHtml(seriesHtml,false,seriesCopyMode)}</td><td data-label="Tipo">${equipmentCellChipHtml(esc(typeText),false,'disabled')}</td><td data-label="Status">${equipmentCellChipHtml(`<span class="badge badge-green">${esc(unitText)}</span>`,true,'disabled')}</td><td data-label="Ações"><button class="btn btn-small equipment-group-toggle" onclick="toggleEquipmentGroup('${key}')">${expanded?'RECOLHER':'EXPANDIR'} <span class="group-arrow">${expanded?'▼':'▶'}</span></button></td></tr>`;
+    let html=`<tr class="equipment-group-row"><td data-label="Código">${equipmentCellChipHtml(esc(first.code))}</td><td data-label="Local">${equipmentCellChipHtml(localHtml,false,localCopyMode)}</td><td data-label="Produto">${equipmentCellChipHtml(`<strong>${esc(productText)}</strong>`)}</td><td data-label="Software">${equipmentCellChipHtml(softwareHtml,false,'disabled')}</td><td data-label="Série">${equipmentCellChipHtml(seriesHtml,false,seriesCopyMode)}</td><td data-label="Tipo">${equipmentCellChipHtml(esc(typeText),false,'disabled')}</td><td data-label="Status">${equipmentCellChipHtml(`<span class="badge badge-green">${esc(unitText)}</span>`,true,'disabled')}</td><td data-label="Ações"><button class="btn btn-small equipment-group-toggle" ${safeEventAttrs("click","a18",[key])}>${expanded?'RECOLHER':'EXPANDIR'} <span class="group-arrow">${expanded?'▼':'▶'}</span></button></td></tr>`;
 
     if(expanded){
         const rows=items.slice().sort((a,b)=>{
@@ -4929,9 +5009,9 @@ document.addEventListener('keydown',event=>{
 let mobileExpandedEquipmentId=null;
 function mobileEquipmentActions(e){
  const id=String(e.id);
- const edit=hasPermission('equipment.edit')?`<button type="button" class="btn btn-small" onclick="openEquipmentModal('${id}')">EDITAR</button>`:'';
- const duplicate=hasPermission('equipment.duplicate')?`<button type="button" class="btn btn-small" onclick="openDuplicateEquipment('${id}')">DUPLICAR</button>`:'';
- const remove=hasPermission('equipment.delete')?`<button type="button" class="btn btn-small btn-danger" onclick="deleteEquipment('${id}')">EXCLUIR</button>`:'';
+ const edit=hasPermission('equipment.edit')?`<button type="button" class="btn btn-small" ${safeEventAttrs("click","a19",[id])}>EDITAR</button>`:'';
+ const duplicate=hasPermission('equipment.duplicate')?`<button type="button" class="btn btn-small" ${safeEventAttrs("click","a20",[id])}>DUPLICAR</button>`:'';
+ const remove=hasPermission('equipment.delete')?`<button type="button" class="btn btn-small btn-danger" ${safeEventAttrs("click","a21",[id])}>EXCLUIR</button>`:'';
  const balance=accessoryBalanceActions(e);
  if(isAccessoryEquipment(e)&&balance){
   const top=[edit,duplicate].filter(Boolean).join('');
@@ -4985,7 +5065,7 @@ function renderMobileEquipmentList(groups){
   const primary=compareEquipmentSortValues(equipmentSortValueFromItem(a,equipmentSortState.field),equipmentSortValueFromItem(b,equipmentSortState.field),equipmentSortState.field);
   return primary||String(a.code||'').localeCompare(String(b.code||''),'pt-BR',{numeric:true,sensitivity:'base'})||String(a.series||'').localeCompare(String(b.series||''),'pt-BR',{numeric:true,sensitivity:'base'});
  });
- const mobileHead=[['code','Código'],['location','Local'],['product','Produto'],['series','Série']].map(([field,label])=>`<button type="button" class="equipment-column-sort" data-sort-field="${field}" aria-label="Classificar ${label} de A a Z" onclick="toggleEquipmentColumnSort('${field}')"><span>${label}</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button>`).join('');
+ const mobileHead=[['code','Código'],['location','Local'],['product','Produto'],['series','Série']].map(([field,label])=>`<button type="button" class="equipment-column-sort" data-sort-field="${field}" aria-label="Classificar ${label} de A a Z" ${safeEventAttrs("click","a22",[field])}><span>${label}</span><span class="equipment-column-arrow" aria-hidden="true">▼</span></button>`).join('');
  list.innerHTML=`<div class="mobile-equipment-header">${mobileHead}<span></span></div><div class="mobile-equipment-body">${equipments.length?equipments.map(renderMobileEquipmentItem).join(''):'<div class="mobile-equipment-empty">Nenhum equipamento encontrado.</div>'}</div>`;
 }
 let mobileEquipmentHold=null;
@@ -5117,7 +5197,7 @@ function saveCode(ev){
  closeModal('codeModal');save(permissionKey);renderAll();toast('Código salvo. EAN-13 gerado automaticamente.');
 }
 function openCodeManager(){renderCodeManager();openModal('codeManagerModal')}
-function renderCodeManager(){$('codeManager').innerHTML=state.codes.length?state.codes.slice().sort((a,b)=>String(a.code).localeCompare(String(b.code),'pt-BR',{numeric:true})).map(c=>`<div class="product-row"><div><strong>${esc(c.code)}</strong><div class="hint">EAN-13: ${esc(c.ean||'Não informado')}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openCodeModal('${c.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteCode('${c.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum código cadastrado.</div>'}
+function renderCodeManager(){$('codeManager').innerHTML=state.codes.length?state.codes.slice().sort((a,b)=>String(a.code).localeCompare(String(b.code),'pt-BR',{numeric:true})).map(c=>`<div class="product-row"><div><strong>${esc(c.code)}</strong><div class="hint">EAN-13: ${esc(c.ean||'Não informado')}</div></div><div class="table-actions"><button class="btn btn-small" ${safeEventAttrs("click","a23",[c.id])}>EDITAR</button><button class="btn btn-small btn-danger" ${safeEventAttrs("click","a24",[c.id])}>EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum código cadastrado.</div>'}
 function deleteCode(id){if(!requirePermission('equipment.delete'))return;if(state.equipments.some(e=>e.codeId===id)){toast('Não é possível excluir um código que possui equipamentos cadastrados.');return}confirm('Excluir este código?',()=>{state.codes=state.codes.filter(c=>c.id!==id);save('equipment.delete');renderAll();renderCodeManager();toast('Código excluído.')})}
 
 function selectSingleProductCategory(selected){
@@ -5132,7 +5212,7 @@ function renderProductPage(){
     const el=$('productPageManager');if(!el)return;
     const q=($('productPageSearch')?.value||'').toLowerCase().trim();
     const list=state.products.slice().sort((a,b)=>productSiteName(a).localeCompare(productSiteName(b),'pt-BR')).filter(p=>!q||[productSiteName(p),p.name,...(p.variables||[])].join(' ').toLowerCase().includes(q));
-    el.innerHTML=list.length?list.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openProductModal('${p.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteProduct('${p.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
+    el.innerHTML=list.length?list.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" ${safeEventAttrs("click","a25",[p.id])}>EDITAR</button><button class="btn btn-small btn-danger" ${safeEventAttrs("click","a26",[p.id])}>EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
 }
 function clearProductPageSearch(){const el=$('productPageSearch');if(el)el.value='';renderProductPage()}
 function renderProductManager(){
@@ -5141,7 +5221,7 @@ function renderProductManager(){
  const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');
  const query=normalize($('productManagerSearch')?.value||'').trim();
  const products=state.products.slice().sort((a,b)=>productSiteName(a).localeCompare(productSiteName(b),'pt-BR')).filter(p=>!query||normalize([productSiteName(p),p.name,p.displayName||'',...(p.variables||[])].join(' ')).includes(query));
- el.innerHTML=products.length?products.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" onclick="openProductModal('${p.id}')">EDITAR</button><button class="btn btn-small btn-danger" onclick="deleteProduct('${p.id}')">EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
+ el.innerHTML=products.length?products.map(p=>`<div class="product-row"><div><strong>${esc(productSiteName(p))}</strong>${p.displayName?`<div class="hint">Etiqueta: ${esc(productLabelName(p))}</div>`:''}<div class="product-vars">${p.variables.map(v=>`<span class="badge badge-blue">${esc(v)}</span>`).join('')||'<span class="badge badge-gray">Sem variável</span>'}</div></div><div class="table-actions"><button class="btn btn-small" ${safeEventAttrs("click","a27",[p.id])}>EDITAR</button><button class="btn btn-small btn-danger" ${safeEventAttrs("click","a28",[p.id])}>EXCLUIR</button></div></div>`).join(''):'<div class="empty">Nenhum produto encontrado.</div>';
 }
 function deleteProduct(id){if(!requirePermission('products.delete'))return;if(state.equipments.some(e=>e.productId===id)){toast('Não é possível excluir um produto que possui equipamentos cadastrados.');return}confirm('Excluir este produto?',()=>{state.products=state.products.filter(p=>p.id!==id);save('products.delete');renderAll();renderProductManager();toast('Produto excluído.')})}
 
@@ -5166,16 +5246,16 @@ function canAddToLaserKit(id,currentIds){
 function renderBuilder(){
     const q=($('builderSearch').value||'').toLowerCase().trim();const pf=isMobileSidebarLayout()?'':$('builderProduct').value;
     const selected=new Set(selectedEquipment);const list=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!selected.has(e.id)).filter(e=>{const p=getProduct(e.productId);const txt=[e.code,e.location,e.series,productSiteName(p),p?.name||''].join(' ').toLowerCase();return(!q||txt.includes(q))&&(!pf||e.productId===pf)});
-    $('availableList').innerHTML=list.length?list.map(e=>{const p=getProduct(e.productId);return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</small></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-primary" onclick="addSelected('${e.id}')">+</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento disponível.</div>';
-    $('selectedList').innerHTML=selectedEquipment.length?selectedEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">${esc(e?.series||'')}${e?.type?' · '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-danger" onclick="removeSelected('${id}')">REMOVER</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento selecionado.</div>';$('selectedCount').textContent=selectedEquipment.length;
+    $('availableList').innerHTML=list.length?list.map(e=>{const p=getProduct(e.productId);return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</small></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-primary" ${safeEventAttrs("click","a29",[e.id])}>+</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento disponível.</div>';
+    $('selectedList').innerHTML=selectedEquipment.length?selectedEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">${esc(e?.series||'')}${e?.type?' · '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div>${hasPermission('kits.create')?`<button class="btn btn-small btn-danger" ${safeEventAttrs("click","a30",[id])}>REMOVER</button>`:''}</div>`}).join(''):'<div class="empty">Nenhum equipamento selecionado.</div>';$('selectedCount').textContent=selectedEquipment.length;
 }
 function addSelected(id){if(!requirePermission('kits.create'))return;const e=getEquipment(id);if(e&&!isAccessoryEquipment(e)&&!selectedEquipment.includes(id)){if(!canAddToLaserKit(id,selectedEquipment))return;selectedEquipment.push(id);renderBuilder()}}
 function removeSelected(id){if(!requirePermission('kits.create'))return;selectedEquipment=selectedEquipment.filter(x=>x!==id);renderBuilder()}
 function createKit(){if(!requirePermission('kits.create'))return;if(!selectedEquipment.length){toast('Adicione pelo menos um equipamento.');return}const compatibility=validateLaserHceCompatibility(selectedEquipment);if(!compatibility.ok){toast(compatibility.message);return}const created=now();const id=kitId();state.kits.push({id,name:id,createdAt:created,updatedAt:created,equipmentIds:[...selectedEquipment],ntrip:calcNtrip(selectedEquipment)});selectedEquipment=[];save('kits.create');renderAll();toast('Kit '+id+' criado.')}
 
 function openKitEdit(id){if(!requirePermission('kits.edit'))return;const k=state.kits.find(x=>x.id===id);if(!k)return;editingKitId=id;editingKitEquipment=[...k.equipmentIds];$('kitEditTitle').textContent='Editar '+k.id;$('editKitName').value=k.name;renderEditKit();openModal('kitEditModal')}
-function renderEditKit(){$('editKitList').innerHTML=editingKitEquipment.length?editingKitEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">Cód. ${esc(e?.code)} · Série: ${esc(e?.series)}${e?.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div><button class="btn btn-small btn-danger" onclick="removeFromEditingKit('${id}')">REMOVER</button></div>`}).join(''):'<div class="empty">Nenhum equipamento no kit.</div>';
-    const avail=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!editingKitEquipment.includes(e.id));$('editKitAdd').innerHTML='<option value="">Selecione um equipamento...</option>'+avail.map(e=>{const p=getProduct(e.productId);return `<option value="${e.id}">${esc(productSiteName(p))} · ${esc(e.series)} · ${esc(e.location)}</option>`}).join('')
+function renderEditKit(){$('editKitList').innerHTML=editingKitEquipment.length?editingKitEquipment.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="selected-item"><div><strong>${esc(productSiteName(p))}</strong><div class="hint">Cód. ${esc(e?.code)} · Série: ${esc(e?.series)}${e?.type?' · Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''}</div></div><button class="btn btn-small btn-danger" ${safeEventAttrs("click","a31",[id])}>REMOVER</button></div>`}).join(''):'<div class="empty">Nenhum equipamento no kit.</div>';
+    const avail=state.equipments.filter(e=>!isAccessoryEquipment(e)&&!isInKit(e.id)&&!editingKitEquipment.includes(e.id));$('editKitAdd').innerHTML='<option value="">Selecione um equipamento...</option>'+avail.map(e=>{const p=getProduct(e.productId);return `<option value="${esc(e.id)}">${esc(productSiteName(p))} · ${esc(e.series)} · ${esc(e.location)}</option>`}).join('')
 }
 function addToEditingKit(id){if(!requirePermission('kits.edit'))return;const e=getEquipment(id);if(id&&e&&!isAccessoryEquipment(e)&&!editingKitEquipment.includes(id)){if(!canAddToLaserKit(id,editingKitEquipment))return;editingKitEquipment.push(id);renderEditKit();if($('editKitPickerModal')?.classList.contains('open')){if(isMobileSidebarLayout())closeModal('editKitPickerModal');else renderEditKitPicker()}}}
 function openEditKitPicker(){
@@ -5192,12 +5272,12 @@ function renderEditKitPicker(){
  const filtered=allowed.filter(e=>{const p=getProduct(e.productId);return !query||[e.code,e.location,e.series,productSiteName(p),p?.name||''].join(' ').toLocaleLowerCase('pt-BR').includes(query)});
  selectedList.innerHTML=editingKitEquipment.length?editingKitEquipment.map(id=>{
   const e=getEquipment(id),p=getProduct(e?.productId);
-  return `<div class="selected-item"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>${esc(e?.code||'')} · ${esc(e?.location||'')} · ${esc(e?.series||'')}</small></div><button class="btn btn-small btn-danger" type="button" onclick="removeFromEditingKit('${id}')">REMOVER</button></div>`;
+  return `<div class="selected-item"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>${esc(e?.code||'')} · ${esc(e?.location||'')} · ${esc(e?.series||'')}</small></div><button class="btn btn-small btn-danger" type="button" ${safeEventAttrs("click","a32",[id])}>REMOVER</button></div>`;
  }).join(''):'<div class="empty">Nenhum equipamento selecionado.</div>';
  $('editKitPickerCount').textContent=editingKitEquipment.length;
  available.innerHTML=filtered.length?filtered.map(e=>{
   const p=getProduct(e.productId);
-  return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · '+esc(e.type):''}</small></div><button class="btn btn-small btn-primary" type="button" onclick="addToEditingKit('${e.id}')" aria-label="Adicionar equipamento">+</button></div>`;
+  return `<div class="equip-option"><div class="equip-info"><strong>${esc(productSiteName(p))}</strong><small>Cód. ${esc(e.code)} · ${esc(e.location)} · Série: ${esc(e.series)}${e.type?' · '+esc(e.type):''}</small></div><button class="btn btn-small btn-primary" type="button" ${safeEventAttrs("click","a33",[e.id])} aria-label="Adicionar equipamento">+</button></div>`;
  }).join(''):'<div class="empty">Nenhum equipamento disponível.</div>';
 }
 function removeFromEditingKit(id){if(!requirePermission('kits.edit'))return;editingKitEquipment=editingKitEquipment.filter(x=>x!==id);renderEditKit();if($('editKitPickerModal')?.classList.contains('open'))renderEditKitPicker()}
@@ -5206,7 +5286,7 @@ function disassembleKit(id){if(!requirePermission('kits.disassemble'))return;con
 function renderKits(){
     const name=($('kitFilterName').value||'').toLowerCase().trim();
     const kits=state.kits.filter(k=>!name||`${k.id} ${k.name}`.toLowerCase().includes(name)).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
-    $('kitGrid').innerHTML=kits.length?kits.map(k=>`<div class="card kit-card"><div class="kit-head"><div><h3>${esc(k.name)}</h3><div class="kit-meta">${esc(k.id)} · Criado ${fmtDate(k.createdAt)}</div><div class="kit-meta">Última alteração ${fmtDate(k.updatedAt)}</div></div><span class="badge ${k.ntrip?'badge-blue':'badge-green'}">${k.ntrip?'NTrip':'Completo'}</span></div><div class="kit-equipments">${k.equipmentIds.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="kit-eq"><strong>${esc(productSiteName(p))}</strong><span>${esc(e?.series||'')} ${e?.type?'· Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''} · Cód. ${esc(e?.code||'')}</span></div>`}).join('')}</div><div class="kit-footer"><span class="hint">${k.equipmentIds.length} equipamento${k.equipmentIds.length===1?'':'s'}</span><div class="table-actions">${hasPermission('kits.print')?`<button class="btn btn-small btn-primary kit-print-button" onclick="printKitLabel('${k.id}')">IMPRIMIR IDENTIFICAÇÃO</button>`:''}${hasPermission('kits.edit')?`<button class="btn btn-small" onclick="openKitEdit('${k.id}')">EDITAR</button>`:''}${hasPermission('kits.disassemble')?`<button class="btn btn-small btn-danger" onclick="disassembleKit('${k.id}')">DESMONTAR</button>`:''}</div></div></div>`).join(''):'<div class="card empty" style="grid-column:1/-1">Nenhum kit encontrado.</div>';
+    $('kitGrid').innerHTML=kits.length?kits.map(k=>`<div class="card kit-card"><div class="kit-head"><div><h3>${esc(k.name)}</h3><div class="kit-meta">${esc(k.id)} · Criado ${fmtDate(k.createdAt)}</div><div class="kit-meta">Última alteração ${fmtDate(k.updatedAt)}</div></div><span class="badge ${k.ntrip?'badge-blue':'badge-green'}">${k.ntrip?'NTrip':'Completo'}</span></div><div class="kit-equipments">${k.equipmentIds.map(id=>{const e=getEquipment(id);const p=getProduct(e?.productId);return `<div class="kit-eq"><strong>${esc(productSiteName(p))}</strong><span>${esc(e?.series||'')} ${e?.type?'· Tipo: '+esc(e.type):''}${hceText(e)?' · '+esc(hceText(e)):''} · Cód. ${esc(e?.code||'')}</span></div>`}).join('')}</div><div class="kit-footer"><span class="hint">${k.equipmentIds.length} equipamento${k.equipmentIds.length===1?'':'s'}</span><div class="table-actions">${hasPermission('kits.print')?`<button class="btn btn-small btn-primary kit-print-button" ${safeEventAttrs("click","a34",[k.id])}>IMPRIMIR IDENTIFICAÇÃO</button>`:''}${hasPermission('kits.edit')?`<button class="btn btn-small" ${safeEventAttrs("click","a35",[k.id])}>EDITAR</button>`:''}${hasPermission('kits.disassemble')?`<button class="btn btn-small btn-danger" ${safeEventAttrs("click","a36",[k.id])}>DESMONTAR</button>`:''}</div></div></div>`).join(''):'<div class="card empty" style="grid-column:1/-1">Nenhum kit encontrado.</div>';
 }
 
 function pdfEscapeText(value){
@@ -5687,7 +5767,7 @@ function printKitLabel(id){if(!requirePermission('kits.print'))return;
     $('printLabelEquipmentList').innerHTML=serialized.map(e=>{
         const p=getProduct(e.productId);
         const metric=e.type||hceText(e)||'';
-        return `<div class="selected-item"><div><strong>${esc(e.code)} · ${esc(e.location)} · ${esc(productSiteName(p))}${metric?' · '+esc(metric):''}</strong><div class="hint">S/N: ${esc(e.series)}</div></div><div class="table-actions"><button class="btn btn-small btn-primary" onclick="generateEquipmentLabel('${k.id}','${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR IDENTIFICAÇÃO</button><button class="btn btn-small btn-primary" onclick="generateKitEquipmentLocalLabel('${k.id}','${e.id}',event)" title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR LOCAL</button></div></div>`;
+        return `<div class="selected-item"><div><strong>${esc(e.code)} · ${esc(e.location)} · ${esc(productSiteName(p))}${metric?' · '+esc(metric):''}</strong><div class="hint">S/N: ${esc(e.series)}</div></div><div class="table-actions"><button class="btn btn-small btn-primary" ${safeEventAttrs("click","a37",[k.id,e.id])} title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR IDENTIFICAÇÃO</button><button class="btn btn-small btn-primary" ${safeEventAttrs("click","a38",[k.id,e.id])} title="Clique: imprimir · Ctrl+clique: abrir PDF">IMPRIMIR LOCAL</button></div></div>`;
     }).join('');
     openModal('printLabelModal');
 }
@@ -5745,7 +5825,7 @@ function importData(ev){if(!requirePermission('data.import')){ev.target.value=''
         }catch(e){
             state=previous;
             console.error('Importação recusada:',e);
-            toast('Backup recusado: dados atuais foram mantidos intactos.');
+            toast('Backup recusado: '+e.message+' Os dados atuais foram mantidos intactos.');
         }
         ev.target.value='';
     };
@@ -6079,7 +6159,7 @@ document.addEventListener("keydown",function(event){
         fecharModalHora();
     }
 });
-function renderBuilderProductFilter(){$('builderProduct').innerHTML='<option value="">Todos</option>'+state.products.slice().sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(p=>`<option value="${p.id}">${esc(productSiteName(p))}</option>`).join('')}
+function renderBuilderProductFilter(){$('builderProduct').innerHTML='<option value="">Todos</option>'+state.products.slice().sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(p=>`<option value="${esc(p.id)}">${esc(productSiteName(p))}</option>`).join('')}
 
 function applyResponsiveTableLabels(){
  document.querySelectorAll('.table').forEach(table=>{
