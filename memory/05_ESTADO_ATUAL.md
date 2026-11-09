@@ -6,6 +6,22 @@ Por instrução explícita do usuário, atualizar somente os arquivos Markdown d
 
 Esta regra substitui a preferência anterior de persistir a documentação no repositório. A recusa HTTP 403 anterior permanece apenas como histórico; não é motivo para tentar novamente. Nenhum envio manual ao GitHub é obrigatório para concluir a atualização do contexto.
 
+**Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
+
+Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
+
+Base de desenvolvimento: arquivo único `v6.18.4.html` entregue nesta conversa. Commit correspondente à v6.18.4 não consultado nem confirmado; não presumir publicação no GitHub. A aprovação original atualizou apenas o contexto. Posteriormente, em 09/11/2026, o usuário autorizou explicitamente atualizar este arquivo em `memory/05_ESTADO_ATUAL.md` por commit direto na `main`, sem criar branch, com título e descrição de commit.
+
+## Estado atual e próximos passos
+
+A v6.18.4 está oficialmente aprovada e passa a ser a base de desenvolvimento. Correção HTML entregue e migração SQL aplicada. A v6.18.3 permanece como etapa anterior aprovada de prevenção de XSS.
+
+Verificação: 76 casos HTML/SQL, 27 verificações de regressão e 39 testes de eventos, sem erros de página no conjunto final. Teste manual reportado: todas as oito tentativas independentes pela conta limitada foram recusadas. Não foi relatado resultado individual dos testes manuais de categorias, impressão física, dispositivos móveis ou sincronização em duas sessões; aprovação não deve ser convertida em alegação desses testes.
+
+Próxima implementação planejada: v6.18.5, padronizar ativo/aprovado nas verificações operacionais, preservando consulta do próprio cadastro pendente e aprovação administrativa. Permanecem planejados SRI/senhas, CSP progressiva e isolamento de leitura por módulo; também pendem limpeza do cache no logout, revisão de grants e remoção de sankhya.view.
+
+A aprovação foi registrada nos seis Markdown de contexto. Esta cópia em `memory/05_ESTADO_ATUAL.md` é atualizada por solicitação explícita posterior do usuário; não implica autorização geral para futuras escritas no GitHub. Não alterar código ou banco apenas para documentação.
+
 ## Histórico preservado — estado aprovado anterior, v6.18.3
 
 O conteúdo seguinte descreve o estado anterior; as seções acima definem o estado vigente da v6.18.4.
