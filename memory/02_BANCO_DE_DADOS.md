@@ -30,6 +30,37 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Banco — implementação aprovada da v6.18.5
+
+Migração aplicada: `giocapo_v6_18_5_require_active_approved_access`, em 09/11/2026; aprovação em 10/11/2026.
+
+| Componente | Regra vigente |
+|---|---|
+| app_state SELECT | Exige active=true e approval_status='approved'. |
+| role_permissions SELECT do próprio papel | Exige ativo e aprovado; mantém alternativas administrativas autorizadas. |
+| app_private.is_admin() | Exige papel admin, ativo e aprovado. |
+| app_private.has_permission() | Aprovação verificada com IS DISTINCT FROM, negando também NULL. |
+| app_private.touch_user_last_seen() | Atualiza somente usuário ativo e aprovado. |
+| app_private.protect_last_admin() | Protege o último administrador ativo e aprovado, inclusive contra retirada da aprovação. |
+| Presença realtime.messages SELECT/INSERT | Exige ativo e aprovado. |
+| Publicação supabase_realtime | Inclui app_users para UPDATE do próprio perfil, sujeito às políticas RLS; não se depende de DELETE para detectar exclusão. |
+
+Leitura do perfil próprio por contas pendentes/inativas preservada. Fluxos RPC de aprovação/rejeição continuam funcionando. Edge Function de exclusão conferida: já exigia administrador ativo/aprovado e não precisou de alteração. Não houve nova tabela nem mudança do JSON operacional.
+
+Evidência da implantação: revisão 338 e hash operacional MD5 b9156ed45f283e2159f7d8128b72a536 preservados antes/depois; 6 perfis, 6 usuários Auth e 1 administrador ativo/aprovado. Snapshot de 09/11, não contagem atual. Testes sintéticos foram revertidos, sem contas QA persistidas.
+
+A leitura integral para contas ativas/aprovadas ainda não isola por módulo. Os alertas anteriores de função privilegiada exposta e proteção contra senhas vazadas permanecem fora do escopo.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
