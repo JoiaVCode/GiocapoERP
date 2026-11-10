@@ -30,6 +30,28 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Aprovação e decisões — 10/11/2026, v6.18.5
+
+O relatório diagnostico.docx mostrou tela branca para pendentes/inativos/rejeitados, dados e ações residuais após desativação, cloudReady ainda true e interface desatualizada após exclusão. As leituras operacionais das contas desativadas foram negadas no diagnóstico; dados já carregados não comprovavam novas leituras autorizadas.
+
+Decidiu-se corrigir o fluxo de inicialização, tratar perfil ausente, exigir ativo + aprovado, limpar dados no bloqueio e manter monitor independente para recuperação. O usuário também autorizou bloquear quando não for possível confirmar acesso, com impacto no uso offline.
+
+Em 09/11 foi aplicada a migração. Os testes SQL usaram contas sintéticas em subtransação revertida; a primeira tentativa foi cancelada porque a fixture administrativa contrariava constraint existente, depois corrigida sem mudança de regra de produção.
+
+Na revisão de 10/11 o usuário pediu o loader discreto da v6.18.4 durante verificação, telas maiores só para estados da conta e textos individualizados. A versão permaneceu v6.18.5 por estar em homologação.
+
+O usuário declarou “versão aprovada” em 10/11/2026. Essa aprovação cobre a revisão final entregue e a implementação descrita acima. Mantidas as decisões das v6.18.3 e v6.18.4. Próximas fases permanecem planejadas.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
