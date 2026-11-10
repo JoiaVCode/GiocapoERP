@@ -30,6 +30,27 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Recursos aprovados na v6.18.5
+
+- Autenticação/acesso: corrigida tela branca; mensagens próprias para criação pendente, rejeição, desativação e conta não encontrada.
+- Sessão: logo e moldura amarela nas telas de status, ações Verificar novamente e Voltar ao login; verificação normal usa loader discreto.
+- Operação: permissões exigem ativo + aprovado; bloqueio fecha modais, limpa tabelas, campos, estado, permissões e caches operacionais.
+- Sincronização/presença/histórico: interrompidos no bloqueio; respostas de operações antigas são descartadas. Aprovação/reativação recarrega dados do servidor.
+- Recuperação de senha: mantém tela separada visível. Calculadora pública permanece no fluxo sem login.
+- PDFs ainda controlados pela página são removidos/fechados e URLs revogadas no bloqueio, sem possibilidade de recolher cópias já salvas.
+
+Próxima etapa planejada: v6.18.6, integridade dos scripts/SRI, avaliação de proteção de senhas e preparação da CSP. Não confundir com ativação de CSP efetiva, prevista para fase posterior e dependente de homologação.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
