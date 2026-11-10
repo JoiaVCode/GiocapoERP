@@ -30,6 +30,28 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Estado atual e próxima implementação
+
+A v6.18.5 revisada está oficialmente aprovada e é a próxima base de desenvolvimento. Foram concluídos ativo + aprovado, correção das telas brancas, limpeza operacional na perda de acesso, descarte de respostas antigas, recuperação por aprovação/reativação e mensagens individuais com loader discreto.
+
+Evidência: 36 verificações de acesso/interface no Chromium isolado, 27 verificações de regressão e 39 testes de eventos, sem erros de página no conjunto final. SQL real: 12 combinações operator/admin × ativo/inativo × pending/rejected/approved, verificando permissões, is_admin e leituras RLS; aprovação/rejeição por RPC com papel authenticated também conferidas. Dados sintéticos revertidos. O usuário informou funcionamento geral e aprovou; não atribuir execução individual de impressão física ou todos os dispositivos sem relato.
+
+Próxima implementação planejada: v6.18.6 — SRI/integridade do script Supabase, avaliação da proteção contra senhas vazadas e preparação de CSP. A CSP efetiva exige etapa posterior com testes; isolamento de leitura por módulo continua fase arquitetural futura. Revisão de grants e remoção de sankhya.view seguem pendentes.
+
+A limpeza do cache na perda de acesso/logout, anteriormente pendente, está implementada na v6.18.5. Não existe modo operacional offline nesta versão: perder conexão/verificação bloqueia visualização e descarta edições não sincronizadas. O limite de detecção depende do navegador/rede, sem garantia instantânea.
+
+Esta aprovação atualiza somente os Markdown pertinentes na memory por commits diretos na main, conforme autorização permanente. Nenhum código ou banco foi alterado para documentar.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
