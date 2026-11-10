@@ -30,6 +30,24 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Arquitetura e segurança vigentes
+
+Mantidos HTML único, Supabase Auth e estado operacional JSONB versão 3 com revisão otimista. O acesso operacional agora exige simultaneamente conta ativa e aprovada no HTML e nas verificações pertinentes do servidor. O perfil próprio continua consultável para informar status e permitir aprovação/reativação.
+
+O navegador acompanha o próprio perfil por Realtime e consultas periódicas. Ao bloquear, remove dados operacionais da memória, cache e interface, interrompe sincronização/presença/histórico e descarta respostas antigas por geração de acesso. A recuperação usa dados novos do servidor.
+
+Verificação de sessão usa o carregamento discreto da v6.18.4. Telas maiores são destinadas a criação pendente, rejeição e conta desativada/removida; erros de conexão usam apresentação compacta. A arquitetura de isolamento de leitura por módulo continua planejada, não implementada nesta etapa.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
