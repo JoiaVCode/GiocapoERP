@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.18.4 -->
+<!-- v6.18.5 -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -1104,6 +1104,15 @@ body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
  #mainApp .nav,body > #sidebarPin{transition:none!important}
 }
 
+
+body.access-blocked #mainApp,body.access-blocked .modal-backdrop,body.access-blocked #authGate,body.access-blocked #sidebarPin{display:none!important}
+.access-status{position:fixed;inset:0;z-index:20000;overflow:auto;display:grid;place-items:center;background:#f1f1f1;padding:12px}
+.access-status[hidden]{display:none}
+.access-status-card{border:3px solid #fec123;border-radius:22px;width:min(100%,520px);padding:34px 24px;background:white;text-align:center;box-shadow:0 12px 36px #00000012}
+.access-status-card img{max-width:210px;max-height:90px;object-fit:contain;margin-bottom:22px;background:#454545;padding:12px 18px;border-radius:12px;box-sizing:content-box}
+.access-status-card h1{font-size:25px;margin:0 0 16px}
+.access-status-card p{line-height:1.6;color:#555;margin:0 0 24px}
+.access-status-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -1115,10 +1124,12 @@ body.mobile-sidebar-open > #sidebarPin{background:#f0e59b}
     <div class="boot-text">
       <strong>Giocapo</strong>
       <span>Verificando sessão...</span>
+      <div id="bootAccessActions" hidden style="margin-top:12px"><button id="bootAccessRetry" type="button" class="btn btn-small">TENTAR NOVAMENTE</button><button id="bootAccessLogout" type="button" class="btn btn-small" style="margin-top:8px">VOLTAR AO LOGIN</button></div>
     </div>
   </div>
 </div>
 
+<section id="accessStatus" class="access-status" hidden aria-labelledby="accessStatusTitle"><div class="access-status-card"><img src="data:image/png;base64,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" alt="CPE Tecnologia"><h1 id="accessStatusTitle">Verificando acesso</h1><p id="accessStatusMessage" role="status" aria-live="polite"></p><div class="access-status-actions"><button id="accessRetry" type="button" class="btn btn-primary">VERIFICAR NOVAMENTE</button><button id="accessLogout" type="button" class="btn">VOLTAR AO LOGIN</button></div></div></section>
 <div id="authGate" class="auth-gate hidden">
   <div class="auth-card">
     <div class="auth-accent"></div>
@@ -2871,6 +2882,123 @@ function validateStateIdentifiers(data,allowLegacyMissing=false){
  }
 }
 
+let accessGeneration=0;
+let accessBlocked=true;
+let accessLastVerified=0;
+let accessCheckBusy=false;
+let accessCheckSequence=0;
+let accessMonitorTimer=null;
+let accessWatchdogTimer=null;
+let accessProfileChannel=null;
+const ACCESS_LEASE_MS=30000;
+function isApprovedAccess(profile){return profile?.active===true&&profile?.approval_status==='approved';}
+function operationalAccessAllowed(){return !accessBlocked&&isApprovedAccess(currentAccess);}
+function accessTicketValid(ticket){return ticket===accessGeneration&&operationalAccessAllowed();}
+async function accessAwait(ticket,operation){
+ if(!accessTicketValid(ticket))throw new Error('Acesso operacional encerrado.');
+ const result=await operation();
+ if(!accessTicketValid(ticket))throw new Error('Resposta descartada: acesso encerrado.');
+ return result;
+}
+function showAccessStatus(reason){
+ guestCalculatorMode=false;document.body.classList.remove('guest-calculator-mode','mobile-sidebar-open');
+ document.body.classList.add('access-blocked');$('mainApp').classList.add('auth-locked');
+ const accountMessages={
+ pending:['Criação da conta aguardando aprovação','A criação da sua conta ainda não foi aprovada por um administrador. Aguarde de 24 a 48 horas ou entre em contato com um administrador.'],
+ rejected:['Cadastro rejeitado','Seu cadastro foi rejeitado por um administrador. Entre em contato com um administrador para obter mais informações.'],
+ disabled:['Conta indisponível','Não foi possível encontrar uma conta com acesso ativo. Sua conta pode estar desativada. Entre em contato com um administrador.'],
+ missing:['Conta não encontrada','Sua conta não foi encontrada. Ela pode ter sido excluída ou estar desativada. Entre em contato com um administrador.']
+ };
+ if(!Object.hasOwn(accountMessages,reason)){
+  $('accessStatus').hidden=true;
+  const checking=reason==='checking';
+  const text=$('bootGate').querySelector('.boot-text');
+  text.querySelector('strong').textContent='Giocapo';
+  text.querySelector('span').textContent=checking?'Verificando sessão...':reason==='offline'?'Sem conexão. Conecte-se para verificar seu acesso.':'Não foi possível verificar seu acesso. Tente novamente.';
+  $('bootGate').querySelector('.boot-spinner').style.display=checking?'':'none';
+  $('bootAccessActions').hidden=checking;
+  $('bootGate').classList.remove('hidden');
+  return;
+ }
+ hideBootGate();
+ const [title,message]=accountMessages[reason];
+ $('accessStatusTitle').textContent=title;$('accessStatusMessage').textContent=message;
+ $('accessStatus').hidden=false;
+}
+function clearOperationalData(){
+ for(const cleanup of activePdfCleanups)cleanup();activePdfCleanups.clear();
+ cloudReady=false;pendingCloudSave=false;pendingCloudAction='';clearTimeout(syncTimer);syncTimer=null;
+ stopRealtimeSync();stopUserPresence();
+ state=emptyState();selectedEquipment=[];editingKitEquipment=[];editingKitId=null;confirmCallback=null;cloudRevision=0;
+ currentPermissions={};usersPageCache=[];pendingApprovalCache={activations:[],changes:[]};
+ resetAuditHistory();
+ rolePermissionsCache={admin:{},operator:{},viewer:{}};editedPermissionsUserId=null;editedPermissionsRole=null;editedPermissionsMode=null;userPermissionsSaving=false;currentPrintKitId=null;
+ syncInFlight=false;remoteSyncInFlight=false;
+ document.querySelectorAll('.modal-backdrop').forEach(el=>{el.classList.remove('open');el.style.zIndex='';});
+ document.querySelectorAll('#mainApp input,#mainApp textarea,.modal-backdrop input,.modal-backdrop textarea').forEach(el=>{if(el.type!=='checkbox'&&el.type!=='radio')el.value='';else el.checked=false;});
+ for(const id of ['usersPageList','permissionsPageContent','userPermissionEditor','pendingApprovalsList','printLabelEquipmentList','selectedList','availableList','kitGrid','productManager','productPageManager','codeManager','equipmentTable','equipmentMobileList','editKitList','editKitPickerSelected','editKitPickerAvailable','builderProduct','editKitAdd','codeDropdown','productDropdown']){
+  const el=$(id);if(el)el.replaceChildren();
+ }
+ document.querySelectorAll('#accountDisplayName,#accountEmail,#accountRole,#accountCreatedAt,#currentUserName,#currentUserRole').forEach(el=>el.textContent='');
+ for(const id of ['equipmentPie','kitPie'])if($(id))$(id).style.background='';
+ for(const id of ['equipmentLegend','kitLegend'])if($(id))$(id).replaceChildren();
+ for(const id of ['printLabelTitle','userPermissionsTitle'])if($(id))$(id).textContent='';
+ if($('auditArchiveNotice')){$('auditArchiveNotice').replaceChildren();$('auditArchiveNotice').hidden=true;}
+ updateDashboard();hideEquipmentOverflowTooltip();closePermissionInfo();closeHeaderProfileMenu();closeEquipmentPrintMenu();
+ const tip=document.querySelector('.equipment-overflow-tooltip');if(tip)tip.textContent='';
+ try{localStorage.removeItem(CONFIG.STORAGE_KEY);localStorage.removeItem('controle_kits_v1');for(const key of Object.keys(sessionStorage))if(key.startsWith('giocapo_log_'))sessionStorage.removeItem(key);}catch(error){console.error('Falha ao limpar cache operacional:',error);}
+}
+function blockOperationalAccess(profile,reason){
+ accessGeneration++;
+ accessBlocked=true;currentAccess=profile||null;
+ showAccessStatus(reason||(!profile?'missing':profile.approval_status==='rejected'?'rejected':profile.approval_status!=='approved'?'pending':'disabled'));
+ clearOperationalData();applyRoleToInterface();
+}
+async function readAccessProfile(userId){
+ let timeout;
+ try{
+  const response=await Promise.race([
+   supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',userId).maybeSingle(),
+   new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('Tempo de verificação excedido.')),8000);})
+  ]);
+  if(response.error)throw response.error;
+  return response.data;
+ }finally{clearTimeout(timeout);}
+}
+function stopAccessMonitor(){
+ accessCheckSequence++;accessCheckBusy=false;
+ clearInterval(accessMonitorTimer);clearInterval(accessWatchdogTimer);accessMonitorTimer=null;accessWatchdogTimer=null;
+ if(accessProfileChannel){try{supabaseClient.removeChannel(accessProfileChannel)}catch(_){}accessProfileChannel=null;}
+}
+function startAccessMonitor(){
+ stopAccessMonitor();if(!currentSession)return;
+ accessMonitorTimer=setInterval(()=>recheckAccess(),10000);
+ accessWatchdogTimer=setInterval(()=>{if(currentSession&&!accessBlocked&&Date.now()-accessLastVerified>ACCESS_LEASE_MS)blockOperationalAccess(currentAccess,'unverified');},1000);
+ const userId=currentSession.user.id;
+ try{accessProfileChannel=supabaseClient.channel('giocapo-access-'+userId).on('postgres_changes',{event:'UPDATE',schema:'public',table:'app_users',filter:'user_id=eq.'+userId},()=>{if(currentSession?.user?.id===userId)recheckAccess();}).subscribe();}catch(error){console.error('Monitoramento por eventos indisponível; verificação periódica mantida.',error);}
+}
+async function recheckAccess(){
+ if(!currentSession||accessCheckBusy)return;
+ accessCheckBusy=true;const check=++accessCheckSequence;const generation=accessGeneration;const userId=currentSession.user.id;
+ try{
+  const profile=await readAccessProfile(userId);
+  if(check!==accessCheckSequence||generation!==accessGeneration||currentSession?.user?.id!==userId)return;
+  if(!isApprovedAccess(profile)){blockOperationalAccess(profile);return;}
+  if(accessBlocked||!cloudReady){currentAccess=profile;showAccessStatus('checking');await loadCloudState();return;}
+  currentAccess=profile;accessLastVerified=Date.now();
+  await loadCurrentRolePermissions();
+  if(generation!==accessGeneration||!operationalAccessAllowed())return;
+  applyRoleToInterface();$('currentUserName').textContent=profile.display_name||currentSession.user.email||'Usuário';$('currentUserRole').textContent=roleLabel(profile.role);updateHeaderAvatar();
+ }catch(error){if(check===accessCheckSequence&&generation===accessGeneration&&currentSession?.user?.id===userId)blockOperationalAccess(currentAccess,navigator.onLine?'unverified':'offline');}
+ finally{if(check===accessCheckSequence)accessCheckBusy=false;}
+}
+async function returnToLogin(){
+ accessGeneration++;accessBlocked=true;stopAccessMonitor();clearOperationalData();
+ currentSession=null;currentAccess=null;
+ $('authPassword').value='';showLoginGate();applyRoleToInterface();
+ try{const {error}=await supabaseClient.auth.signOut({scope:'local'});if(error)throw error;}catch(error){console.error('Falha ao encerrar sessão:',error);setAuthMessage('Não foi possível encerrar a sessão. Conecte-se e tente novamente.');}
+}
+
 function varsText(p){return p?.variables?.length?p.variables.join(' · '):'Sem variável'}
 function hceText(e){const h=e?.hce||{};if(h.landstar&&h.smartgo)return 'LS/SMG';if(h.landstar)return 'LS';if(h.smartgo)return 'SMG';return ''}
 function equipmentMetricHtml(e){const p=getProduct(e?.productId);const out=[];if(p?.variables.includes('Receptor')&&e?.type)out.push(`<span class="badge badge-blue">${esc(e.type)}</span>`);if(p?.variables.includes('Coletora')){if(e?.hce?.landstar&&e?.hce?.smartgo)out.push('<span class="badge badge-blue" data-tooltip-full="Landstar SmartGO">LS/SGO</span>');else if(e?.hce?.landstar)out.push('<span class="badge badge-blue">Landstar</span>');else if(e?.hce?.smartgo)out.push('<span class="badge badge-blue">SmartGO</span>')}return out.length?out.join(' '):'-'}
@@ -2889,12 +3017,13 @@ function ensureCodeRecord(code){
 function getEquipment(id){return state.equipments.find(e=>e.id===id)}
 function isInKit(id){return state.kits.some(k=>k.equipmentIds.includes(id))}
 function save(actionKey=''){
+  if(!operationalAccessAllowed())return;
   localStorage.setItem(CONFIG.STORAGE_KEY,JSON.stringify(state));
   updateDashboard();updateCharts();
   if(actionKey)scheduleCloudSave(actionKey);
 }
 function scheduleCloudSave(actionKey=''){
-  if(!actionKey||!currentSession||!cloudReady||!currentAccess?.active)return;
+  if(!actionKey||!currentSession||!cloudReady||!operationalAccessAllowed())return;
   pendingCloudAction=actionKey;
   pendingCloudSave=true;
   setSyncStatus(navigator.onLine?'syncing':'offline',navigator.onLine?'Sincronizando':'Offline');
@@ -2909,14 +3038,24 @@ function canApplyRemoteStateNow(){
   return !syncInFlight&&!pendingCloudSave&&!hasBlockingEditModal();
 }
 async function fetchCloudStateRow(){
-  const {data:row,error}=await supabaseClient.from('app_state')
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
+  const {data:row,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_state')
     .select('data,data_version,revision,updated_at')
     .eq('id',SUPABASE_CONFIG.STATE_ID)
-    .single();
+    .single()));
   if(error)throw error;
   return row;
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function applyLatestCloudState(reason='realtime',silent=false){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!currentSession||!cloudReady||remoteSyncInFlight||!navigator.onLine)return false;
 
   if(!canApplyRemoteStateNow()){
@@ -2931,7 +3070,7 @@ async function applyLatestCloudState(reason='realtime',silent=false){
 
   remoteSyncInFlight=true;
   try{
-    const row=await fetchCloudStateRow();
+    const row=await accessAwait(accessTicket,()=>(fetchCloudStateRow()));
     const remoteRevision=Number(row.revision)||0;
 
     if(remoteRevision<=cloudRevision){
@@ -2944,7 +3083,7 @@ async function applyLatestCloudState(reason='realtime',silent=false){
     const previousState=state;
     try{
       prepareState(row.data);
-    }catch(err){
+    }catch(err){if(!accessTicketValid(accessTicket))return;
       state=previousState;
       throw err;
     }
@@ -2958,34 +3097,48 @@ async function applyLatestCloudState(reason='realtime',silent=false){
 
     if(!silent&&reason==='realtime')toast('Dados atualizados automaticamente.');
     return true;
-  }catch(err){
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha ao atualizar dados remotos:',err);
     if(currentSession&&navigator.onLine)setSyncStatus('error','Falha ao atualizar');
     return false;
   }finally{
     remoteSyncInFlight=false;
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function checkCloudRevisionAndSync(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!currentSession||!cloudReady||remoteSyncInFlight||!navigator.onLine)return;
   try{
-    const {data:row,error}=await supabaseClient.from('app_state')
+    const {data:row,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_state')
       .select('revision')
       .eq('id',SUPABASE_CONFIG.STATE_ID)
-      .single();
+      .single()));
     if(error)throw error;
     if((Number(row?.revision)||0)>cloudRevision){
       remoteSyncDeferred=true;
-      await applyLatestCloudState('polling',true);
+      await accessAwait(accessTicket,()=>(applyLatestCloudState('polling',true)));
     }
-  }catch(err){
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha na verificação periódica de sincronização:',err);
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function processDeferredRemoteSync(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(remoteSyncDeferred&&canApplyRemoteStateNow()){
-    await applyLatestCloudState('deferred',true);
+    await accessAwait(accessTicket,()=>(applyLatestCloudState('deferred',true)));
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function stopRealtimeSync(){
   if(realtimeFallbackTimer){
@@ -3004,7 +3157,7 @@ function stopRealtimeSync(){
 }
 function startRealtimeSync(){
   stopRealtimeSync();
-  if(!currentSession||!cloudReady||!currentAccess?.active)return;
+  if(!currentSession||!cloudReady||!operationalAccessAllowed())return;
 
   realtimeStateChannel=supabaseClient
     .channel('giocapo-app-state-'+currentSession.user.id)
@@ -3025,31 +3178,41 @@ function startRealtimeSync(){
       }
     )
     .subscribe(status=>{
-      if(status==='SUBSCRIBED'&&!pendingCloudSave){
+      if(status==='SUBSCRIBED'&&operationalAccessAllowed()&&!pendingCloudSave){
         setSyncStatus('synced','Sincronizado');
       }
     });
 
   // Rede de segurança caso o WebSocket seja interrompido sem aviso.
   realtimeFallbackTimer=setInterval(checkCloudRevisionAndSync,60000);
-  permissionRefreshTimer=setInterval(refreshOwnProfileHeader,20000);
+
   if(hasPermission('history.view'))startAuditRealtime();
 }
 
 async function reloadStateFromCloudAfterDenied(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   try{
-    const {data:row,error}=await supabaseClient.from('app_state')
+    const {data:row,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_state')
       .select('data,data_version,revision,updated_at')
       .eq('id',SUPABASE_CONFIG.STATE_ID)
-      .single();
+      .single()));
     if(error)throw error;
     cloudRevision=Number(row.revision)||cloudRevision;
     prepareState(row.data);
     localStorage.setItem(CONFIG.STORAGE_KEY,JSON.stringify(state));
     renderAll();
-  }catch(e){console.error('Falha ao restaurar estado remoto:',e)}
+  }catch(e){if(!accessTicketValid(accessTicket))return;console.error('Falha ao restaurar estado remoto:',e)}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function flushCloudSave(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(syncInFlight||!pendingCloudSave||!currentSession||!cloudReady)return;
   if(!navigator.onLine){setSyncStatus('offline','Offline');return}
   syncInFlight=true;pendingCloudSave=false;
@@ -3057,12 +3220,12 @@ async function flushCloudSave(){
   if(!actionKey){syncInFlight=false;return}
   try{
     const payload=cloneStateForCloud();
-    const {data,error}=await supabaseClient.rpc('save_giocapo_state',{
+    const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.rpc('save_giocapo_state',{
       action_key:actionKey,
       expected_revision:cloudRevision,
       new_data:payload,
       new_data_version:CURRENT_DATA_VERSION
-    });
+    })));
     if(error)throw error;
     if(!data||data.length!==1){
       pendingCloudSave=true;
@@ -3072,13 +3235,13 @@ async function flushCloudSave(){
     }
     cloudRevision=Number(data[0].revision)||cloudRevision+1;
     setSyncStatus('synced','Sincronizado');
-  }catch(err){
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha de sincronização:',err);
     const message=String(err?.message||'');
     if(/Permissão negada/i.test(message)){
       setSyncStatus('error','Permissão negada');
       toast('Sua permissão para esta ação foi removida.');
-      await reloadStateFromCloudAfterDenied();
+      await accessAwait(accessTicket,()=>(reloadStateFromCloudAfterDenied()));
       return;
     }
     pendingCloudSave=true;
@@ -3087,6 +3250,8 @@ async function flushCloudSave(){
     syncInFlight=false;
     if(remoteSyncDeferred&&!pendingCloudSave)processDeferredRemoteSync();
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2400)}
 let modalStackLevel=100;
@@ -3267,14 +3432,14 @@ function load(){
 
 
 function canAdmin(){
-  return !!(currentAccess?.active && currentAccess.role==='admin');
+  return operationalAccessAllowed()&&currentAccess.role==='admin';
 }
 function canViewUsers(){return hasPermission('users.view')||hasPermission('users.manage')||hasPermission('permissions.manage')||hasPermission('approvals.activation')||hasPermission('approvals.name')}
 function canViewApprovals(){return hasPermission('approvals.activation')||hasPermission('approvals.name')}
 function canManageTarget(user){return !!user&&(canAdmin()||hasPermission('users.manage')&&user.role!=='admin'&&user.user_id!==currentSession?.user?.id)}
 function canEditTargetPermissions(user){return !!user&&(canAdmin()||hasPermission('permissions.manage')&&user.role!=='admin'&&user.user_id!==currentSession?.user?.id)}
 function hasPermission(key){
-  if(!currentAccess?.active)return false;
+  if(!operationalAccessAllowed())return false;
   if(currentAccess.role==='admin')return true;
   return currentPermissions?.[key]===true;
 }
@@ -3312,7 +3477,7 @@ function permissionPageMap(){
   };
 }
 function applyPermissionVisibility(){
-  const banner=$('readonlyBanner');if(banner)banner.style.display=canWrite()?'none':'block';
+  const banner=$('readonlyBanner');if(banner)banner.style.display=!operationalAccessAllowed()||canWrite()?'none':'block';
   const map=permissionPageMap();
   document.querySelectorAll('.nav button[data-page]').forEach(btn=>{
     const page=btn.dataset.page;
@@ -3335,7 +3500,11 @@ function applyPermissionVisibility(){
   }
 }
 async function loadCurrentRolePermissions(){
-  if(!currentAccess?.active){currentPermissions={};return}
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
+  if(!operationalAccessAllowed()){currentPermissions={};return}
   if(currentAccess.role==='admin'){
     currentPermissions=Object.fromEntries(ALL_PERMISSION_KEYS.map(k=>[k,true]));
     return;
@@ -3344,12 +3513,14 @@ async function loadCurrentRolePermissions(){
     currentPermissions=currentAccess.permissions||{};
     return;
   }
-  const {data,error}=await supabaseClient.from('role_permissions')
+  const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('role_permissions')
     .select('permissions')
     .eq('role',currentAccess.role)
-    .single();
+    .single()));
   if(error)throw error;
   currentPermissions=data?.permissions||{};
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function closePermissionInfo(){
  document.querySelectorAll('.permission-info-button.is-open').forEach(b=>{b.classList.remove('is-open');b.setAttribute('aria-expanded','false')});
@@ -3392,20 +3563,30 @@ function renderPermissionsMatrixGroup(group){
   </div>`;
 }
 async function renderPermissionsPage(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   closePermissionInfo();
   const el=$('permissionsPageContent');if(!el)return;
   if(!canAdmin()){el.innerHTML='<div class="card empty">Acesso restrito a administradores.</div>';return}
   el.innerHTML='<div class="card empty">Carregando permissões...</div>';
-  const {data,error}=await supabaseClient.from('role_permissions')
+  const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('role_permissions')
     .select('role,permissions')
-    .order('role');
+    .order('role')));
   if(error){console.error(error);el.innerHTML='<div class="card empty">Não foi possível carregar as permissões.</div>';return}
   rolePermissionsCache={admin:{},operator:{},viewer:{}};
   data.forEach(r=>rolePermissionsCache[r.role]=r.permissions||{});
   el.innerHTML=PERMISSION_GROUPS.map(renderPermissionsMatrixGroup).join('')+
     '<div class="permission-fixed-note">Permissões administrativas são fixas na matriz de cargos. Podem ser concedidas individualmente em Usuários → Permissões → Personalizadas.</div>';
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function saveRolePermissions(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requireAdmin())return;
   for(const role of ['operator','viewer']){
     const permissions={...rolePermissionsCache[role]};
@@ -3418,14 +3599,16 @@ async function saveRolePermissions(){
     permissions['state.write']=Object.entries(permissions).some(([k,v])=>
       v===true && /^(equipment|products|kits)\.(create|edit|delete|duplicate|add_stock|disassemble)$/.test(k)
     );
-    const {error}=await supabaseClient.from('role_permissions')
+    const {error}=await accessAwait(accessTicket,()=>(supabaseClient.from('role_permissions')
       .update({permissions,updated_at:new Date().toISOString(),updated_by:currentSession.user.id})
-      .eq('role',role);
+      .eq('role',role)));
     if(error){console.error(error);toast('Não foi possível salvar as permissões de '+role+'.');return}
     rolePermissionsCache[role]=permissions;
   }
   toast('Permissões dos cargos atualizadas.');
-  await renderPermissionsPage();
+  await accessAwait(accessTicket,()=>(renderPermissionsPage()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 
 function formatLastSeen(value){
@@ -3440,14 +3623,20 @@ function updateOnlineUsersSummary(){
   el.textContent=total===1?'1 online':`${total} online`;
 }
 async function refreshLastSeenForUsers(userIds=[]){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!canViewUsers()||!userIds.length)return;
   const ids=[...new Set(userIds.filter(Boolean))];
   if(!ids.length)return;
-  const {data,error}=await supabaseClient.from('app_users').select('user_id,last_seen_at').in('user_id',ids);
+  const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users').select('user_id,last_seen_at').in('user_id',ids)));
   if(error){console.error('Falha ao atualizar visto por último:',error);return}
   const byId=new Map((data||[]).map(row=>[row.user_id,row.last_seen_at]));
   usersPageCache=usersPageCache.map(u=>byId.has(u.user_id)?{...u,last_seen_at:byId.get(u.user_id)}:u);
   filterUsersPage();
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function syncOnlineUsersFromPresence(){
   if(!userPresenceChannel){onlineUserConnections.clear();updateOnlineUsersSummary();return}
@@ -3466,20 +3655,26 @@ function syncOnlineUsersFromPresence(){
   if(wentOffline.length)refreshLastSeenForUsers(wentOffline);
 }
 async function touchOwnLastSeen(silent=true){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!currentSession||!currentAccess?.active)return null;
   try{
-    const {data,error}=await supabaseClient.rpc('touch_user_last_seen');
+    const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.rpc('touch_user_last_seen')));
     if(error)throw error;
     if(data){
       currentAccess={...currentAccess,last_seen_at:data};
       usersPageCache=usersPageCache.map(u=>u.user_id===currentSession.user.id?{...u,last_seen_at:data}:u);
     }
     return data||null;
-  }catch(err){
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha ao atualizar visto por último:',err);
     if(!silent)toast('Não foi possível atualizar o visto por último.');
     return null;
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function stopUserPresence(){
   if(lastSeenHeartbeatTimer){clearInterval(lastSeenHeartbeatTimer);lastSeenHeartbeatTimer=null}
@@ -3492,10 +3687,14 @@ function stopUserPresence(){
   updateOnlineUsersSummary();
 }
 async function startUserPresence(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   stopUserPresence();
-  if(!currentSession||!currentAccess?.active||!navigator.onLine)return;
+  if(!currentSession||!operationalAccessAllowed()||!navigator.onLine)return;
   try{
-    await supabaseClient.realtime.setAuth();
+    await accessAwait(accessTicket,()=>(supabaseClient.realtime.setAuth()));
     userPresenceConnectionId=(crypto?.randomUUID?.()||uid('presence'));
     userPresenceChannel=supabaseClient.channel('giocapo-online-users',{config:{private:true,presence:{key:userPresenceConnectionId}}});
     userPresenceChannel
@@ -3503,18 +3702,21 @@ async function startUserPresence(){
       .on('presence',{event:'join'},syncOnlineUsersFromPresence)
       .on('presence',{event:'leave'},syncOnlineUsersFromPresence)
       .subscribe(async(status,err)=>{
-        if(status==='SUBSCRIBED'){
-          await userPresenceChannel.track({user_id:currentSession.user.id});
-          await touchOwnLastSeen(true);
+        if(status==='SUBSCRIBED'&&operationalAccessAllowed()&&userPresenceChannel){
+          const presenceGeneration=accessGeneration;
+          await accessAwait(accessTicket,()=>(userPresenceChannel.track({user_id:currentSession.user.id})));
+          if(presenceGeneration===accessGeneration&&operationalAccessAllowed())await accessAwait(accessTicket,()=>(touchOwnLastSeen(true)));
         }else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
           console.error('Falha no canal de presença:',err||status);
         }
       });
     lastSeenHeartbeatTimer=setInterval(()=>touchOwnLastSeen(true),LAST_SEEN_HEARTBEAT_MS);
-  }catch(err){
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha ao iniciar presença de usuários:',err);
     stopUserPresence();
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 
 let usersPageCache=[];
@@ -3582,9 +3784,15 @@ function permissionDiffersFromRole(custom,defaults){
   return ALL_PERMISSION_KEYS.some(k=>Boolean(custom?.[k])!==Boolean(defaults?.[k]));
 }
 async function fetchRolePermissions(role){
-  const {data,error}=await supabaseClient.from('role_permissions').select('permissions').eq('role',role).single();
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
+  const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('role_permissions').select('permissions').eq('role',role).single()));
   if(error)throw error;
   return data?.permissions||{};
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function resetUserPermissionSelect(userId){
   const select=$('userPermissionMode_'+userId);
@@ -3592,6 +3800,10 @@ function resetUserPermissionSelect(userId){
   if(select&&user)select.value=user.permission_mode||'role';
 }
 async function changeUserPermissionMode(userId,mode){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requirePermission('permissions.manage'))return;
   const user=usersPageCache.find(u=>u.user_id===userId);
   const selector=$('userPermissionMode_'+userId);
@@ -3603,40 +3815,52 @@ async function changeUserPermissionMode(userId,mode){
     toast('As permissões administrativas são fixas.');resetUserPermissionSelect(userId);return;
   }
   if(mode==='custom'){
-    try{await openUserPermissionsEditor(userId)}catch(err){console.error(err);toast('Não foi possível carregar as permissões.');resetUserPermissionSelect(userId)}
+    try{await accessAwait(accessTicket,()=>(openUserPermissionsEditor(userId)))}catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Não foi possível carregar as permissões.');resetUserPermissionSelect(userId)}
     return;
   }
   if(mode!=='role'||user.permission_mode!=='custom'){resetUserPermissionSelect(userId);return}
   try{
-    const roleDefaults=await fetchRolePermissions(user.role);
+    const roleDefaults=await accessAwait(accessTicket,()=>(fetchRolePermissions(user.role)));
     const proceed=()=>resetUserPermissionsToRole(userId,user.role);
     if(permissionDiffersFromRole(user.permissions,roleDefaults)){
       resetUserPermissionSelect(userId);
       confirm('Este usuário possui permissões específicas. Deseja continuar? Esta ação descartará as permissões personalizadas e redefinirá o acesso com base na função '+roleLabel(user.role)+'.',proceed);
     }else{
-      await proceed();
+      await accessAwait(accessTicket,()=>(proceed()));
     }
-  }catch(err){console.error(err);toast('Não foi possível conferir as permissões.');resetUserPermissionSelect(userId)}
+  }catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Não foi possível conferir as permissões.');resetUserPermissionSelect(userId)}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function resetUserPermissionsToRole(userId,expectedRole){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   try{
-    const {data,error}=await supabaseClient.from('app_users')
+    const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users')
       .update({permission_mode:'role',permissions:null})
       .eq('user_id',userId).eq('role',expectedRole)
-      .select('user_id,permission_mode').maybeSingle();
+      .select('user_id,permission_mode').maybeSingle()));
     if(error||!data)throw error||new Error('Cadastro alterado por outro administrador.');
     toast('Permissões redefinidas para a função.');
-    await renderUsersPage();
-    if(userId===currentSession?.user?.id)await refreshOwnProfileHeader();
-  }catch(err){console.error(err);toast('Não foi possível redefinir as permissões.');resetUserPermissionSelect(userId)}
+    await accessAwait(accessTicket,()=>(renderUsersPage()));
+    if(userId===currentSession?.user?.id)await accessAwait(accessTicket,()=>(refreshOwnProfileHeader()));
+  }catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Não foi possível redefinir as permissões.');resetUserPermissionSelect(userId)}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function openUserPermissionsEditor(userId){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   const user=usersPageCache.find(u=>u.user_id===userId);
   if(!canEditTargetPermissions(user)||user.role==='admin'||(!canAdmin()&&user.user_id===currentSession?.user?.id))return;
-  const [{data:profile,error:profileError},defaults]=await Promise.all([
+  const [{data:profile,error:profileError},defaults]=await accessAwait(accessTicket,()=>(Promise.all([
     supabaseClient.from('app_users').select('role,permission_mode,permissions').eq('user_id',userId).single(),
     fetchRolePermissions(user.role)
-  ]);
+  ])));
   if(profileError)throw profileError;
   if(profile.role!==user.role)throw new Error('O perfil foi alterado. Atualize a lista.');
   editedPermissionsUserId=userId;
@@ -3658,6 +3882,8 @@ async function openUserPermissionsEditor(userId){
     if(field===view&&!view.checked&&archive&&!archive.disabled)archive.checked=false;
   };
   openModal('userPermissionsModal');
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function cancelUserPermissionsEditor(){
   if(userPermissionsSaving)return;
@@ -3667,6 +3893,10 @@ function cancelUserPermissionsEditor(){
   if(id)resetUserPermissionSelect(id);
 }
 async function saveUserCustomPermissions(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requirePermission('permissions.manage')||userPermissionsSaving)return;
   const id=editedPermissionsUserId,role=editedPermissionsRole;
   if(!id||!['operator','viewer'].includes(role))return;
@@ -3683,17 +3913,19 @@ async function saveUserCustomPermissions(){
   userPermissionsSaving=true;
   const button=$('saveUserPermissionsButton');button.disabled=true;button.textContent='SALVANDO...';
   try{
-    const {data,error}=await supabaseClient.from('app_users').update({permission_mode:'custom',permissions})
+    const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users').update({permission_mode:'custom',permissions})
       .eq('user_id',id).eq('role',role)
-      .select('user_id,permission_mode').maybeSingle();
+      .select('user_id,permission_mode').maybeSingle()));
     if(error||!data)throw error||new Error('O perfil foi alterado. Atualize a lista.');
     closeModal('userPermissionsModal');
     editedPermissionsUserId=null;editedPermissionsRole=null;editedPermissionsMode=null;
     toast('Permissões personalizadas salvas.');
-    await renderUsersPage();
-    if(id===currentSession?.user?.id)await refreshOwnProfileHeader();
-  }catch(err){console.error(err);toast('Não foi possível salvar as permissões do usuário.');}
+    await accessAwait(accessTicket,()=>(renderUsersPage()));
+    if(id===currentSession?.user?.id)await accessAwait(accessTicket,()=>(refreshOwnProfileHeader()));
+  }catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Não foi possível salvar as permissões do usuário.');}
   finally{userPermissionsSaving=false;button.disabled=false;button.textContent='SALVAR PERMISSÕES';}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function updateUserDeleteButton(userId){
   const button=$('userDelete_'+userId);
@@ -3727,6 +3959,10 @@ function openDeleteUserConfirmation(userId){
   openModal('deleteUserConfirmModal');
 }
 async function executeUserDeletion(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requireAdmin()||userDeletionInProgress||!isDeleteUserConfirmationValid())return;
   const userId=pendingDeletionUserId;
   if(!userId||userId===currentSession?.user?.id)return;
@@ -3736,28 +3972,30 @@ async function executeUserDeletion(){
   const button=$('deleteUserConfirmButton');
   if(button){button.disabled=true;button.textContent='EXCLUINDO...'}
   try{
-    const {data,error}=await supabaseClient.functions.invoke('giocapo-delete-user',{body:{userId}});
+    const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.functions.invoke('giocapo-delete-user',{body:{userId}})));
     if(error){
       let message='Não foi possível excluir a conta no Supabase.';
-      try{const body=await error.context?.json();if(typeof body?.error==='string')message=body.error}catch(_){}
+      try{const body=await accessAwait(accessTicket,()=>(error.context?.json()));if(typeof body?.error==='string')message=body.error}catch(_){if(!accessTicketValid(accessTicket))return;}
       throw new Error(message);
     }
     if(data?.ok!==true||data?.deletedUserId!==userId)throw new Error('O Supabase não confirmou a exclusão da conta.');
-    const {data:remaining,error:verifyError}=await supabaseClient.from('app_users').select('user_id').eq('user_id',userId).maybeSingle();
+    const {data:remaining,error:verifyError}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users').select('user_id').eq('user_id',userId).maybeSingle()));
     if(verifyError||remaining)throw new Error('A conta foi processada, mas não foi possível confirmar a remoção do cadastro. Atualize a lista.');
     closeModal('deleteUserConfirmModal');
     pendingDeletionUserId=null;
     toast('Usuário excluído do Supabase Auth e do ERP.');
-    await renderUsersPage();
-  }catch(err){
+    await accessAwait(accessTicket,()=>(renderUsersPage()));
+  }catch(err){if(!accessTicketValid(accessTicket))return;
     console.error('Falha na exclusão de usuário:',err);
     toast(err?.message||'Falha ao excluir usuário do Supabase.');
-    await renderUsersPage();
+    await accessAwait(accessTicket,()=>(renderUsersPage()));
   }finally{
     userDeletionInProgress=false;
     if(button)button.textContent='EXCLUIR PERMANENTEMENTE';
     updateDeleteUserConfirmation();
   }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function filterUsersPage(){
   const q=normalizeEquipmentSearch($('usersSearch')?.value||'');
@@ -3768,15 +4006,19 @@ function filterUsersPage(){
   renderUsersPageRows(filtered);
 }
 async function renderUsersPage(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   const el=$('usersPageList');if(!el)return;
   if(!canViewUsers()){
     el.innerHTML='<div class="card empty">Acesso restrito.</div>';
     return;
   }
   el.innerHTML='<div class="card empty">Carregando usuários...</div>';
-  const {data,error}=await supabaseClient.from('app_users')
+  const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users')
     .select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions')
-    .order('created_at',{ascending:true});
+    .order('created_at',{ascending:true})));
   if(error){
     console.error('Falha ao listar usuários:',error);
     el.innerHTML='<div class="card empty">Não foi possível carregar os usuários.</div>';
@@ -3784,9 +4026,15 @@ async function renderUsersPage(){
   }
   usersPageCache=data||[];
   filterUsersPage();
-  await refreshPendingApprovalCount();
+  await accessAwait(accessTicket,()=>(refreshPendingApprovalCount()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function saveUserAccess(userId){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requirePermission('users.manage'))return;
   const original=usersPageCache.find(u=>u.user_id===userId);
   if(!canManageTarget(original)){toast('Você não pode alterar esta conta.');return}
@@ -3804,17 +4052,23 @@ async function saveUserAccess(userId){
   if(role!==original.role&&original.permission_mode==='custom'){
     let differs=true;
     try{
-      const newDefaults=role==='admin'?{}:await fetchRolePermissions(role);
+      const newDefaults=role==='admin'?{}:await accessAwait(accessTicket,()=>(fetchRolePermissions(role)));
       differs=role==='admin'||permissionDiffersFromRole(original.permissions,newDefaults);
-    }catch(err){console.error(err);toast('Não foi possível conferir as permissões da nova função.');return}
+    }catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Não foi possível conferir as permissões da nova função.');return}
     if(differs){
       confirm('Este usuário possui permissões específicas. Alterar o Perfil para '+roleLabel(role)+' descartará as configurações personalizadas e aplicará as permissões padrão da nova função. Deseja continuar?',()=>commitUserAccessChange(userId,displayName,role,active));
       return;
     }
   }
-  await commitUserAccessChange(userId,displayName,role,active);
+  await accessAwait(accessTicket,()=>(commitUserAccessChange(userId,displayName,role,active)));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function commitUserAccessChange(userId,displayName,role,active){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   const original=usersPageCache.find(u=>u.user_id===userId);
   if(!original||!canManageTarget(original))return;
   if(!canAdmin()&&role==='admin'){toast('Somente administradores podem conceder este cargo.');return}
@@ -3823,14 +4077,14 @@ async function commitUserAccessChange(userId,displayName,role,active){
   if(role!==original.role){update.permission_mode='role';update.permissions=null;}
   if(canAdmin()&&active&&original?.approval_status!=='approved')update.approval_status='approved';
 
-  const {error}=await supabaseClient.from('app_users').update(update).eq('user_id',userId);
+  const {error}=await accessAwait(accessTicket,()=>(supabaseClient.from('app_users').update(update).eq('user_id',userId)));
   if(error){
     console.error('Falha ao atualizar usuário:',error);
     const msg=String(error.message||'');
     if(msg.includes('último administrador'))toast('Não é possível remover o último administrador ativo.');
     else if(/duplicate|unique|app_users_display_name_unique_ci/i.test(msg))toast('Este nome de exibição já está em uso.');
     else toast('Não foi possível atualizar o usuário.');
-    await renderUsersPage();
+    await accessAwait(accessTicket,()=>(renderUsersPage()));
     return;
   }
 
@@ -3841,24 +4095,36 @@ async function commitUserAccessChange(userId,displayName,role,active){
     updateHeaderAvatar();
     if(role!==original.role){
       currentAccess={...currentAccess,permission_mode:'role',permissions:null};
-      await loadCurrentRolePermissions();
+      await accessAwait(accessTicket,()=>(loadCurrentRolePermissions()));
     }
     applyRoleToInterface();
   }
   toast('Usuário atualizado.');
-  await renderUsersPage();
+  await accessAwait(accessTicket,()=>(renderUsersPage()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function refreshPendingApprovalCount(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!canViewApprovals()){$('pendingApprovalsButton').classList.add('permission-hidden');return}
   $('pendingApprovalsButton').classList.remove('permission-hidden');
-  const [{count:c1},{count:c2}]=await Promise.all([
+  const [{count:c1},{count:c2}]=await accessAwait(accessTicket,()=>(Promise.all([
     supabaseClient.from('app_users').select('user_id',{count:'exact',head:true}).eq('approval_status','pending'),
     supabaseClient.from('user_change_requests').select('id',{count:'exact',head:true}).eq('status','pending')
-  ]);
+  ])));
   const total=(hasPermission('approvals.activation')?c1||0:0)+(hasPermission('approvals.name')?c2||0:0);
   const b=$('pendingApprovalsButton');if(b)b.textContent=total?`APROVAÇÕES PENDENTES (${total})`:'APROVAÇÕES PENDENTES';
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function openPendingApprovals(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!canViewApprovals()){toast('Sem permissão para aprovações.');return}
   openModal('pendingApprovalsModal');
   const allowActivation=hasPermission('approvals.activation'),allowName=hasPermission('approvals.name');
@@ -3868,14 +4134,16 @@ async function openPendingApprovals(){
   if(currentApprovalTab==='activation'&&!allowActivation||currentApprovalTab==='display_name'&&!allowName)currentApprovalTab='all';
   document.querySelectorAll('[data-approval-tab]').forEach(b=>b.classList.toggle('active',b.dataset.approvalTab===currentApprovalTab));
   $('pendingApprovalsList').innerHTML='<div class="card empty">Carregando aprovações...</div>';
-  const [usersRes,changesRes]=await Promise.all([
+  const [usersRes,changesRes]=await accessAwait(accessTicket,()=>(Promise.all([
     supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('approval_status','pending').order('created_at',{ascending:true}),
     supabaseClient.from('user_change_requests').select('id,user_id,request_type,requested_value,status,requested_at,review_note').eq('status','pending').order('requested_at',{ascending:true})
-  ]);
+  ])));
   if(usersRes.error||changesRes.error){console.error(usersRes.error||changesRes.error);$('pendingApprovalsList').innerHTML='<div class="card empty">Não foi possível carregar as aprovações.</div>';return}
-  const allUsers=usersPageCache.length?usersPageCache:(await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions')).data||[];
+  const allUsers=usersPageCache.length?usersPageCache:(await accessAwait(accessTicket,()=>(supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions')))).data||[];
   pendingApprovalCache={activations:usersRes.data||[],changes:(changesRes.data||[]).map(r=>({...r,user:allUsers.find(u=>u.user_id===r.user_id)||null}))};
   renderPendingApprovals();
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function setApprovalTab(tab,button){
   currentApprovalTab=tab;
@@ -3898,24 +4166,36 @@ function renderPendingApprovals(){
   el.innerHTML=blocks.length?blocks.join(''):'<div class="card empty">Nenhuma aprovação pendente nesta categoria.</div>';
 }
 async function reviewUserActivation(userId,decision){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requirePermission('approvals.activation'))return;
   const role=$('approvalRole_'+userId)?.value||'viewer';
   if(role==='admin'&&!canAdmin()){toast('A aprovação de administradores é exclusiva de administradores.');return}
   const review_note=$('approvalActivationNote_'+userId)?.value.trim()||null;
-  const {error}=await supabaseClient.rpc('review_user_activation',{user_id:userId,decision,role,review_note});
+  const {error}=await accessAwait(accessTicket,()=>(supabaseClient.rpc('review_user_activation',{user_id:userId,decision,role,review_note})));
   if(error){console.error(error);toast(error.message||'Não foi possível analisar o cadastro.');return}
   toast(decision==='approved'?'Cadastro aprovado.':'Cadastro rejeitado.');
-  await renderUsersPage();await openPendingApprovals();
+  await accessAwait(accessTicket,()=>(renderUsersPage()));await accessAwait(accessTicket,()=>(openPendingApprovals()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function reviewDisplayNameRequest(requestId,decision){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!requirePermission('approvals.name'))return;
   const approved_value=normalizeDisplayName($('approvalName_'+requestId)?.value||'');
   const review_note=$('approvalNameNote_'+requestId)?.value.trim()||null;
   if(decision==='approved'&&(!isValidDisplayNameCharacters(approved_value)||approved_value.length<3||approved_value.length>40)){toast('O nome aprovado deve conter apenas letras e espaços e ter entre 3 e 40 caracteres.');return}
-  const {error}=await supabaseClient.rpc('review_user_change_request',{request_id:requestId,decision,approved_value:decision==='approved'?approved_value:null,review_note});
+  const {error}=await accessAwait(accessTicket,()=>(supabaseClient.rpc('review_user_change_request',{request_id:requestId,decision,approved_value:decision==='approved'?approved_value:null,review_note})));
   if(error){console.error(error);toast(error.message||'Não foi possível analisar a solicitação.');return}
   toast(decision==='approved'?'Alteração de nome aprovada.':'Alteração de nome rejeitada.');
-  await renderUsersPage();await openPendingApprovals();
+  await accessAwait(accessTicket,()=>(renderUsersPage()));await accessAwait(accessTicket,()=>(openPendingApprovals()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function getOwnAccess(){
   const {data,error}=await supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',currentSession.user.id).maybeSingle();
@@ -3923,54 +4203,38 @@ async function getOwnAccess(){
   return data;
 }
 async function loadCloudState(){
-  const access=await getOwnAccess();
+  const generation=accessGeneration;
+  const userId=currentSession?.user?.id;
+  if(!userId)return false;
+  const access=await readAccessProfile(userId);
+  if(generation!==accessGeneration||currentSession?.user?.id!==userId)return false;
   currentAccess=access;
-  if(!access||!access.active){
-    cloudReady=false;
-    $('mainApp').classList.add('auth-locked');
-    $('authGate').classList.remove('hidden');
-    setAuthMessage(access?.approval_status==='rejected'?'Seu acesso foi recusado pelo administrador.':access?.approval_status==='approved'?'Seu acesso está desativado.':'Acesso criado, mas ainda não liberado pelo administrador.');
-    return false;
-  }
+  if(!isApprovedAccess(access)){blockOperationalAccess(access);return false;}
+  accessBlocked=false;accessLastVerified=Date.now();
   await loadCurrentRolePermissions();
+  if(generation!==accessGeneration||!operationalAccessAllowed())return false;
+  const {data:row,error}=await supabaseClient.from('app_state').select('data,data_version,revision,updated_at').eq('id',SUPABASE_CONFIG.STATE_ID).single();
+  if(generation!==accessGeneration||!operationalAccessAllowed())return false;
+  if(error)throw error;
+  const verified=await readAccessProfile(userId);
+  if(generation!==accessGeneration||currentSession?.user?.id!==userId)return false;
+  if(!isApprovedAccess(verified)){blockOperationalAccess(verified);return false;}
+  currentAccess=verified;
+  await loadCurrentRolePermissions();
+  if(generation!==accessGeneration||!operationalAccessAllowed())return false;
+  prepareState(row.data);
+  cloudRevision=Number(row.revision)||1;
+  cloudReady=true;accessLastVerified=Date.now();
+  localStorage.setItem(CONFIG.STORAGE_KEY,JSON.stringify(state));
   $('currentUserName').textContent=access.display_name||currentSession.user.email||'Usuário';
   $('currentUserRole').textContent=roleLabel(access.role);
   updateHeaderAvatar();
-  applyRoleToInterface();
-
-  const localSnapshot=cloneStateForCloud();
-  const {data:row,error}=await supabaseClient.from('app_state').select('data,data_version,revision,updated_at').eq('id',SUPABASE_CONFIG.STATE_ID).single();
-  if(error)throw error;
-  cloudRevision=Number(row.revision)||1;
-
-  let cloudState=row.data;
-  if(cloudState&&typeof cloudState==='object'){
-    try{prepareState(cloudState);cloudState=cloneStateForCloud()}catch(err){throw new Error('Estado remoto inválido: '+err.message)}
-  }
-
-  const cloudEmpty=!stateHasOperationalData(cloudState);
-  const localUseful=stateHasOperationalData(localSnapshot);
-
-  if(cloudEmpty&&localUseful&&access.role!=='viewer'){
-    state=localSnapshot;
-    prepareState(state);
-    cloudReady=true;
-    pendingCloudSave=true;
-    await flushCloudSave();
-  }else{
-    state=cloudState;
-    localStorage.setItem(CONFIG.STORAGE_KEY,JSON.stringify(state));
-  }
-
-  cloudReady=true;
-  renderAll();
-  setSyncStatus('synced','Sincronizado');
-  $('authGate').classList.add('hidden');
-  $('mainApp').classList.remove('auth-locked');
-  startRealtimeSync();
-  await startUserPresence();
-  handleAppRoute();
-  return true;
+  document.body.classList.remove('access-blocked');$('accessStatus').hidden=true;
+  $('authGate').classList.add('hidden');$('mainApp').classList.remove('auth-locked');
+  renderAll();setSyncStatus('synced','Sincronizado');
+  startRealtimeSync();await startUserPresence();
+  if(generation!==accessGeneration||!operationalAccessAllowed())return false;
+  handleAppRoute();return true;
 }
 
 let guestCalculatorMode=false;
@@ -3984,10 +4248,12 @@ function showLoginGate(message=''){
   document.body.classList.remove('guest-calculator-mode');
   $('mainApp')?.classList.add('auth-locked');
   $('authGate')?.classList.remove('hidden');
+  $('accessStatus').hidden=true;document.body.classList.remove('access-blocked');
   showLoginView();
   if(message)setAuthMessage(message);
 }
 function openGuestCalculator(){
+  if(currentSession)return;
   guestCalculatorMode=true;
   document.body.classList.add('guest-calculator-mode');
   $('authGate').classList.add('hidden');
@@ -4006,28 +4272,15 @@ function closeGuestCalculator(){
   showLoginView();
 }
 async function activateAuthenticatedSession(session){
-  currentSession=session;
-  if(!session){
-    stopRealtimeSync();
-    stopUserPresence();
-    cloudReady=false;currentAccess=null;applyRoleToInterface();
-    setSyncStatus('local','Local');
-    showLoginGate();
-    return;
-  }
-  try{
-    guestCalculatorMode=false;
-    document.body.classList.remove('guest-calculator-mode');
-    load();
-    renderAll();
-    await loadCloudState();
-    hideBootGate();
-    $('authGate').classList.add('hidden');
-    setAuthMessage('');
-  }catch(err){
-    console.error('Falha ao iniciar sessão:',err);
-    showLoginGate('Não foi possível carregar seu acesso: '+(err.message||'erro desconhecido'));
-  }
+  stopAccessMonitor();
+  accessGeneration++;
+  currentSession=session;const sessionGeneration=accessGeneration;
+  clearOperationalData();
+  if(!session){currentAccess=null;accessBlocked=true;showLoginGate();setSyncStatus('local','Local');return;}
+  accessBlocked=true;
+  showAccessStatus('checking');startAccessMonitor();
+  try{await loadCloudState();hideBootGate();}
+  catch(err){if(currentSession&&sessionGeneration===accessGeneration&&currentSession?.user?.id===session?.user?.id){blockOperationalAccess(currentAccess,'unverified');console.error('Falha ao verificar acesso:',err);}}
 }
 
 let lastMainPage='equipamentos';
@@ -4075,6 +4328,8 @@ async function sendPasswordRecovery(ev){
   $('forgotPasswordMessage').textContent='Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.';
 }
 function showRecoveryPasswordView(session){
+  accessGeneration++;accessBlocked=true;stopAccessMonitor();clearOperationalData();currentAccess=null;
+  document.body.classList.remove('access-blocked');$('accessStatus').hidden=true;
   passwordRecoveryMode=true;
   currentSession=session||currentSession;
   hideBootGate();
@@ -4111,6 +4366,10 @@ function openChangePasswordModal(){
   setTimeout(()=>$('currentPasswordValue').focus(),0);
 }
 async function changeOwnPassword(ev){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   ev?.preventDefault();
   if(!currentSession?.user?.email)return;
   const current=$('currentPasswordValue').value;
@@ -4121,15 +4380,17 @@ async function changeOwnPassword(ev){
   if(next!==confirmNext){$('changePasswordMessage').textContent='As novas senhas não coincidem.';return}
   if(current===next){$('changePasswordMessage').textContent='A nova senha deve ser diferente da senha atual.';return}
   const button=$('changePasswordButton');button.disabled=true;$('changePasswordMessage').textContent='Validando senha atual...';
-  const login=await supabaseClient.auth.signInWithPassword({email:currentSession.user.email,password:current});
+  const login=await accessAwait(accessTicket,()=>(supabaseClient.auth.signInWithPassword({email:currentSession.user.email,password:current})));
   if(login.error){button.disabled=false;$('changePasswordMessage').textContent='A senha atual está incorreta.';return}
   currentSession=login.data.session||currentSession;
   $('changePasswordMessage').textContent='Alterando senha...';
-  const {error}=await supabaseClient.auth.updateUser({password:next});
+  const {error}=await accessAwait(accessTicket,()=>(supabaseClient.auth.updateUser({password:next})));
   button.disabled=false;
   if(error){$('changePasswordMessage').textContent=error.message||'Não foi possível alterar a senha.';return}
   closeModal('changePasswordModal');
   toast('Senha alterada com sucesso.');
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function openAccountPage(){
   if(!currentSession||!currentAccess?.active)return;
@@ -4155,12 +4416,17 @@ function showMainPage(page){
   else document.querySelector('.nav button[data-page]:not(.permission-hidden)')?.click();
 }
 async function renderAccountPage(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   if(!currentSession)return;
-  const [{data:profile,error:profileError},{data:pending,error:pendingError}]=await Promise.all([
+  const [{data:profile,error:profileError},{data:pending,error:pendingError}]=await accessAwait(accessTicket,()=>(Promise.all([
     supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',currentSession.user.id).single(),
     supabaseClient.from('user_change_requests').select('id,requested_value').eq('user_id',currentSession.user.id).eq('request_type','display_name').eq('status','pending').maybeSingle()
-  ]);
+  ])));
   if(profileError||pendingError){console.error(profileError||pendingError);toast('Não foi possível carregar sua conta.');return}
+  if(!isApprovedAccess(profile)){blockOperationalAccess(profile);return;}
   currentAccess={...currentAccess,...profile};
   $('accountDisplayName').textContent=profile.display_name||'-';
   $('accountEmail').textContent=profile.email||currentSession.user.email||'-';
@@ -4170,37 +4436,28 @@ async function renderAccountPage(){
   const button=$('accountNameRequestButton');
   button.disabled=!!pending;
   button.textContent=pending?'SOLICITAÇÃO PENDENTE':'PEDIR APROVAÇÃO';
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 async function requestDisplayNameChange(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
   const name=normalizeDisplayName($('accountRequestedName').value);
   if(!isValidDisplayNameCharacters(name)||name.length<3||name.length>40){toast('Use apenas letras e espaços, entre 3 e 40 caracteres.');return}
   const button=$('accountNameRequestButton');button.disabled=true;
-  const {error}=await supabaseClient.rpc('request_display_name_change',{candidate:name});
+  const {error}=await accessAwait(accessTicket,()=>(supabaseClient.rpc('request_display_name_change',{candidate:name})));
   if(error){button.disabled=false;toast(error.message||'Não foi possível enviar a solicitação.');return}
   toast('Solicitação enviada para aprovação.');
-  await renderAccountPage();
+  await accessAwait(accessTicket,()=>(renderAccountPage()));
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
-async function refreshOwnProfileHeader(){
-  if(!currentSession||!currentAccess?.active)return;
-  const {data}=await supabaseClient.from('app_users').select('display_name,role,active,approval_status,permission_mode,permissions').eq('user_id',currentSession.user.id).maybeSingle();
-  if(!data)return;
-  const previous=currentAccess;
-  const modeChanged=previous?.permission_mode!==data.permission_mode||previous?.role!==data.role;
-  const customChanged=JSON.stringify(previous?.permissions||null)!==JSON.stringify(data.permissions||null);
-  currentAccess={...currentAccess,...data};
-  if(modeChanged||customChanged||data.permission_mode!=='custom'){
-    try{await loadCurrentRolePermissions()}catch(err){console.error('Falha ao atualizar permissões:',err);return}
-    applyRoleToInterface();
-    if(hasPermission('history.view')){if(!auditRealtimeChannel)startAuditRealtime()}
-    else stopAuditRealtime();
-    const pendingButton=$('pendingApprovalsButton');if(pendingButton)pendingButton.classList.toggle('permission-hidden',!canViewApprovals());
-  }
-  $('currentUserName').textContent=data.display_name||currentSession.user.email||'Usuário';
-  $('currentUserRole').textContent=roleLabel(data.role);
-  updateHeaderAvatar();
-}
+async function refreshOwnProfileHeader(){return recheckAccess();}
+
 function handleAppRoute(){
-  if(location.hash==='#/user/me'&&currentSession&&currentAccess?.active)showAccountPage();
+  if(location.hash==='#/user/me'&&currentSession&&operationalAccessAllowed())showAccountPage();
 }
 window.addEventListener('hashchange',handleAppRoute);
 
@@ -4363,20 +4620,8 @@ async function signupWithEmail(ev){
     button.disabled=false;
   }
 }
-async function logoutUser(){
-  closeHeaderProfileMenu();
-  if(location.hash==='#/user/me')history.replaceState(null,'',location.pathname+location.search);
-  await flushCloudSave();
-  await touchOwnLastSeen(true);
-  stopUserPresence();
-  stopRealtimeSync();
-  await supabaseClient.auth.signOut();
-  currentSession=null;currentAccess=null;cloudReady=false;resetAuditHistory();applyRoleToInterface();
-  $('authPassword').value='';
-  setSyncStatus('local','Local');
-  showLoginGate();
-  setAuthMessage('Sessão encerrada.',true);
-}
+async function logoutUser(){return returnToLogin();}
+
 async function bootApp(){
   try{
     const {data:{session},error}=await supabaseClient.auth.getSession();
@@ -4393,6 +4638,7 @@ async function bootApp(){
   });
 }
 window.addEventListener('online',async()=>{
+  if(currentSession){await recheckAccess();if(!operationalAccessAllowed())return;}
   if(pendingCloudSave)await flushCloudSave();
   if(currentSession&&cloudReady){
     if(!realtimeStateChannel)startRealtimeSync();
@@ -4401,12 +4647,13 @@ window.addEventListener('online',async()=>{
   }
 });
 window.addEventListener('offline',()=>{
-  stopUserPresence();
-  setSyncStatus('offline','Offline');
+  if(currentSession)blockOperationalAccess(currentAccess,'offline');
+  else setSyncStatus('offline','Offline');
 });
 document.addEventListener('visibilitychange',()=>{
-  if(!currentSession||!cloudReady)return;
+  if(!currentSession)return;
   if(document.visibilityState==='visible'){
+    recheckAccess();if(!operationalAccessAllowed())return;
     if(!userPresenceChannel&&navigator.onLine)startUserPresence();
     touchOwnLastSeen(true);
     checkCloudRevisionAndSync();
@@ -4415,7 +4662,8 @@ document.addEventListener('visibilitychange',()=>{
   }
 });
 window.addEventListener('focus',()=>{
-  if(currentSession&&cloudReady){touchOwnLastSeen(true);checkCloudRevisionAndSync();refreshOwnProfileHeader();}
+  if(currentSession)recheckAccess();
+  if(currentSession&&cloudReady&&operationalAccessAllowed()){touchOwnLastSeen(true);checkCloudRevisionAndSync();}
 });
 
 function calcNtrip(ids){
@@ -4805,6 +5053,10 @@ function showCopyToast(message='Copiado',warning=false){
 }
 
 async function copyEquipmentCell(button){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
     if(button?.dataset?.copyMode==='no-series'){
         showCopyToast('Não há série a ser copiada',true);
         return;
@@ -4817,7 +5069,7 @@ async function copyEquipmentCell(button){
     if(!text)return;
     try{
         if(navigator.clipboard?.writeText){
-            await navigator.clipboard.writeText(text);
+            await accessAwait(accessTicket,()=>(navigator.clipboard.writeText(text)));
         }else{
             const area=document.createElement('textarea');
             area.value=text;
@@ -4829,9 +5081,11 @@ async function copyEquipmentCell(button){
             area.remove();
         }
         showCopyToast();
-    }catch(err){
+    }catch(err){if(!accessTicketValid(accessTicket))return;
         toast('Não foi possível copiar.');
     }
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 
 function renderSingleEquipmentRow(e){
@@ -5708,7 +5962,9 @@ function setLabelPrintLoading(visible){
  loading.classList.toggle('active',!!visible);
  loading.setAttribute('aria-hidden',visible?'false':'true');
 }
+const activePdfCleanups=new Set();
 function openPdfBytes(bytes,title,preview=false){
+ if(!operationalAccessAllowed())return;
  const blob=new Blob([bytes],{type:'application/pdf'});
  const url=URL.createObjectURL(blob);
  if(preview){
@@ -5718,9 +5974,11 @@ function openPdfBytes(bytes,title,preview=false){
    toast('O navegador bloqueou a nova aba. Permita pop-ups e tente novamente.');
    return;
   }
+  const disposePreview=()=>{try{w.close()}catch(_){}URL.revokeObjectURL(url);activePdfCleanups.delete(disposePreview);};
+  activePdfCleanups.add(disposePreview);
   w.document.title=title;
   w.location.href=url;
-  setTimeout(()=>URL.revokeObjectURL(url),120000);
+  setTimeout(()=>{URL.revokeObjectURL(url);activePdfCleanups.delete(disposePreview);},120000);
   return;
  }
  setLabelPrintLoading(true);
@@ -5732,13 +5990,14 @@ function openPdfBytes(bytes,title,preview=false){
  let started=false,disposed=false,watchdog=null,disposeTimer=null;
  const cleanup=()=>{
   if(disposed)return;
-  disposed=true;
+  disposed=true;activePdfCleanups.delete(cleanup);
   clearTimeout(watchdog);
   clearTimeout(disposeTimer);
   setLabelPrintLoading(false);
   frame.remove();
   URL.revokeObjectURL(url);
  };
+ activePdfCleanups.add(cleanup);
  const fail=err=>{
   if(err)console.error('Falha na impressão automática da etiqueta:',err);
   cleanup();
@@ -5752,7 +6011,7 @@ function openPdfBytes(bytes,title,preview=false){
   started=true;
   clearTimeout(watchdog);
   setTimeout(()=>{
-   if(disposed)return;
+   if(disposed||!operationalAccessAllowed()){cleanup();return;}
    try{
     const frameWindow=frame.contentWindow;
     if(!frameWindow||typeof frameWindow.print!=='function')throw new Error('API de impressão indisponível.');
@@ -5821,10 +6080,11 @@ function updateCharts(){
 }
 
 function exportData(){if(!requirePermission('data.export'))return;state.dataVersion=CURRENT_DATA_VERSION;const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup-controle-kits-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exportado.')}
-function importData(ev){if(!requirePermission('data.import')){ev.target.value='';return}
+function importData(ev){const importGeneration=accessGeneration;if(!requirePermission('data.import')){ev.target.value='';return}
     const file=ev.target.files[0];if(!file)return;
     const reader=new FileReader();
     reader.onload=()=>{
+        if(!accessTicketValid(importGeneration)){ev.target.value='';return;}
         const previous=structuredClone(state);
         try{
             const imported=JSON.parse(reader.result);
@@ -6293,6 +6553,10 @@ function renderAuditHistory(){
  more.disabled=auditHistoryLoading;
 }
 async function loadAuditHistory(reset=true,background=false){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
  if(!hasPermission('history.view'))return;
  if(auditArchive){if(!background)renderAuditHistory();return}
  if(background&&auditHistoryLoading)return;
@@ -6313,7 +6577,7 @@ async function loadAuditHistory(reset=true,background=false){
   const start=$('auditFrom')?.value,end=$('auditTo')?.value;
   if(start)query=query.gte('event_at',new Date(start+'T00:00:00').toISOString());
   if(end)query=query.lte('event_at',new Date(end+'T23:59:59.999').toISOString());
-  const {data,error}=await query;
+  const {data,error}=await accessAwait(accessTicket,()=>(query));
   if(request!==auditHistoryRequest)return;
   if(error)throw error;
   const fresh=data||[];
@@ -6328,11 +6592,13 @@ async function loadAuditHistory(reset=true,background=false){
   auditHistoryRows=updated;
   if(!background)auditHistoryHasMore=fresh.length===pageSize;
   if(!unchanged)renderAuditHistory();
- }catch(error){
+ }catch(error){if(!accessTicketValid(accessTicket))return;
   if(request!==auditHistoryRequest)return;
   console.error('Falha ao consultar histórico:',error);
   if(!background){$('auditHistoryList').innerHTML=`<div class="card empty">Não foi possível carregar o histórico. ${esc(error.message||'Confira a conexão e as permissões.')}</div>`;if(more)more.hidden=true}
  }finally{if(request===auditHistoryRequest){auditHistoryLoading=false;if(more)more.disabled=false}}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function queueAuditRefresh(delay=180){
  if(auditArchive||!hasPermission('history.view')||!$('historico')?.classList.contains('active'))return;
@@ -6351,15 +6617,21 @@ function stopAuditRealtime(){
 }
 function auditLogId(date){const n=x=>String(x).padStart(2,'0');return `LOG${n(date.getDate())}${n(date.getMonth()+1)}${date.getFullYear()}${n(date.getHours())}${n(date.getMinutes())}`}
 async function exportAuditHistory(){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
  if(!hasPermission('history.export')||!hasPermission('history.view')||auditArchive)return;
  const btn=$('auditExport');btn.disabled=true;
  try{
   const rows=[];const cutoff=auditCutoff();let offset=0;
-  while(true){const {data,error}=await supabaseClient.from('erp_audit_history').select(AUDIT_COLUMNS).gte('event_at',cutoff).order('id',{ascending:true}).range(offset,offset+499);if(error)throw error;rows.push(...data);if(data.length<500)break;offset+=data.length;if(offset>100000)throw new Error('O histórico ultrapassou o limite de exportação.');}
+  while(true){const {data,error}=await accessAwait(accessTicket,()=>(supabaseClient.from('erp_audit_history').select(AUDIT_COLUMNS).gte('event_at',cutoff).order('id',{ascending:true}).range(offset,offset+499)));if(error)throw error;rows.push(...data);if(data.length<500)break;offset+=data.length;if(offset>100000)throw new Error('O histórico ultrapassou o limite de exportação.');}
   const at=new Date();const id=auditLogId(at);
   const content=JSON.stringify({format:'GiocapoAuditLog',version:1,id,exportedAt:at.toISOString(),retentionDays:30,total:rows.length,records:rows},null,2);
   const href=URL.createObjectURL(new Blob([content],{type:'application/json;charset=utf-8'}));const a=document.createElement('a');a.href=href;a.download=id+'.log';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),2000);toast(`${rows.length} registros exportados.`);
- }catch(err){console.error(err);toast('Falha ao exportar: '+(err.message||'erro desconhecido'))}finally{btn.disabled=false}
+ }catch(err){if(!accessTicketValid(accessTicket))return;console.error(err);toast('Falha ao exportar: '+(err.message||'erro desconhecido'))}finally{btn.disabled=false}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function auditValidLog(data,basename){
  if(!data||data.format!=='GiocapoAuditLog'||data.version!==1||data.id!==basename||!Array.isArray(data.records)||data.records.length>100000)return false;
@@ -6370,17 +6642,23 @@ function auditValidLog(data,basename){
  return true;
 }
 async function importAuditLog(event){
+ if(!operationalAccessAllowed())return;
+ const accessTicket=accessGeneration;
+ try{
+
  const file=event.target.files?.[0];event.target.value='';if(!file)return;
  if(!hasPermission('history.view')||!requirePermission('history.export'))return;
  const basename=file.name.replace(/\.log$/i,'');
  if(!/^LOG\d{12}\.log$/.test(file.name)||file.size>30*1024*1024){toast('Selecione um arquivo LOGDDMMAAAAHHMM.log válido (até 30 MB).');return}
  try{
-  const data=JSON.parse(await file.text());if(!auditValidLog(data,basename))throw new Error('Arquivo inválido ou incompatível.');
+  const data=JSON.parse(await accessAwait(accessTicket,()=>(file.text())));if(!auditValidLog(data,basename))throw new Error('Arquivo inválido ou incompatível.');
   auditArchive=data;auditHistoryRequest++;auditHistoryLoading=false;
-  try{sessionStorage.setItem('giocapo_log_'+basename,JSON.stringify(data))}catch(_){}
+  try{sessionStorage.setItem('giocapo_log_'+basename,JSON.stringify(data))}catch(_){if(!accessTicketValid(accessTicket))return;}
   history.pushState({auditLog:basename},'',`/${basename}`);
   showAuditArchive();
- }catch(err){toast('Não foi possível abrir o registro: '+(err.message||'arquivo inválido'))}
+ }catch(err){if(!accessTicketValid(accessTicket))return;toast('Não foi possível abrir o registro: '+(err.message||'arquivo inválido'))}
+
+ }catch(accessError){if(!accessTicketValid(accessTicket))return;throw accessError;}
 }
 function restoreAuditArchiveRoute(){
  if(!hasPermission('history.view')||!hasPermission('history.export'))return;
@@ -6737,6 +7015,10 @@ document.querySelectorAll('.nav button[data-page]').forEach(btn=>{
   else renderSelected();
  });
 });
+$('bootAccessRetry').addEventListener('click',()=>recheckAccess());
+$('bootAccessLogout').addEventListener('click',returnToLogin);
+$('accessRetry').addEventListener('click',()=>recheckAccess());
+$('accessLogout').addEventListener('click',returnToLogin);
 bootApp();
 
 const responsiveTableObserver=new MutationObserver(()=>applyResponsiveTableLabels());
