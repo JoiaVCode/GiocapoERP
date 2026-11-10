@@ -30,6 +30,31 @@ A instalação exibida pelo usuário permite leitura/escrita em código e acesso
 
 A liberdade permanente concedida aqui cobre os Markdown necessários em `memory/` e os commits diretos de documentação. Não equivale a autorização irrestrita para alterar/publicar código do ERP, banco, outros repositórios, excluir conteúdo ou reescrever histórico. Essas ações seguem o escopo solicitado pelo usuário e o protocolo de aprovação do projeto. Uma nova instrução explícita do usuário pode alterar esse escopo.
 
+**Versão atual aprovada: v6.18.5 — aprovação explícita em 10/11/2026.**
+
+Base: `v6.18.4` aprovada; entrega aprovada é a revisão de `v6.18.5.html` com carregamento discreto e mensagens específicas. O usuário informou funcionamento geral e aprovou a revisão. Isso não comprova individualmente todos os testes físicos ou de dispositivos.
+
+A migração `giocapo_v6_18_5_require_active_approved_access` foi aplicada em 09/11/2026; o ajuste visual de 10/11 não exigiu nova alteração no banco. Commit de publicação do HTML v6.18.5 não conferido nesta aprovação; não presumir publicação por este registro.
+
+## Regras vigentes da sessão e bloqueio
+
+- Operações e verificações administrativas pertinentes exigem conta ativa e aprovada. Contas pendentes/rejeitadas/desativadas/removidas não recebem dados operacionais.
+- Criação pendente: informar que ainda não foi aprovada por administrador, orientar aguardar 24 a 48 horas ou contatar administrador. O prazo é orientação textual, não aprovação automática nem SLA implementado.
+- Rejeição: informar que foi rejeitada por um administrador e orientar contato. Desativação/ausência: explicar indisponibilidade, possível exclusão/desativação e contato com administrador.
+- Verificação normal de sessão usa o loader discreto anterior. Falha de conexão/verificação usa apresentação compacta.
+- Detectada perda de acesso, bloquear a área, fechar modais, cancelar salvamentos agendados, limpar estado/DOM/caches controle_kits_v2 e v1 e arquivos de histórico em sessionStorage; interromper serviços operacionais e descartar respostas antigas.
+- Aprovação/reativação permite recuperação pelo monitor ou Verificar novamente, com leitura nova do servidor, sem upload automático de cache anterior.
+- Monitor: UPDATE do próprio perfil, consulta a cada 10 segundos, foco/retorno à aba e reconexão. Timeout do perfil: 8 segundos. Sem validação bem-sucedida por mais de 30 segundos, bloquear; offline também bloqueia.
+- Temporizadores podem ser limitados em abas suspensas; não prometer bloqueio instantâneo. Servidor controla novas operações.
+- Alterações não sincronizadas são descartadas no bloqueio. Requisições já enviadas podem ter sido processadas; não há reversão retroativa automática.
+- Voltar ao login encerra apenas a sessão local, não os outros dispositivos.
+- Não se recolhem dados já exportados, impressos ou copiados.
+- Essas regras tratam perda de acesso à conta. Isolamento de dados por permissão de módulo continua etapa futura.
+
+## Histórico preservado — estado anterior à aprovação da v6.18.5
+
+As seções seguintes descrevem versões e decisões anteriores. O estado vigente é o registrado acima; referências a v6.18.5 como futura são históricas.
+
 **Versão atual aprovada: v6.18.4 — aprovação explícita em 09/11/2026.**
 
 Aprovação registrada após o usuário confirmar, pelo Console do site com conta limitada, a rejeição das oito tentativas independentes: `location`, `series`, `type`, `hce`, `balance`, `code`, `codeId` e `productId`. O servidor respondeu “Alteração incompatível com a ação autorizada: products.edit”.
