@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP | Giocapo</title>
-<!-- v6.18.5 -->
+<!-- v6.18.5_fix_patch -->
 <style>
 :root{
     --bg:#f1f1f1;
@@ -2954,17 +2954,21 @@ function blockOperationalAccess(profile,reason){
  showAccessStatus(reason||(!profile?'missing':profile.approval_status==='rejected'?'rejected':profile.approval_status!=='approved'?'pending':'disabled'));
  clearOperationalData();applyRoleToInterface();
 }
-async function readAccessProfile(userId){
+async function awaitAccessStep(operation){
  let timeout;
  try{
-  const response=await Promise.race([
-   supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',userId).maybeSingle(),
+  return await Promise.race([
+   Promise.resolve().then(operation),
    new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('Tempo de verificação excedido.')),8000);})
   ]);
-  if(response.error)throw response.error;
-  return response.data;
  }finally{clearTimeout(timeout);}
 }
+async function readAccessProfile(userId){
+ const response=await awaitAccessStep(()=>supabaseClient.from('app_users').select('user_id,email,display_name,role,active,created_at,approval_status,last_seen_at,permission_mode,permissions').eq('user_id',userId).maybeSingle());
+ if(response.error)throw response.error;
+ return response.data;
+}
+
 function stopAccessMonitor(){
  accessCheckSequence++;accessCheckBusy=false;
  clearInterval(accessMonitorTimer);clearInterval(accessWatchdogTimer);accessMonitorTimer=null;accessWatchdogTimer=null;
@@ -2986,7 +2990,7 @@ async function recheckAccess(){
   if(!isApprovedAccess(profile)){blockOperationalAccess(profile);return;}
   if(accessBlocked||!cloudReady){currentAccess=profile;showAccessStatus('checking');await loadCloudState();return;}
   currentAccess=profile;accessLastVerified=Date.now();
-  await loadCurrentRolePermissions();
+  await awaitAccessStep(()=>loadCurrentRolePermissions());
   if(generation!==accessGeneration||!operationalAccessAllowed())return;
   applyRoleToInterface();$('currentUserName').textContent=profile.display_name||currentSession.user.email||'Usuário';$('currentUserRole').textContent=roleLabel(profile.role);updateHeaderAvatar();
  }catch(error){if(check===accessCheckSequence&&generation===accessGeneration&&currentSession?.user?.id===userId)blockOperationalAccess(currentAccess,navigator.onLine?'unverified':'offline');}
@@ -4211,16 +4215,16 @@ async function loadCloudState(){
   currentAccess=access;
   if(!isApprovedAccess(access)){blockOperationalAccess(access);return false;}
   accessBlocked=false;accessLastVerified=Date.now();
-  await loadCurrentRolePermissions();
+  await awaitAccessStep(()=>loadCurrentRolePermissions());
   if(generation!==accessGeneration||!operationalAccessAllowed())return false;
-  const {data:row,error}=await supabaseClient.from('app_state').select('data,data_version,revision,updated_at').eq('id',SUPABASE_CONFIG.STATE_ID).single();
+  const {data:row,error}=await awaitAccessStep(()=>supabaseClient.from('app_state').select('data,data_version,revision,updated_at').eq('id',SUPABASE_CONFIG.STATE_ID).single());
   if(generation!==accessGeneration||!operationalAccessAllowed())return false;
   if(error)throw error;
   const verified=await readAccessProfile(userId);
   if(generation!==accessGeneration||currentSession?.user?.id!==userId)return false;
   if(!isApprovedAccess(verified)){blockOperationalAccess(verified);return false;}
   currentAccess=verified;
-  await loadCurrentRolePermissions();
+  await awaitAccessStep(()=>loadCurrentRolePermissions());
   if(generation!==accessGeneration||!operationalAccessAllowed())return false;
   prepareState(row.data);
   cloudRevision=Number(row.revision)||1;
@@ -4232,7 +4236,8 @@ async function loadCloudState(){
   document.body.classList.remove('access-blocked');$('accessStatus').hidden=true;
   $('authGate').classList.add('hidden');$('mainApp').classList.remove('auth-locked');
   renderAll();setSyncStatus('synced','Sincronizado');
-  startRealtimeSync();await startUserPresence();
+  hideBootGate();
+  startRealtimeSync();await awaitAccessStep(()=>startUserPresence());
   if(generation!==accessGeneration||!operationalAccessAllowed())return false;
   handleAppRoute();return true;
 }
